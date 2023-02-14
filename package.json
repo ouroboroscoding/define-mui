@@ -1,0 +1,48 @@
+{
+	"name": "@ouroboros/define-mui",
+	"version": "0.1.0",
+	"description": "Components for use on @ouroboros/define types",
+	"main": "index.js",
+	"types": "index.d.ts",
+	"scripts": {
+		"build": "tslint -p tsconfig.json && tsc",
+		"clean": "rm lib/*",
+		"test": "echo \"Error: no test specified.\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ouroboroscoding/define-mui.git"
+	},
+	"keywords": [
+		"@ouroboros/define",
+		"material-ui",
+		"mui",
+		"react"
+	],
+	"author": "Chris Nasr <chris@ouroboroscoding.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ouroboroscoding/define-mui/issues"
+	},
+	"devDependencies": {
+		"@types/react": "^18.0.28",
+		"@types/uuid": "^9.0.0",
+		"tslint": "^6.1.3",
+		"tslint-config-prettier": "^1.18.0",
+		"typescript": "^4.8.3"
+	},
+	"dependencies": {
+		"@ouroboros/define": "file:../define",
+		"@ouroboros/tools": "../tools",
+		"csv-writer-browser": "^1.0.0",
+		"react-phone-input-material-ui": "^2.17.4",
+		"uuid": "^9.0.0"
+	},
+	"peerDependencies": {
+		"@emotion/react": "^11.8.2",
+		"@emotion/styled": "^11.8.1",
+		"@mui/material": "^5.5.1",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2"
+	}
+}
