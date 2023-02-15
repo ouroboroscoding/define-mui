@@ -1,11 +1,11 @@
 /**
- * Format Array
+ * Define Array
  *
- * Handles arrays of FormatOC nodes/parents
+ * Handles arrays of define nodes/parents
  *
  * @author Chris Nasr <chris@ouroboroscoding.com>
  * @copyright Ouroboros Coding Inc.
- * @created 2022-03-19
+ * @created 2023-02-14
  */
 /// <reference types="react" />
 import { BaseNode, ArrayNode } from '@ouroboros/define';

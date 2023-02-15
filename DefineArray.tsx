@@ -1,11 +1,11 @@
 /**
- * Format Array
+ * Define Array
  *
- * Handles arrays of FormatOC nodes/parents
+ * Handles arrays of define nodes/parents
  *
  * @author Chris Nasr <chris@ouroboroscoding.com>
  * @copyright Ouroboros Coding Inc.
- * @created 2022-03-19
+ * @created 2023-02-14
  */
 
 // Ouroboros
@@ -27,7 +27,6 @@ import { red } from '@mui/material/colors';
 
 // Components
 import DefineBase from './DefineBase';
-import Child from './Child';
 
 // Types
 import { labelOptions, typeOptions, onEnterCallback } from './types';
@@ -232,7 +231,7 @@ export default class DefineArray extends DefineBase {
 				{this.state.elements.map(o =>
 					<Box key={o.key} className="element flexColumns">
 						<Box className="data flexGrow">
-							{Child.create(this.state.nodeClass, {
+							{DefineBase.create(this.state.nodeClass, {
 								ref: (el: DefineBase) => (this.nodes as Record<string, DefineBase>)[o.key] = el,
 								name: (this.props as DefineArrayProps).name,
 								node: this.child,
@@ -343,4 +342,4 @@ export default class DefineArray extends DefineBase {
 }
 
 // Register the component
-Child.register('DefineArray', DefineArray);
+DefineBase.register('DefineArray', DefineArray);
