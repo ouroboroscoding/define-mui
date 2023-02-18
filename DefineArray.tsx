@@ -9,12 +9,11 @@
  */
 
 // Ouroboros
-import { BaseNode, ArrayNode } from '@ouroboros/define';
+import { Base, ArrayNode } from '@ouroboros/define';
 import { afindi, clone, combine, ucfirst } from '@ouroboros/tools';
 
 // NPM modules
 import PropTypes from 'prop-types';
-import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 // Material UI
@@ -27,32 +26,47 @@ import { red } from '@mui/material/colors';
 
 // Components
 import DefineBase from './DefineBase';
+import { DefineNodeBase } from './DefineNode';
+
+// Modules
+import { errorTree } from './Shared';
 
 // Types
-import { labelOptions, typeOptions, onEnterCallback } from './Types';
-
-// Types
+import {
+	labelOptions,
+	onChangeCallback,
+	onEnterCallback,
+	typeOptions,
+	variantOptions
+} from './DefineNode';
+import { DefineNodeBaseProps } from './DefineNode/Base';
 type DefineArrayProps = {
+	error?: any,
 	label?: labelOptions,
-	name?: string,
+	name: string,
 	node: ArrayNode,
+	onChange?: onChangeCallback,
 	onEnter?: onEnterCallback,
 	placeholder?: string,
 	type: typeOptions,
 	value?: any[],
-	validation?: boolean
+	validation?: boolean,
+	variant: variantOptions
 };
 type DefineArrayStateElement = {
 	value: any,
 	key: string
 }
 type DefineArrayState = {
-	custom: typeof DefineBase | null,
-	customProps?: Record<string, any>,
+	plugin: typeof DefineNodeBase | null,
 	nodeClass: string,
 	display: Record<string, any>,
 	elements: DefineArrayStateElement[]
 }
+type pluginsType = Record<string, typeof DefineNodeBase>;
+
+// Registered components
+const _plugins: pluginsType = {};
 
 /**
  * Define Array
@@ -61,39 +75,40 @@ type DefineArrayState = {
  *
  * @name DefineArray
  * @access public
- * @extends React.Component
+ * @extends DefineBase
  */
 export default class DefineArray extends DefineBase {
 
+	// Called to add an external Component to the list available
+	static pluginAdd(type: string, classConstructor: typeof DefineNodeBase) {
+		_plugins[type] = classConstructor;
+	}
+
 	// Instance variables
-	child: BaseNode;
+	child: Base;
 	nodes: Record<string, DefineBase> | DefineBase;
+	declare props: DefineArrayProps;
 	state: DefineArrayState;
 
 	// PropTypes variables
 	static propTypes = {
+		error: PropTypes.object,
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
-		name: PropTypes.string,
+		name: PropTypes.string.isRequired,
 		node: PropTypes.instanceOf(ArrayNode).isRequired,
 		onEnter: PropTypes.func,
 		placeholder: PropTypes.string,
 		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
 		value: PropTypes.array,
-		validation: PropTypes.bool
+		validation: PropTypes.bool,
+		variant: PropTypes.oneOf(['filled', 'outlined', 'standard'])
 	}
 	static defaultProps = {
 		label: 'placeholder',
 		name: '',
 		value: [],
-		validation: true
-	}
-
-	// External Components register to be used within DefineArray
-	static _registered: Record<string, typeof DefineBase> = {}
-
-	// Called to add an external Component to the list available
-	static register(type: string, classConstructor: typeof DefineBase) {
-		DefineArray._registered[type] = classConstructor;
+		validation: true,
+		variant: 'outlined'
 	}
 
 	/**
@@ -130,7 +145,7 @@ export default class DefineArray extends DefineBase {
 
 		// Init state
 		this.state = {
-			custom: null,
+			plugin: null,
 			nodeClass: this.child.class(),
 			display: oUI,
 			elements: (props.value as any[]).map(v => {
@@ -141,10 +156,9 @@ export default class DefineArray extends DefineBase {
 			})
 		}
 
-		// If we have a custom Node
-		if(mType && mType in DefineArray._registered) {
-			this.state.custom = DefineArray._registered[mType];
-			this.state.customProps = oUI.props || {};
+		// If we have a plugin Node
+		if(mType && mType in _plugins) {
+			this.state.plugin = _plugins[mType];
 		}
 	}
 
@@ -180,18 +194,28 @@ export default class DefineArray extends DefineBase {
 	 * @access public
 	 * @param errors Errors to set on the component
 	 */
-	error(errors: Record<string, any>) {
+	error(errors: string[][] | Record<string, any>) {
 
-		// If we have a custom component
-		if(this.state.custom) {
-			(this.nodes as DefineBase).error(errors);
+		// Errors
+		let oErrors: Record<string, any>;
+
+		// If we got an array
+		if(Array.isArray(errors)) {
+			oErrors = errorTree(errors);
+		} else {
+			oErrors = errors;
+		}
+
+		// If we have a plugin component
+		if(this.state.plugin) {
+			(this.nodes as DefineBase).error(oErrors);
 		}
 
 		// Else, if we have an array of nodes
 		else {
-			for(const k of Object.keys(errors)) {
+			for(const k of Object.keys(oErrors)) {
 				const iIndex = parseInt(k, 10);
-				(this.nodes as Record<string, DefineBase>)[this.state.elements[iIndex].key].error(errors[k]);
+				(this.nodes as Record<string, DefineBase>)[this.state.elements[iIndex].key].error(oErrors[k]);
 			}
 		}
 	}
@@ -237,26 +261,28 @@ export default class DefineArray extends DefineBase {
 		// Reset the refs
 		this.nodes = {};
 
-		// If we have a custom component
-		if(this.state.custom) {
+		// If we have a plugin component
+		if(this.state.plugin) {
 
 			// Store the name
-			const ElName = this.state.custom;
+			const ElName = this.state.plugin;
 
-			// Combine the regular node props with any custom props
-			const oProps = combine(this.state.customProps as Record<string, any>, {
+			// Combine the regular node props with any plugin props
+			const oProps: DefineNodeBaseProps = {
 				display: this.state.display,
-				label: (this.props as DefineArrayProps).label,
+				error: this.props.error,
+				label: this.props.label,
 				ref: (el: DefineBase) => this.nodes = el,
-				name: (this.props as DefineArrayProps).name,
-				node: (this.props as DefineArrayProps).node,
-				onEnter: (this.props as DefineArrayProps).onEnter,
+				name: this.props.name,
+				node: this.props.node,
+				onEnter: this.props.onEnter,
 				placeholder: (this.props as DefineArrayProps).placeholder,
-				value: (this.props as DefineArrayProps).value,
-				validation: (this.props as DefineArrayProps).validation
-			});
+				value: this.props.value,
+				validation: this.props.validation,
+				variant: this.props.variant
+			};
 
-			// Render custom type
+			// Render plugin type
 			return (
 				<ElName {...oProps} />
 			);
@@ -314,8 +340,8 @@ export default class DefineArray extends DefineBase {
 	 */
 	reset(): void {
 
-		// If we have a custom component
-		if(this.state.custom) {
+		// If we have a plugin component
+		if(this.state.plugin) {
 			return (this.nodes as DefineBase).reset();
 		}
 
@@ -339,8 +365,8 @@ export default class DefineArray extends DefineBase {
 		// Valid?
 		let bValid = true;
 
-		// If we have a custom component
-		if(this.state.custom) {
+		// If we have a plugin component
+		if(this.state.plugin) {
 			bValid = (this.props as DefineArrayProps).node.valid((this.nodes as DefineBase).value);
 			if(!bValid) {
 				(this.nodes as DefineBase).error((this.props as DefineArrayProps).node.validationFailures);
@@ -373,8 +399,8 @@ export default class DefineArray extends DefineBase {
 	 */
 	get value(): any[] {
 
-		// If we have a custom component
-		if(this.state.custom) {
+		// If we have a plugin component
+		if(this.state.plugin) {
 			return this.nodes.value;
 		}
 
@@ -406,8 +432,8 @@ export default class DefineArray extends DefineBase {
 	 */
 	set value(val: any[]) {
 
-		// If we have a custom component
-		if(this.state.custom) {
+		// If we have a plugin component
+		if(this.state.plugin) {
 			this.nodes.value = val;
 			return;
 		}

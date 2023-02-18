@@ -23,26 +23,18 @@ import Button from '@mui/material/Button';
 
 // Local components
 import DefineParent from './DefineParent';
+import { errorTree } from './Shared';
 
 // Types
-import {
-	errorStruct,
-	handleErrorsProp,
-	labelOptions,
-	gridSizesStruct,
-	onErrorCallback,
-	onSubmitCallback
-} from './Types';
-
-// Types
-type DefineSearchProps = {
+import { gridSizesStruct, onSubmitCallback } from './DefineBase';
+import { labelOptions } from './DefineNode';
+export type DefineSearchProps = {
 	dynamicOptions?: {
 		node: string,
 		trigger: string,
 		options: Record<any, any>
 	}[],
 	gridSizes?: Record<string, gridSizesStruct>,
-	handleErrors?: handleErrorsProp,
 	hash: string,
 	label?: labelOptions,
 	name: string,
@@ -254,23 +246,8 @@ export default class DefineSearch extends React.Component {
 	 * @access public
 	 * @param error The error(s) associated with the search
 	 */
-	error(error: errorStruct): void {
-		if(error.code === 1001) {
-			this.parent.error(error.msg);
-		} else if(error.code.toString() in (this.props.handleErrors as handleErrorsProp)) {
-
-			// If the value is already an object
-			if(isObject((this.props.handleErrors as handleErrorsProp)[error.code.toString()])) {
-				this.parent.error((this.props.handleErrors as handleErrorsProp)[error.code.toString()]);
-			} else {
-				const oErrors = ((this.props.handleErrors as handleErrorsProp)[error.code.toString()] as onErrorCallback)(error);
-				if(isObject(oErrors)) {
-					this.parent.error(oErrors);
-				}
-			}
-		} else {
-			throw new Error(`Unknown error in Search: ${String(error)}`);
-		}
+	error(error: string[][]): void {
+		this.parent.error(errorTree(error));
 	}
 
 	/**

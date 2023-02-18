@@ -11,15 +11,15 @@ import { Tree } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DefineParent from './DefineParent';
-import { errorStruct, handleErrorsProp, labelOptions, gridSizesStruct, onSubmitCallback } from './Types';
-type DefineSearchProps = {
+import { gridSizesStruct, onSubmitCallback } from './DefineBase';
+import { labelOptions } from './DefineNode';
+export type DefineSearchProps = {
     dynamicOptions?: {
         node: string;
         trigger: string;
         options: Record<any, any>;
     }[];
     gridSizes?: Record<string, gridSizesStruct>;
-    handleErrors?: handleErrorsProp;
     hash: string;
     label?: labelOptions;
     name: string;
@@ -145,7 +145,7 @@ export default class DefineSearch extends React.Component {
      * @access public
      * @param error The error(s) associated with the search
      */
-    error(error: errorStruct): void;
+    error(error: string[][]): void;
     /**
      * Render
      *

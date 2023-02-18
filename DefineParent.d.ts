@@ -11,8 +11,14 @@
 import { Parent } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import DefineBase from './DefineBase';
-import { dynamicOptionStruct, gridSizesStruct, labelOptions, typeOptions, onEnterCallback, variantOptions } from './Types';
-type DefineParentProps = {
+import { gridSizesStruct } from './DefineBase';
+import { labelOptions, onEnterCallback, typeOptions, variantOptions } from './DefineNode';
+export type dynamicOptionStruct = {
+    node: string;
+    trigger: string;
+    options: Record<string, any>;
+};
+export type DefineParentProps = {
     dynamicOptions?: dynamicOptionStruct[];
     error?: Record<string, any>;
     fields?: string[];

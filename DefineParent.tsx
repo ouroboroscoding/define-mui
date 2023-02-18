@@ -25,18 +25,16 @@ import DefineBase from './DefineBase';
 import { OptionsHash } from './Options';
 
 // Types
-import {
-	dynamicOptionStruct,
-	gridSizesStruct,
-	labelOptions,
-	typeOptions,
-	onEnterCallback,
-	variantOptions,
-	DefineNodeProps
-} from './Types';
+import { gridSizesStruct } from './DefineBase';
+import { labelOptions, onEnterCallback, typeOptions, variantOptions } from './DefineNode';
 
 // Types
-type DefineParentProps = {
+export type dynamicOptionStruct = {
+	node: string,
+	trigger: string,
+	options: Record<string, any>
+}
+export type DefineParentProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	error?: Record<string, any>,
 	fields?: string[],

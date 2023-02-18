@@ -1,95 +1,77 @@
 /**
- * Define Array
+ * Define Hash
  *
- * Handles arrays of define nodes/parents
+ * Handles hashes (objects, maps) define nodes/parents
  *
  * @author Chris Nasr <chris@ouroboroscoding.com>
  * @copyright Ouroboros Coding Inc.
- * @created 2023-02-14
+ * @created 2023-02-18
  */
 /// <reference types="react" />
-import { Base, ArrayNode } from '@ouroboros/define';
+import { Hash } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
-import { labelOptions, onChangeCallback, onEnterCallback, typeOptions, variantOptions } from './DefineNode';
-type DefineArrayProps = {
+import { labelOptions, onEnterCallback, variantOptions } from './DefineNode';
+export type DefineHashProps = {
     error?: any;
     label?: labelOptions;
     name: string;
-    node: ArrayNode;
-    onChange?: onChangeCallback;
+    node: Hash;
     onEnter?: onEnterCallback;
     placeholder?: string;
-    type: typeOptions;
-    value?: any[];
+    type: 'create' | 'update';
+    value?: Record<any, any>;
     validation?: boolean;
     variant: variantOptions;
 };
-type DefineArrayStateElement = {
-    value: any;
-    key: string;
-};
-type DefineArrayState = {
-    plugin: typeof DefineNodeBase | null;
-    nodeClass: string;
+type DefineHashState = {
+    plugin: typeof DefineNodeBase;
     display: Record<string, any>;
-    elements: DefineArrayStateElement[];
 };
 /**
- * Define Array
+ * Hash Node
  *
  * Handles array types with the ability to add / remove elements
  *
- * @name DefineArray
+ * @name DefineHash
  * @access public
  * @extends DefineBase
  */
-export default class DefineArray extends DefineBase {
+export default class DefineHash extends DefineBase {
     static pluginAdd(type: string, classConstructor: typeof DefineNodeBase): void;
-    child: Base;
-    nodes: Record<string, DefineBase> | DefineBase;
-    props: DefineArrayProps;
-    state: DefineArrayState;
     static propTypes: {
-        error: PropTypes.Requireable<object>;
         label: PropTypes.Requireable<string>;
-        name: PropTypes.Validator<string>;
-        node: PropTypes.Validator<ArrayNode>;
+        name: PropTypes.Requireable<string>;
+        node: PropTypes.Validator<Hash>;
         onEnter: PropTypes.Requireable<(...args: any[]) => any>;
         placeholder: PropTypes.Requireable<string>;
         type: PropTypes.Validator<string>;
-        value: PropTypes.Requireable<any[]>;
+        value: PropTypes.Requireable<object>;
         validation: PropTypes.Requireable<boolean>;
         variant: PropTypes.Requireable<string>;
     };
     static defaultProps: {
         label: string;
         name: string;
-        value: never[];
+        value: {};
         validation: boolean;
         variant: string;
     };
+    props: DefineHashProps;
+    state: DefineHashState;
+    plugin: DefineNodeBase;
     /**
      * Constructor
      *
      * Creates a new instance
      *
-     * @name DefineArray
+     * @name DefineHash
      * @access public
      * @param props Properties passed to the component
      * @returns a new instance
      */
-    constructor(props: DefineArrayProps);
-    /**
-     * Add
-     *
-     * Called to add a new array element
-     *
-     * @name add
-     * @access public
-     */
-    add(): void;
+    constructor(props: DefineHashProps);
     /**
      * Error
      *
@@ -100,15 +82,6 @@ export default class DefineArray extends DefineBase {
      * @param errors Errors to set on the component
      */
     error(errors: string[][] | Record<string, any>): void;
-    /**
-     * Remove
-     *
-     * Used to remove an element from the array
-     *
-     * @name remove
-     * @param key The key associated with the element to remove
-     */
-    remove(key: string): void;
     /**
      * Render
      *
@@ -121,7 +94,7 @@ export default class DefineArray extends DefineBase {
     /**
      * Reset
      *
-     * Calls reset on all the child components
+     * Calls reset on the plugin instance
      *
      * @name reset
      * @access public
@@ -146,7 +119,7 @@ export default class DefineArray extends DefineBase {
      * @property
      * @returns the current value
      */
-    get value(): any[];
+    get value(): any;
     /**
      * Value (set)
      *
@@ -156,6 +129,6 @@ export default class DefineArray extends DefineBase {
      * @property
      * @param val The new values to set
      */
-    set value(val: any[]);
+    set value(val: any);
 }
 export {};

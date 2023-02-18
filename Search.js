@@ -10,7 +10,7 @@
 // Ouroboros
 import { hash } from '@ouroboros/browser';
 import { Tree } from '@ouroboros/define';
-import { empty, isObject } from '@ouroboros/tools';
+import { empty } from '@ouroboros/tools';
 // NPM modules
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -19,6 +19,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 // Local components
 import DefineParent from './DefineParent';
+import { errorTree } from './Shared';
 /**
  * Define Search
  *
@@ -186,24 +187,7 @@ export default class DefineSearch extends React.Component {
      * @param error The error(s) associated with the search
      */
     error(error) {
-        if (error.code === 1001) {
-            this.parent.error(error.msg);
-        }
-        else if (error.code.toString() in this.props.handleErrors) {
-            // If the value is already an object
-            if (isObject(this.props.handleErrors[error.code.toString()])) {
-                this.parent.error(this.props.handleErrors[error.code.toString()]);
-            }
-            else {
-                const oErrors = this.props.handleErrors[error.code.toString()](error);
-                if (isObject(oErrors)) {
-                    this.parent.error(oErrors);
-                }
-            }
-        }
-        else {
-            throw new Error(`Unknown error in Search: ${String(error)}`);
-        }
+        this.parent.error(errorTree(error));
     }
     /**
      * Render
