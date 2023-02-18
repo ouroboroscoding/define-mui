@@ -9,7 +9,7 @@
  */
 
 // Import types
-import { CallbackType } from './types';
+import { OptionsCallbackType } from './Types';
 
 /**
  * Options Base
@@ -23,7 +23,7 @@ export default class OptionsBase {
 	_CLONE_SKIP_ = true;
 
 	// List of callbacks tracking changes in the data
-	_callbacks: CallbackType[];
+	_callbacks: OptionsCallbackType[];
 
 	/**
 	 * Constructor
@@ -68,7 +68,7 @@ export default class OptionsBase {
 	 * @param callback The function to call when data changes
 	 * @param remove Set to false to remove the callback
 	 */
-	track(callback: CallbackType, remove=false): void {
+	track(callback: OptionsCallbackType, remove=false): void {
 
 		// If we are removing a callback
 		if(remove) {

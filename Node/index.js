@@ -15,6 +15,24 @@ import PropTypes from 'prop-types';
 import React from 'react';
 // Local modules
 import DefineBase from '../DefineBase';
+import DefineNodeBase from './Base';
+import DefineNodeSearchOption from './SearchOption';
+// Node types
+import DefineNodeBool from './Bool';
+import DefineNodeDate from './Date';
+import DefineNodeDatetime from './Datetime';
+import DefineNodeHidden from './Hidden';
+import DefineNodeMultiSelectCSV from './MultiSelectCSV';
+import DefineNodeNumber from './Number';
+import DefineNodePassword from './Password';
+import DefineNodePhoneNumber from './PhoneNumber';
+import DefineNodePrice from './Price';
+import DefineNodeSelect from './Select';
+import DefineNodeText from './Text';
+import DefineNodeTextArea from './TextArea';
+import DefineNodeTime from './Time';
+// Export Node types
+export { DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime, DefineNodeHidden, DefineNodeMultiSelectCSV, DefineNodeNumber, DefineNodePassword, DefineNodePhoneNumber, DefineNodePrice, DefineNodeSelect, DefineNodeText, DefineNodeTextArea, DefineNodeTime };
 // Registered components
 const _components = {};
 /**
@@ -50,7 +68,7 @@ export default class DefineNode extends DefineBase {
         variant: 'outlined'
     };
     // Registered Node types
-    static addType(name, componentClass, defaultValue) {
+    static addType(name, componentClass, defaultValue = '') {
         _components[name] = {
             class_: componentClass,
             default_: defaultValue,
@@ -81,13 +99,31 @@ export default class DefineNode extends DefineBase {
         this._el = null;
         this._search = null;
     }
+    /**
+     * Component Did Mount
+     *
+     * Called right after the component is added to the DOM
+     *
+     * @name componentDidMount
+     * @access public
+     * @param prevProps The previously set properties
+     */
     componentDidUpdate(prevProps) {
         // If the Node changed
         if (prevProps.node !== this.props.node) {
             this.setState(this.generateState());
         }
     }
-    // Figure out the element type based on the default values of the node
+    /**
+     * Default Type
+     *
+     * Returns the element type associated with the Node's type. Useful when
+     * there's no custom type to handle the render
+     *
+     * @name defaultType
+     * @param node The Node associated with the element
+     * @returns string
+     */
     defaultType(node) {
         // If it has options, it's a select, no question
         if (node.options()) {
@@ -125,11 +161,30 @@ export default class DefineNode extends DefineBase {
                 throw new Error('invalid type in format/Node: ' + sType);
         }
     }
+    /**
+     * Error
+     *
+     * Called to set the error on the node
+     *
+     * @name error
+     * @access public
+     * @param msg The error message
+     */
     error(msg) {
         if (this._el) {
             this._el.error(msg);
         }
     }
+    /**
+     * Generate State
+     *
+     * Checks the node for data and generates the state that will be used in the
+     * component
+     *
+     * @name generateState
+     * @access public
+     * @returns the state to use
+     */
     generateState() {
         // Get the react display properties
         const oReact = this.props.node.special('ui') || {};
@@ -149,6 +204,14 @@ export default class DefineNode extends DefineBase {
                 this.defaultType(this.props.node),
         };
     }
+    /**
+     * Render
+     *
+     * Generates the actual DOM elements of the component
+     *
+     * @name render
+     * @access public
+     */
     render() {
         // Get the component name based on the type
         let ElName = null;
@@ -165,14 +228,31 @@ export default class DefineNode extends DefineBase {
         return (<React.Fragment>
 				<ElName display={this.state.display} error={this.props.error} label={this.props.label} onChange={this.props.onChange} onEnter={this.props.onEnter || false} name={this.props.name} node={this.props.node} ref={el => this._el = el} value={mValue} validation={this.props.validation} variant={this.props.variant}/>
 				{this.props.type === 'search' &&
-                <SearchOption ref={el => this._search = el} type={this.state.type} variant={this.props.variant}/>}
+                <DefineNodeSearchOption ref={(el) => this._search = el} type={this.state.type} variant={this.props.variant}/>}
 			</React.Fragment>);
     }
+    /**
+     * Reset
+     *
+     * Resets the value on a Node without triggering error checking
+     *
+     * @name reset
+     * @access public
+     */
     reset() {
         if (this._el) {
             this._el.reset();
         }
     }
+    /**
+     * Value (get)
+     *
+     * Returns the current value of the node
+     *
+     * @name value
+     * @property
+     * @returns the current value
+     */
     get value() {
         // If we don't have the element
         if (!this._el) {
@@ -202,6 +282,15 @@ export default class DefineNode extends DefineBase {
             };
         }
     }
+    /**
+     * Value (set)
+     *
+     * Sets the new value on the node
+     *
+     * @name value
+     * @property
+     * @param val The new value to set
+     */
     set value(val) {
         // If we're not in search mode, set the value as is
         if (this.props.type !== 'search') {

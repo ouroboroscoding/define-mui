@@ -19,24 +19,40 @@ import React from 'react';
 // Local modules
 import DefineBase from '../DefineBase';
 import DefineNodeBase from './Base';
+import DefineNodeSearchOption from './SearchOption';
+
+// Node types
+import DefineNodeBool from './Bool';
+import DefineNodeDate from './Date';
+import DefineNodeDatetime from './Datetime';
+import DefineNodeHidden from './Hidden';
+import DefineNodeMultiSelectCSV from './MultiSelectCSV';
+import DefineNodeNumber from './Number';
+import DefineNodePassword from './Password';
+import DefineNodePhoneNumber from './PhoneNumber';
+import DefineNodePrice from './Price';
+import DefineNodeSelect from './Select';
+import DefineNodeText from './Text';
+import DefineNodeTextArea from './TextArea';
+import DefineNodeTime from './Time';
+
+// Export Node types
+export {
+	DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime,
+	DefineNodeHidden, DefineNodeMultiSelectCSV, DefineNodeNumber,
+	DefineNodePassword, DefineNodePhoneNumber, DefineNodePrice,
+	DefineNodeSelect, DefineNodeText, DefineNodeTextArea, DefineNodeTime
+}
 
 // Types
-import { labelOptions, typeOptions, variantOptions } from '../types';
+import {
+	labelOptions,
+	typeOptions,
+	variantOptions,
+	DefineNodeProps
+} from '../Types';
 
 // Types
-type DefineNodeProps = {
-	error: string | false,
-	label?: labelOptions,
-	name: string,
-	node: Node,
-	onChange: (val: any) => void,
-	onEnter: () => void | false,
-	placeholder?: string,
-	type: typeOptions,
-	value?: any,
-	validation?: boolean,
-	variant: variantOptions
-};
 type DefineNodeState = {
 	display: Record<string, any>,
 	type: string,
@@ -85,7 +101,7 @@ export default class DefineNode extends DefineBase {
 	}
 
 	// Registered Node types
-	static addType(name: string, componentClass: typeof DefineNodeBase, defaultValue: string | number) {
+	static addType(name: string, componentClass: typeof DefineNodeBase, defaultValue: any = '') {
 		_components[name] = {
 			class_: componentClass,
 			default_: defaultValue,
@@ -98,7 +114,7 @@ export default class DefineNode extends DefineBase {
 
 	// Child elements
 	_el: DefineNodeBase | null;
-	_search: React.ElementType | null;
+	_search: DefineNodeSearchOption | null;
 
 	/**
 	 * Constructor
@@ -126,6 +142,15 @@ export default class DefineNode extends DefineBase {
 		this._search = null;
 	}
 
+	/**
+	 * Component Did Mount
+	 *
+	 * Called right after the component is added to the DOM
+	 *
+	 * @name componentDidMount
+	 * @access public
+	 * @param prevProps The previously set properties
+	 */
 	componentDidUpdate(prevProps: DefineNodeProps) {
 
 		// If the Node changed
@@ -134,7 +159,16 @@ export default class DefineNode extends DefineBase {
 		}
 	}
 
-	// Figure out the element type based on the default values of the node
+	/**
+	 * Default Type
+	 *
+	 * Returns the element type associated with the Node's type. Useful when
+	 * there's no custom type to handle the render
+	 *
+	 * @name defaultType
+	 * @param node The Node associated with the element
+	 * @returns string
+	 */
 	defaultType(node: Node) {
 
 		// If it has options, it's a select, no question
@@ -180,12 +214,31 @@ export default class DefineNode extends DefineBase {
 		}
 	}
 
+	/**
+	 * Error
+	 *
+	 * Called to set the error on the node
+	 *
+	 * @name error
+	 * @access public
+	 * @param msg The error message
+	 */
 	error(msg: string) {
 		if(this._el) {
 			this._el.error(msg);
 		}
 	}
 
+	/**
+	 * Generate State
+	 *
+	 * Checks the node for data and generates the state that will be used in the
+	 * component
+	 *
+	 * @name generateState
+	 * @access public
+	 * @returns the state to use
+	 */
 	generateState(): DefineNodeState {
 
 		// Get the react display properties
@@ -210,6 +263,14 @@ export default class DefineNode extends DefineBase {
 		}
 	}
 
+	/**
+	 * Render
+	 *
+	 * Generates the actual DOM elements of the component
+	 *
+	 * @name render
+	 * @access public
+	 */
 	render() {
 
 		// Get the component name based on the type
@@ -241,8 +302,8 @@ export default class DefineNode extends DefineBase {
 					variant={this.props.variant}
 				/>
 				{this.props.type === 'search' &&
-					<SearchOption
-						ref={el => this._search = el}
+					<DefineNodeSearchOption
+						ref={(el: DefineNodeSearchOption) => this._search = el}
 						type={this.state.type}
 						variant={this.props.variant}
 					/>
@@ -251,13 +312,30 @@ export default class DefineNode extends DefineBase {
 		);
 	}
 
-	reset() {
+	/**
+	 * Reset
+	 *
+	 * Resets the value on a Node without triggering error checking
+	 *
+	 * @name reset
+	 * @access public
+	 */
+	reset(): void {
 		if(this._el) {
 			this._el.reset();
 		}
 	}
 
-	get value() {
+	/**
+	 * Value (get)
+	 *
+	 * Returns the current value of the node
+	 *
+	 * @name value
+	 * @property
+	 * @returns the current value
+	 */
+	get value(): any | null {
 
 		// If we don't have the element
 		if(!this._el) {
@@ -278,7 +356,7 @@ export default class DefineNode extends DefineBase {
 		}
 
 		// Get the value of the search select
-		const sSearch = this._search.value;
+		const sSearch = (this._search as DefineNodeSearchOption).value;
 
 		// If it's null or exact, return the value as is
 		if(sSearch === null || sSearch === 'exact') {
@@ -294,7 +372,16 @@ export default class DefineNode extends DefineBase {
 		}
 	}
 
-	set value(val) {
+	/**
+	 * Value (set)
+	 *
+	 * Sets the new value on the node
+	 *
+	 * @name value
+	 * @property
+	 * @param val The new value to set
+	 */
+	set value(val: any | null) {
 
 		// If we're not in search mode, set the value as is
 		if(this.props.type !== 'search') {
@@ -305,13 +392,13 @@ export default class DefineNode extends DefineBase {
 		// If we didn't get an object, assume exact
 		if(!isObject(val)) {
 			(this._el as DefineNodeBase).value = val;
-			(this._search as Search).value = 'exact';
+			(this._search as DefineNodeSearchOption).value = 'exact';
 			return;
 		}
 
 		// Set the value and search dropdown
 		(this._el as DefineNodeBase).value = val.value;
-		(this._search as Search).value = val.type;
+		(this._search as DefineNodeSearchOption).value = val.type;
 	}
 }
 

@@ -7,7 +7,7 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-15
  */
-import { CallbackType } from './types';
+import { OptionsCallbackType } from './Types';
 /**
  * Options Base
  *
@@ -18,7 +18,7 @@ import { CallbackType } from './types';
  */
 export default class OptionsBase {
     _CLONE_SKIP_: boolean;
-    _callbacks: CallbackType[];
+    _callbacks: OptionsCallbackType[];
     /**
      * Constructor
      *
@@ -50,5 +50,5 @@ export default class OptionsBase {
      * @param callback The function to call when data changes
      * @param remove Set to false to remove the callback
      */
-    track(callback: CallbackType, remove?: boolean): void;
+    track(callback: OptionsCallbackType, remove?: boolean): void;
 }

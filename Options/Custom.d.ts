@@ -9,7 +9,7 @@
  * @created 2023-02-15
  */
 import Base from './Base';
-import { CallbackType } from './types';
+import { OptionsCallbackType } from './Types';
 /**
  * Custom
  *
@@ -55,5 +55,5 @@ export default class Custom extends Base {
      * @param remove Set to true to remove the callback
      * @returns the current data, or void on callback removal
      */
-    track(callback: CallbackType, remove?: boolean): void | string[][];
+    track(callback: OptionsCallbackType, remove?: boolean): void | string[][];
 }

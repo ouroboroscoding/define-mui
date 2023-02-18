@@ -8,7 +8,7 @@
  * @created 2023-02-15
  */
 import Base from './Base';
-import { CallbackType } from './types';
+import { OptionsCallbackType } from './Types';
 /**
  * Hash
  *
@@ -56,5 +56,5 @@ export default class Hash extends Base {
      * @param callback The function to call when data changes
      * @param remove Set to false to remove the callback
      */
-    track(callback: CallbackType, remove?: boolean): string[][] | undefined;
+    track(callback: OptionsCallbackType, remove?: boolean): string[][] | undefined;
 }

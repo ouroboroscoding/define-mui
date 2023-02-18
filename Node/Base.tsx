@@ -16,25 +16,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 // Types
-import { labelOptions, variantOptions } from '../types';
-
-// Types
-type DefineNodeBaseProps = {
-	display: Record<string, any>,
-	error?: string | false,
-	label?: labelOptions,
-	name: string,
-	node: Node,
-	onChange?: (val: any) => void,
-	onEnter?: () => void | false,
-	value?: any,
-	validation?: boolean,
-	variant: variantOptions
-}
-type DefineNodeBaseState = {
-	error?: string | false,
-	value: any
-}
+import { DefineNodeBaseProps, DefineNodeBaseState } from '../Types';
 
 /**
  * Define Node Base
@@ -55,6 +37,7 @@ export default class DefineNodeBase extends React.Component {
 		node: PropTypes.instanceOf(Node).isRequired,
 		onChange: PropTypes.func,
 		onEnter: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+		placeholder: PropTypes.string,
 		value: PropTypes.any
 	}
 
@@ -126,7 +109,7 @@ export default class DefineNodeBase extends React.Component {
 	 * @access public
 	 * @param event The event, aka, the key pressed
 	 */
-	keyPressed(event: React.KeyboardEvent<HTMLInputElement>) {
+	keyPressed(event: React.KeyboardEvent<HTMLInputElement>): void {
 		if(event.key === 'Enter' && this.props.onEnter) {
 			this.props.onEnter();
 		}

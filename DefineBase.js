@@ -63,6 +63,14 @@ export default class DefineBase extends React.Component {
     error(error) {
         throw new Error('Must implement error when extending DefineBase');
     }
+    // Must implement reset
+    reset() {
+        throw new Error('Must implement reset when extending DefineBase');
+    }
+    // Must implement valid
+    valid() {
+        throw new Error('Must implement valid when extending DefineBase');
+    }
     // Must implement get value
     get value() {
         throw new Error('Must implement get value when extending DefineBase');

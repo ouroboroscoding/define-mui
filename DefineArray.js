@@ -56,7 +56,20 @@ export default class DefineArray extends DefineBase {
     };
     // External Components register to be used within DefineArray
     static _registered = {};
-    // Constructor
+    // Called to add an external Component to the list available
+    static register(type, classConstructor) {
+        DefineArray._registered[type] = classConstructor;
+    }
+    /**
+     * Constructor
+     *
+     * Creates a new instance
+     *
+     * @name DefineArray
+     * @access public
+     * @param props Properties passed to the component
+     * @returns a new instance
+     */
     constructor(props) {
         // Call parent
         super(props);
@@ -90,7 +103,14 @@ export default class DefineArray extends DefineBase {
             this.state.customProps = oUI.props || {};
         }
     }
-    // Called to add new array element
+    /**
+     * Add
+     *
+     * Called to add a new array element
+     *
+     * @name add
+     * @access public
+     */
     add() {
         // Clone the current elements
         const lElements = clone(this.state.elements);
@@ -102,6 +122,15 @@ export default class DefineArray extends DefineBase {
         // Set the new state
         this.setState({ elements: lElements });
     }
+    /**
+     * Error
+     *
+     * Sets a new object of error messages by field
+     *
+     * @name error
+     * @access public
+     * @param errors Errors to set on the component
+     */
     error(errors) {
         // If we have a custom component
         if (this.state.custom) {
@@ -115,6 +144,14 @@ export default class DefineArray extends DefineBase {
             }
         }
     }
+    /**
+     * Remove
+     *
+     * Used to remove an element from the array
+     *
+     * @name remove
+     * @param key The key associated with the element to remove
+     */
     remove(key) {
         // Find the index
         const iIndex = afindi(this.state.elements, 'key', key);
@@ -129,11 +166,14 @@ export default class DefineArray extends DefineBase {
             this.setState({ elements: lElements });
         }
     }
-    // Called to add an external Component to the list available
-    static register(type, classConstructor) {
-        DefineArray._registered[type] = classConstructor;
-    }
-    // Renders the component
+    /**
+     * Render
+     *
+     * Generates the actual DOM elements of the component
+     *
+     * @name render
+     * @access public
+     */
     render() {
         // Reset the refs
         this.nodes = {};
@@ -192,6 +232,33 @@ export default class DefineArray extends DefineBase {
 				</Box>
 			</Box>);
     }
+    /**
+     * Reset
+     *
+     * Calls reset on all the child components
+     *
+     * @name reset
+     * @access public
+     */
+    reset() {
+        // If we have a custom component
+        if (this.state.custom) {
+            return this.nodes.reset();
+        }
+        // Go through each item and reset it
+        for (const o of Object.values(this.nodes)) {
+            o.reset();
+        }
+    }
+    /**
+     * Valid
+     *
+     * Called to verify if the current data is valid
+     *
+     * @name valid
+     * @public
+     * @returns true if the current values are valid
+     */
     valid() {
         // Valid?
         let bValid = true;
@@ -203,20 +270,26 @@ export default class DefineArray extends DefineBase {
             }
             return bValid;
         }
-        // Get the list of nodes
-        const lNodes = Object.values(this.nodes);
         // Go through each item and validate it
-        for (const i in lNodes) {
+        for (const o of Object.values(this.nodes)) {
             // Check if the current value is valid
-            if (!this.child.valid(lNodes[i].value)) {
-                lNodes[i].error(this.child.validationFailures[0][1]);
+            if (!this.child.valid(o.value)) {
+                o.error(this.child.validationFailures[0][1]);
                 bValid = false;
             }
         }
         // Return valid state
         return bValid;
     }
-    // Called when value is request
+    /**
+     * Value (get)
+     *
+     * Returns the current value
+     *
+     * @name value
+     * @property
+     * @returns the current value
+     */
     get value() {
         // If we have a custom component
         if (this.state.custom) {
@@ -234,7 +307,15 @@ export default class DefineArray extends DefineBase {
         // Return the values
         return lRet;
     }
-    // Called when new value is passed
+    /**
+     * Value (set)
+     *
+     * Called to set the new value
+     *
+     * @name value
+     * @property
+     * @param val The new values to set
+     */
     set value(val) {
         // If we have a custom component
         if (this.state.custom) {

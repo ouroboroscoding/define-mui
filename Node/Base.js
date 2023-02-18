@@ -30,6 +30,7 @@ export default class DefineNodeBase extends React.Component {
         node: PropTypes.instanceOf(Node).isRequired,
         onChange: PropTypes.func,
         onEnter: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+        placeholder: PropTypes.string,
         value: PropTypes.any
     };
     // State type

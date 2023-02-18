@@ -8,7 +8,7 @@
  * @created 2023-02-15
  */
 import Base from './Base';
-import { CallbackType, FetchType, FieldsType } from './types';
+import { OptionsCallbackType, FetchType, FieldsType } from './Types';
 /**
  * Select Rest
  *
@@ -48,5 +48,5 @@ export default class SelectRest extends Base {
      * @param callback The function to call when data changes
      * @param remove Set to false to remove the callback
      */
-    track(callback: CallbackType, remove?: boolean): string[][] | undefined;
+    track(callback: OptionsCallbackType, remove?: boolean): string[][] | undefined;
 }

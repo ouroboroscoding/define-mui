@@ -32,6 +32,8 @@ export default class DefineBase extends React.Component {
     static register(name: string, component: typeof DefineBase): void;
     constructor(props: Record<string, any>);
     error(error: any): void;
+    reset(): void;
+    valid(): boolean;
     get value(): any;
     set value(val: any);
 }

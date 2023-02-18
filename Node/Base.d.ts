@@ -10,23 +10,7 @@
 import { Node } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { labelOptions, variantOptions } from '../types';
-type DefineNodeBaseProps = {
-    display: Record<string, any>;
-    error?: string | false;
-    label?: labelOptions;
-    name: string;
-    node: Node;
-    onChange?: (val: any) => void;
-    onEnter?: () => void | false;
-    value?: any;
-    validation?: boolean;
-    variant: variantOptions;
-};
-type DefineNodeBaseState = {
-    error?: string | false;
-    value: any;
-};
+import { DefineNodeBaseProps, DefineNodeBaseState } from '../Types';
 /**
  * Define Node Base
  *
@@ -44,6 +28,7 @@ export default class DefineNodeBase extends React.Component {
         node: PropTypes.Validator<Node>;
         onChange: PropTypes.Requireable<(...args: any[]) => any>;
         onEnter: PropTypes.Requireable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>;
+        placeholder: PropTypes.Requireable<string>;
         value: PropTypes.Requireable<any>;
     };
     props: DefineNodeBaseProps;
@@ -118,4 +103,3 @@ export default class DefineNodeBase extends React.Component {
      */
     set value(val: any);
 }
-export {};
