@@ -24,16 +24,23 @@ import Typography from '@mui/material/Typography';
 import DefineBase from './DefineBase';
 import { OptionsHash } from './Options';
 
-// Types
-import { gridSizesStruct } from './DefineBase';
-import { labelOptions, onEnterCallback, typeOptions, variantOptions } from './DefineNode';
+// Modules
+import { errorTree } from './Shared';
 
 // Types
+import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 export type dynamicOptionStruct = {
 	node: string,
 	trigger: string,
 	options: Record<string, any>
 }
+export type gridSizesStruct = {
+	xs: number,
+	sm: number,
+	md: number,
+	lg: number,
+	xl: number
+};
 export type DefineParentProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	error?: Record<string, any>,
@@ -44,7 +51,7 @@ export type DefineParentProps = {
 	name: string,
 	node: Parent,
 	nodeVariant: variantOptions
-	onEnter?: onEnterCallback,
+	onEnterPressed?: onEnterPressedCallback,
 	returnAll?: boolean,
 	type: typeOptions,
 	value: Record<string, any>,
@@ -90,7 +97,7 @@ export default class DefineParent extends DefineBase {
 		name: PropTypes.string.isRequired,
 		node: PropTypes.instanceOf(Parent).isRequired,
 		nodeVariant: PropTypes.oneOf(['filled', 'outlined', 'standard']),
-		onEnter: PropTypes.func,
+		onEnterPressed: PropTypes.func,
 		returnAll: PropTypes.bool,
 		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
 		value: PropTypes.object,
@@ -171,8 +178,20 @@ export default class DefineParent extends DefineBase {
 	 * @access public
 	 * @param errors Errors to set on the component
 	 */
-	error(errors: Record<string, any>) {
-		for(const k in errors) {
+	error(errors: string[][] | Record<string, any>) {
+
+		// Errors
+		let oErrors: Record<string, any>;
+
+		// If we got an array
+		if(Array.isArray(errors)) {
+			oErrors = errorTree(errors);
+		} else {
+			oErrors = errors;
+		}
+
+		// Go through each earrpr
+		for(const k of Object.keys(errors)) {
 			if(k in this.fields) {
 				this.fields[k].error(errors[k]);
 			} else {
@@ -291,7 +310,7 @@ export default class DefineParent extends DefineBase {
 								ref: (el: DefineBase) => this.fields[sField] = el,
 								name: sField,
 								node: oChild,
-								onEnter: this.props.onEnter,
+								onEnterPressed: this.props.onEnterPressed,
 								returnAll: this.props.returnAll,
 								type: this.props.type,
 								value: mValue,
@@ -306,7 +325,7 @@ export default class DefineParent extends DefineBase {
 						ref: (el: DefineBase) => this.fields[sField] = el,
 						name: sField,
 						node: oChild,
-						onEnter: this.props.onEnter,
+						onEnterPressed: this.props.onEnterPressed,
 						type: this.props.type,
 						value: mValue,
 						validation: this.props.validation,

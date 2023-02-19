@@ -93,7 +93,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         // If there's a callback for dynamic options
         if (this.callback) {
             // Stop tracking
-            this.props.display.options.track(this.callback, true);
+            this.props.display.options.unsubscribe(this.callback);
         }
     }
     /**

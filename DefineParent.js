@@ -19,6 +19,8 @@ import Typography from '@mui/material/Typography';
 // Components
 import DefineBase from './DefineBase';
 import { OptionsHash } from './Options';
+// Modules
+import { errorTree } from './Shared';
 /**
  * Parent
  *
@@ -50,7 +52,7 @@ export default class DefineParent extends DefineBase {
         name: PropTypes.string.isRequired,
         node: PropTypes.instanceOf(Parent).isRequired,
         nodeVariant: PropTypes.oneOf(['filled', 'outlined', 'standard']),
-        onEnter: PropTypes.func,
+        onEnterPressed: PropTypes.func,
         returnAll: PropTypes.bool,
         type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
         value: PropTypes.object,
@@ -119,7 +121,17 @@ export default class DefineParent extends DefineBase {
      * @param errors Errors to set on the component
      */
     error(errors) {
-        for (const k in errors) {
+        // Errors
+        let oErrors;
+        // If we got an array
+        if (Array.isArray(errors)) {
+            oErrors = errorTree(errors);
+        }
+        else {
+            oErrors = errors;
+        }
+        // Go through each earrpr
+        for (const k of Object.keys(errors)) {
             if (k in this.fields) {
                 this.fields[k].error(errors[k]);
             }
@@ -212,7 +224,7 @@ export default class DefineParent extends DefineBase {
                             ref: (el) => this.fields[sField] = el,
                             name: sField,
                             node: oChild,
-                            onEnter: this.props.onEnter,
+                            onEnterPressed: this.props.onEnterPressed,
                             returnAll: this.props.returnAll,
                             type: this.props.type,
                             value: mValue,
@@ -226,7 +238,7 @@ export default class DefineParent extends DefineBase {
                         ref: (el) => this.fields[sField] = el,
                         name: sField,
                         node: oChild,
-                        onEnter: this.props.onEnter,
+                        onEnterPressed: this.props.onEnterPressed,
                         type: this.props.type,
                         value: mValue,
                         validation: this.props.validation,

@@ -52,7 +52,7 @@ export default class DefineNode extends DefineBase {
         name: PropTypes.string.isRequired,
         node: PropTypes.instanceOf(Node).isRequired,
         onChange: PropTypes.func,
-        onEnter: PropTypes.func,
+        onEnterPressed: PropTypes.func,
         placeholder: PropTypes.string,
         type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
         value: PropTypes.any,
@@ -225,7 +225,7 @@ export default class DefineNode extends DefineBase {
             this.state.value :
             _plugins[this.state.type].default_;
         return (<React.Fragment>
-				<ElName display={this.state.display} error={this.props.error} label={this.props.label} onChange={this.props.onChange} onEnter={this.props.onEnter} name={this.props.name} node={this.props.node} ref={(el) => this._el = el} value={mValue} validation={this.props.validation} variant={this.props.variant}/>
+				<ElName display={this.state.display} error={this.props.error} label={this.props.label} onChange={this.props.onChange} onEnterPressed={this.props.onEnterPressed} name={this.props.name} node={this.props.node} ref={(el) => this._el = el} value={mValue} validation={this.props.validation} variant={this.props.variant}/>
 				{this.props.type === 'search' &&
                 <DefineNodeSearchOption ref={(el) => this._search = el} type={this.state.type} variant={this.props.variant}/>}
 			</React.Fragment>);

@@ -16,9 +16,10 @@
  * @access public
  */
 export default class OptionsBase {
-    _CLONE_SKIP_ = true;
     // List of callbacks tracking changes in the data
     _callbacks;
+    // The current data
+    _data;
     /**
      * Constructor
      *
@@ -28,9 +29,11 @@ export default class OptionsBase {
      * @access private
      * @returns a new instance
      */
-    constructor() {
+    constructor(data = []) {
         // Init the list of callbacks
         this._callbacks = [];
+        // Store the initial data
+        this._data = data;
     }
     /**
      * Notify
@@ -39,39 +42,45 @@ export default class OptionsBase {
      *
      * @name notify
      * @access public
-     * @param data The data to send to all callbacks
      */
-    notify(data) {
+    notify() {
         // Go through each callback and notify of the data change
         for (const f of this._callbacks) {
-            f(data);
+            f(this._data);
         }
     }
     /**
-     * Track
+     * Subscribe
      *
-     * Stores a callback function to be called whenever the select data needs
+     * Stores a callback function to be called whenever the option data needs
      * to change
      *
-     * @name track
+     * @name subscribe
      * @access public
      * @param callback The function to call when data changes
-     * @param remove Set to false to remove the callback
+     * @returns current data
      */
-    track(callback, remove = false) {
-        // If we are removing a callback
-        if (remove) {
-            // Try to find the callback in the list
-            const i = this._callbacks.indexOf(callback);
-            // If we get an index, delete the callback
-            if (i > -1) {
-                this._callbacks.splice(i, 1);
-            }
-        }
-        // If we are adding a new callback
-        else {
-            // Add it to the list
-            this._callbacks.push(callback);
+    subscribe(callback, remove = false) {
+        // Add it to the list
+        this._callbacks.push(callback);
+        // Return the current data
+        return this._data;
+    }
+    /**
+     * Unsubscribe
+     *
+     * Removes a callback that was added via subscribe
+     *
+     * @name unsubscribe
+     * @access public
+     * @param callback The function used to subscribe
+     */
+    unsubscribe(callback) {
+        // Try to find the callback in the list
+        const i = this._callbacks.indexOf(callback);
+        // If we get an index, delete the callback
+        if (i > -1) {
+            this._callbacks.splice(i, 1);
         }
     }
 }

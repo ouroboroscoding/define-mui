@@ -19,7 +19,7 @@ import Base from './Base';
  * @extends SelectBase
  */
 export default class SelectRest extends Base {
-    _data;
+    // Instance variables
     _fetch;
     _fetched;
     _fields;
@@ -39,12 +39,11 @@ export default class SelectRest extends Base {
      */
     constructor(fetch, fields = ['_id', 'name'], data = []) {
         // Call the base class constructor
-        super();
+        super(data);
         // Store the fetch function
         this._fetch = fetch;
         this._fields = fields;
         // Init the data
-        this._data = data;
         this._fetched = false;
     }
     /**
@@ -52,37 +51,34 @@ export default class SelectRest extends Base {
      *
      * Stores a callback function to be called whenever the data changes
      *
-     * @name track
+     * @name subscribe
      * @access public
      * @param callback The function to call when data changes
      * @param remove Set to false to remove the callback
      */
-    track(callback, remove = false) {
-        // Call the base class track
-        super.track(callback, remove);
-        // If we are not removing the callback
-        if (!remove) {
-            // If we don't have the data yet
-            if (!this._fetched) {
-                this._fetched = true;
-                // Call the instance's fetch
-                this._fetch().then(data => {
-                    // Generate the name/value pairs
-                    this._data = [];
-                    for (const o of data) {
-                        if (typeof this._fields === 'function') {
-                            this._data.push(this._fields(o));
-                        }
-                        else {
-                            this._data.push([o[this._fields[0]], o[this._fields[1]]]);
-                        }
+    subscribe(callback) {
+        // Call the base class subscribe
+        super.subscribe(callback);
+        // If we don't have the data yet
+        if (!this._fetched) {
+            this._fetched = true;
+            // Call the instance's fetch
+            this._fetch().then(data => {
+                // Generate the name/value pairs
+                this._data = [];
+                for (const o of data) {
+                    if (typeof this._fields === 'function') {
+                        this._data.push(this._fields(o));
                     }
-                    // Notify the trackers
-                    this.notify(this._data);
-                });
-            }
-            // Return the current data
-            return this._data;
+                    else {
+                        this._data.push([o[this._fields[0]], o[this._fields[1]]]);
+                    }
+                }
+                // Notify the subscribeers
+                this.notify();
+            });
         }
+        // Return the current data
+        return this._data;
     }
 }

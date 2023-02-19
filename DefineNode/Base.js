@@ -27,7 +27,7 @@ export default class DefineNodeBase extends React.Component {
         name: PropTypes.string.isRequired,
         node: PropTypes.instanceOf(Node).isRequired,
         onChange: PropTypes.func,
-        onEnter: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+        onEnterPressed: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
         placeholder: PropTypes.string,
         value: PropTypes.any
     };
@@ -90,8 +90,8 @@ export default class DefineNodeBase extends React.Component {
      * @param event The event, aka, the key pressed
      */
     keyPressed(event) {
-        if (event.key === 'Enter' && this.props.onEnter) {
-            this.props.onEnter();
+        if (event.key === 'Enter' && this.props.onEnterPressed) {
+            this.props.onEnterPressed();
         }
     }
     /**

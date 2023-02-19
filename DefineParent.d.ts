@@ -11,12 +11,18 @@
 import { Parent } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import DefineBase from './DefineBase';
-import { gridSizesStruct } from './DefineBase';
-import { labelOptions, onEnterCallback, typeOptions, variantOptions } from './DefineNode';
+import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 export type dynamicOptionStruct = {
     node: string;
     trigger: string;
     options: Record<string, any>;
+};
+export type gridSizesStruct = {
+    xs: number;
+    sm: number;
+    md: number;
+    lg: number;
+    xl: number;
 };
 export type DefineParentProps = {
     dynamicOptions?: dynamicOptionStruct[];
@@ -28,7 +34,7 @@ export type DefineParentProps = {
     name: string;
     node: Parent;
     nodeVariant: variantOptions;
-    onEnter?: onEnterCallback;
+    onEnterPressed?: onEnterPressedCallback;
     returnAll?: boolean;
     type: typeOptions;
     value: Record<string, any>;
@@ -71,7 +77,7 @@ export default class DefineParent extends DefineBase {
         name: PropTypes.Validator<string>;
         node: PropTypes.Validator<Parent>;
         nodeVariant: PropTypes.Requireable<string>;
-        onEnter: PropTypes.Requireable<(...args: any[]) => any>;
+        onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
         returnAll: PropTypes.Requireable<boolean>;
         type: PropTypes.Validator<string>;
         value: PropTypes.Requireable<object>;
@@ -126,7 +132,7 @@ export default class DefineParent extends DefineBase {
      * @access public
      * @param errors Errors to set on the component
      */
-    error(errors: Record<string, any>): void;
+    error(errors: string[][] | Record<string, any>): void;
     /**
      * Generate State
      *

@@ -12,9 +12,6 @@
 // Import the base class
 import Base from './Base';
 
-// Import types
-import { OptionsCallbackType } from './Types';
-
 /**
  * Custom
  *
@@ -27,8 +24,6 @@ import { OptionsCallbackType } from './Types';
  */
 export default class Custom extends Base {
 
-	_data: string[][];
-
 	/**
 	 * Options Custom
 	 *
@@ -39,13 +34,10 @@ export default class Custom extends Base {
 	 * @param data Default data
 	 * @returns a new instance
 	 */
-	constructor(data: string[][]=[]) {
+	constructor(data: string[][] = []) {
 
 		// Call the base class constructor
-		super();
-
-		// Init the data
-		this._data = data;
+		super(data);
 	}
 
 	/**
@@ -64,30 +56,6 @@ export default class Custom extends Base {
 		this._data = data;
 
 		// Notify
-		this.notify(this._data);
-	}
-
-	/**
-	 * Track
-	 *
-	 * Stores a callback function to be called whenever the key changes
-	 *
-	 * @name track
-	 * @access public
-	 * @param callback The function to call when data changes
-	 * @param remove Set to true to remove the callback
-	 * @returns the current data, or void on callback removal
-	 */
-	track(callback: OptionsCallbackType, remove: boolean = false): void | string[][] {
-
-		// Call the base class track
-		super.track(callback, remove);
-
-		// If we are not removing the callbacl
-		if(!remove) {
-
-			// Return the current data
-			return this._data;
-		}
+		this.notify();
 	}
 }

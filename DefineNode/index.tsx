@@ -51,7 +51,7 @@ export type typeOptions = 'create' | 'search' | 'update';
 export type variantOptions = 'filled' | 'outlined' | 'standard';
 //	Callbacks
 export type onChangeCallback = (val: any) => void;
-export type onEnterCallback = () => void;
+export type onEnterPressedCallback = () => void;
 //	Props
 export type DefineNodeProps = {
 	error: string | false,
@@ -59,7 +59,7 @@ export type DefineNodeProps = {
 	name: string,
 	node: Node,
 	onChange?: onChangeCallback,
-	onEnter?: onEnterCallback,
+	onEnterPressed?: onEnterPressedCallback,
 	placeholder?: string,
 	ref?: any,
 	type: typeOptions,
@@ -99,7 +99,7 @@ export default class DefineNode extends DefineBase {
 		name: PropTypes.string.isRequired,
 		node: PropTypes.instanceOf(Node).isRequired,
 		onChange: PropTypes.func,
-		onEnter: PropTypes.func,
+		onEnterPressed: PropTypes.func,
 		placeholder: PropTypes.string,
 		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
 		value: PropTypes.any,
@@ -307,7 +307,7 @@ export default class DefineNode extends DefineBase {
 					error={this.props.error}
 					label={this.props.label}
 					onChange={this.props.onChange}
-					onEnter={this.props.onEnter}
+					onEnterPressed={this.props.onEnterPressed}
 					name={this.props.name}
 					node={this.props.node}
 					ref={(el: DefineNodeBase) => this._el = el}

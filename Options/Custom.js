@@ -21,7 +21,6 @@ import Base from './Base';
  * @extends Base
  */
 export default class Custom extends Base {
-    _data;
     /**
      * Options Custom
      *
@@ -34,9 +33,7 @@ export default class Custom extends Base {
      */
     constructor(data = []) {
         // Call the base class constructor
-        super();
-        // Init the data
-        this._data = data;
+        super(data);
     }
     /**
      * Set
@@ -52,26 +49,6 @@ export default class Custom extends Base {
         // Store the new data
         this._data = data;
         // Notify
-        this.notify(this._data);
-    }
-    /**
-     * Track
-     *
-     * Stores a callback function to be called whenever the key changes
-     *
-     * @name track
-     * @access public
-     * @param callback The function to call when data changes
-     * @param remove Set to true to remove the callback
-     * @returns the current data, or void on callback removal
-     */
-    track(callback, remove = false) {
-        // Call the base class track
-        super.track(callback, remove);
-        // If we are not removing the callbacl
-        if (!remove) {
-            // Return the current data
-            return this._data;
-        }
+        this.notify();
     }
 }

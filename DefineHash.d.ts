@@ -12,13 +12,13 @@ import { Hash } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
-import { labelOptions, onEnterCallback, variantOptions } from './DefineNode';
+import { labelOptions, onEnterPressedCallback, variantOptions } from './DefineNode';
 export type DefineHashProps = {
     error?: any;
     label?: labelOptions;
     name: string;
     node: Hash;
-    onEnter?: onEnterCallback;
+    onEnterPressed?: onEnterPressedCallback;
     placeholder?: string;
     type: 'create' | 'update';
     value?: Record<any, any>;
@@ -44,7 +44,7 @@ export default class DefineHash extends DefineBase {
         label: PropTypes.Requireable<string>;
         name: PropTypes.Requireable<string>;
         node: PropTypes.Validator<Hash>;
-        onEnter: PropTypes.Requireable<(...args: any[]) => any>;
+        onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
         placeholder: PropTypes.Requireable<string>;
         type: PropTypes.Validator<string>;
         value: PropTypes.Requireable<object>;

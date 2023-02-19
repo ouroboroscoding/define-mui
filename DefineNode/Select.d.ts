@@ -10,8 +10,8 @@
 import React from 'react';
 import { SelectChangeEvent } from '@mui/material/Select';
 import DefineNodeBase from './Base';
-import { OptionsCallbackType } from '../Options/Types';
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
+import { optionsCallback } from '../Options';
 type DefineNodeSelectState = {
     options: string[][];
 };
@@ -27,7 +27,7 @@ type DefineNodeSelectState = {
 export default class DefineNodeSelect extends DefineNodeBase {
     props: DefineNodeBaseProps;
     state: DefineNodeSelectState & DefineNodeBaseState;
-    callback: OptionsCallbackType;
+    callback: optionsCallback;
     /**
      * Constructor
      *

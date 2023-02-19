@@ -12,7 +12,9 @@
 import Base from './Base';
 
 // Import types
-import { OptionsCallbackType, FetchType, FieldsType } from './Types';
+import { optionsCallback } from './Base';
+export type FetchType = () => Promise<Record<string, any>[]>;
+export type FieldsType = (data: Record<string, any>) => string[];
 
 /**
  * Select Rest
@@ -25,7 +27,7 @@ import { OptionsCallbackType, FetchType, FieldsType } from './Types';
  */
 export default class SelectRest extends Base {
 
-	_data: string[][];
+	// Instance variables
 	_fetch: FetchType;
 	_fetched: boolean;
 	_fields: string[] | FieldsType;
@@ -47,14 +49,13 @@ export default class SelectRest extends Base {
 	constructor(fetch: FetchType, fields: string[] | FieldsType = ['_id', 'name'], data: string[][] = []) {
 
 		// Call the base class constructor
-		super();
+		super(data);
 
 		// Store the fetch function
 		this._fetch = fetch;
 		this._fields = fields;
 
 		// Init the data
-		this._data = data;
 		this._fetched = false;
 	}
 
@@ -63,43 +64,39 @@ export default class SelectRest extends Base {
 	 *
 	 * Stores a callback function to be called whenever the data changes
 	 *
-	 * @name track
+	 * @name subscribe
 	 * @access public
 	 * @param callback The function to call when data changes
 	 * @param remove Set to false to remove the callback
 	 */
-	track(callback: OptionsCallbackType, remove: boolean = false) {
+	subscribe(callback: optionsCallback) {
 
-		// Call the base class track
-		super.track(callback, remove);
+		// Call the base class subscribe
+		super.subscribe(callback);
 
-		// If we are not removing the callback
-		if(!remove) {
+		// If we don't have the data yet
+		if(!this._fetched) {
+			this._fetched = true;
 
-			// If we don't have the data yet
-			if(!this._fetched) {
-				this._fetched = true;
+			// Call the instance's fetch
+			this._fetch().then(data => {
 
-				// Call the instance's fetch
-				this._fetch().then(data => {
-
-					// Generate the name/value pairs
-					this._data = [];
-					for(const o of data) {
-						if(typeof this._fields === 'function') {
-							this._data.push(this._fields(o));
-						} else {
-							this._data.push([o[this._fields[0]], o[this._fields[1]]]);
-						}
+				// Generate the name/value pairs
+				this._data = [];
+				for(const o of data) {
+					if(typeof this._fields === 'function') {
+						this._data.push(this._fields(o));
+					} else {
+						this._data.push([o[this._fields[0]], o[this._fields[1]]]);
 					}
+				}
 
-					// Notify the trackers
-					this.notify(this._data);
-				});
-			}
-
-			// Return the current data
-			return this._data;
+				// Notify the subscribeers
+				this.notify();
+			});
 		}
+
+		// Return the current data
+		return this._data;
 	}
 }

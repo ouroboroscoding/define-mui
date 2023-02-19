@@ -29,12 +29,12 @@ import DefineNodeBase from './Base';
 
 // Options modules
 import { OptionsBase } from '../Options';
-import { OptionsCallbackType } from '../Options/Types';
 
 // Types
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 
 // Types
+import { optionsCallback } from '../Options';
 type DefineNodeSelectState = {
 	options: string[][]
 }
@@ -57,7 +57,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 	declare state: DefineNodeSelectState & DefineNodeBaseState;
 
 	// Callback for dynamic data
-	callback: OptionsCallbackType;
+	callback: optionsCallback;
 
 	/**
 	 * Constructor
@@ -85,7 +85,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 				this.callback = this.dynamicData.bind(this);
 
 				// Get default data and add callback
-				lDisplayOptions = lDisplayOptions.track(this.callback);
+				lDisplayOptions = lDisplayOptions.subscribe(this.callback);
 			}
 
 			// Else, if we have a list but the elements aren't lists
@@ -121,9 +121,10 @@ export default class DefineNodeSelect extends DefineNodeBase {
 	 * @access public
 	 */
 	componentWillUnmount() {
+
 		// If there's a callback for dynamic options
 		if(this.callback) {
-			this.props.display.options.track(this.callback, true);
+			this.props.display.options.unsubscribe(this.callback);
 		}
 	}
 

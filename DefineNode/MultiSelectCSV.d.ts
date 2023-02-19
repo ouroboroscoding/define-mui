@@ -10,8 +10,8 @@
  */
 /// <reference types="react" />
 import DefineNodeBase from './Base';
-import { OptionsCallbackType } from '../Options/Types';
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
+import { optionsCallback } from '../Options';
 type DefineNodeMultiSelectCSVState = {
     defaultValues: string[] | null;
     options: string[][];
@@ -28,7 +28,7 @@ type DefineNodeMultiSelectCSVState = {
 export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
     props: DefineNodeBaseProps;
     state: DefineNodeMultiSelectCSVState & DefineNodeBaseState;
-    callback: OptionsCallbackType;
+    callback: optionsCallback;
     checks: HTMLInputElement[];
     /**
      * Constructor

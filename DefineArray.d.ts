@@ -12,14 +12,14 @@ import { Base, ArrayNode } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
-import { labelOptions, onChangeCallback, onEnterCallback, typeOptions, variantOptions } from './DefineNode';
+import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 type DefineArrayProps = {
     error?: any;
     label?: labelOptions;
     name: string;
     node: ArrayNode;
     onChange?: onChangeCallback;
-    onEnter?: onEnterCallback;
+    onEnterPressed?: onEnterPressedCallback;
     placeholder?: string;
     type: typeOptions;
     value?: any[];
@@ -56,7 +56,7 @@ export default class DefineArray extends DefineBase {
         label: PropTypes.Requireable<string>;
         name: PropTypes.Validator<string>;
         node: PropTypes.Validator<ArrayNode>;
-        onEnter: PropTypes.Requireable<(...args: any[]) => any>;
+        onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
         placeholder: PropTypes.Requireable<string>;
         type: PropTypes.Validator<string>;
         value: PropTypes.Requireable<any[]>;

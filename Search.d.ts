@@ -11,19 +11,16 @@ import { Tree } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DefineParent from './DefineParent';
-import { gridSizesStruct, onSubmitCallback } from './DefineBase';
+import { onSubmitCallback } from './DefineBase';
 import { labelOptions } from './DefineNode';
+import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
 export type DefineSearchProps = {
-    dynamicOptions?: {
-        node: string;
-        trigger: string;
-        options: Record<any, any>;
-    }[];
+    dynamicOptions?: dynamicOptionStruct[];
     gridSizes?: Record<string, gridSizesStruct>;
     hash: string;
     label?: labelOptions;
-    name: string;
-    onSubmit: onSubmitCallback;
+    name?: string;
+    onSearch: onSubmitCallback;
     tree: Tree;
 };
 type DefineSearchState = {
@@ -54,15 +51,10 @@ export default class DefineSearch extends React.Component {
                 xl: PropTypes.Requireable<number>;
             }>> | null | undefined;
         }>;
-        handleErrors: PropTypes.Requireable<{
-            [x: string]: NonNullable<((...args: any[]) => any) | {
-                [x: string]: string | null | undefined;
-            } | null | undefined> | null | undefined;
-        }>;
         hash: PropTypes.Validator<string>;
         label: PropTypes.Requireable<string>;
-        name: PropTypes.Validator<string>;
-        success: PropTypes.Requireable<(...args: any[]) => any>;
+        name: PropTypes.Requireable<string>;
+        onSearch: PropTypes.Requireable<(...args: any[]) => any>;
         tree: PropTypes.Validator<Tree>;
     };
     static defaultProps: {
@@ -73,7 +65,6 @@ export default class DefineSearch extends React.Component {
                 lg: number;
             };
         };
-        handleErrors: {};
         label: string;
     };
     props: DefineSearchProps;
@@ -90,6 +81,25 @@ export default class DefineSearch extends React.Component {
      * @returns a new instance
      */
     constructor(props: DefineSearchProps);
+    /**
+     * Query
+     *
+     * Called to set the hash value and trigger a new search
+     *
+     * @name query
+     * @access private
+     */
+    _query(): void;
+    /**
+     * Search
+     *
+     * Passed the new search parameters and triggers the user to search
+     *
+     * @name search
+     * @access private
+     * @param values The search parameters encoded as JSON
+     */
+    _search(values: string | null): void;
     /**
      * Component Did Mount
      *
@@ -117,25 +127,6 @@ export default class DefineSearch extends React.Component {
      * @access public
      */
     clear(): void;
-    /**
-     * Query
-     *
-     * Called to set the hash value and trigger a new search
-     *
-     * @name query
-     * @access public
-     */
-    query(): void;
-    /**
-     * Search
-     *
-     * Passed the new search parameters and triggers the user to search
-     *
-     * @name search
-     * @access public
-     * @param values The search parameters encoded as JSON
-     */
-    search(values: string | null): void;
     /**
      * Error
      *

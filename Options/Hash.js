@@ -20,6 +20,7 @@ import Base from './Base';
  * @extends SelectBase
  */
 export default class Hash extends Base {
+    // Instance variables
     _hash;
     _key;
     /**
@@ -36,7 +37,7 @@ export default class Hash extends Base {
      */
     constructor(hash, initialKey = null) {
         // Call base class constructor
-        super();
+        super([]);
         // Store the hash
         this._hash = hash;
         this._key = initialKey || '';
@@ -56,31 +57,14 @@ export default class Hash extends Base {
         if (key !== undefined) {
             // Store the new key
             this._key = key;
+            // Set the data
+            this._data = this._key in this._hash ? this._hash[this._key] : [];
             // Notify
-            this.notify(this._key in this._hash ? this._hash[this._key] : []);
+            this.notify();
         }
         // Else, return the current key
         else {
             return this._key;
-        }
-    }
-    /**
-     * Track
-     *
-     * Stores a callback function to be called whenever the key changes
-     *
-     * @name track
-     * @access public
-     * @param callback The function to call when data changes
-     * @param remove Set to false to remove the callback
-     */
-    track(callback, remove = false) {
-        // Call the base class track
-        super.track(callback, remove);
-        // If we are not removing the callbacl
-        if (!remove) {
-            // Return the current data
-            return this._key in this._hash ? this._hash[this._key] : [];
         }
     }
 }

@@ -26,19 +26,16 @@ import DefineParent from './DefineParent';
 import { errorTree } from './Shared';
 
 // Types
-import { gridSizesStruct, onSubmitCallback } from './DefineBase';
+import { onSubmitCallback } from './DefineBase';
 import { labelOptions } from './DefineNode';
+import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
 export type DefineSearchProps = {
-	dynamicOptions?: {
-		node: string,
-		trigger: string,
-		options: Record<any, any>
-	}[],
+	dynamicOptions?: dynamicOptionStruct[],
 	gridSizes?: Record<string, gridSizesStruct>,
 	hash: string,
 	label?: labelOptions,
-	name: string,
-	onSubmit: onSubmitCallback,
+	name?: string,
+	onSearch: onSubmitCallback,
 	tree: Tree
 };
 type DefineSearchState = {
@@ -72,21 +69,14 @@ export default class DefineSearch extends React.Component {
 				xl: PropTypes.number
 			})
 		),
-		handleErrors: PropTypes.objectOf(
-			PropTypes.oneOfType([
-				PropTypes.func,
-				PropTypes.objectOf(PropTypes.string)
-			])
-		),
 		hash: PropTypes.string.isRequired,
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
-		name: PropTypes.string.isRequired,
-		success: PropTypes.func,
+		name: PropTypes.string,
+		onSearch: PropTypes.func,
 		tree: PropTypes.instanceOf(Tree).isRequired,
 	};
 	static defaultProps = {
 		gridSizes: {__default__: {xs: 12, sm: 6, lg: 3}},
-		handleErrors: {},
 		label: 'placeholder'
 	};
 
@@ -124,59 +114,13 @@ export default class DefineSearch extends React.Component {
 
 		// Set the initial state
 		this.state = {
-			name: props.tree._name
+			name: props.name || props.tree._name
 		}
 
 		// Bind methods
 		this.clear = this.clear.bind(this);
-		this.query = this.query.bind(this);
-		this.search = this.search.bind(this);
-	}
-
-	/**
-	 * Component Did Mount
-	 *
-	 * Called when the component is finished being added to the DOM
-	 *
-	 * @name componentDidMount
-	 * @access public
-	 */
-	componentDidMount() {
-
-		// Track hash changes
-		hash.subscribe(this.props.hash, this.search);
-
-		// If we have a hash value
-		const sHash = hash.get(this.props.hash);
-		if(sHash) {
-			this.search(sHash);
-		}
-	}
-
-	/**
-	 * Component Will Unmount
-	 *
-	 * Called just before the component is removed from the DOM
-	 *
-	 * @name componentWillUnmount
-	 * @access public
-	 */
-	componentWillUnmount() {
-
-		// Stop traching hash changes
-		hash.unsubscribe(this.props.hash, this.search);
-	}
-
-	/**
-	 * Clear
-	 *
-	 * Resets all the elements in the component
-	 *
-	 * @name clear
-	 * @access public
-	 */
-	clear(): void {
-		hash.set(this.props.hash);
+		this._query = this._query.bind(this);
+		this._search = this._search.bind(this);
 	}
 
 	/**
@@ -185,9 +129,9 @@ export default class DefineSearch extends React.Component {
 	 * Called to set the hash value and trigger a new search
 	 *
 	 * @name query
-	 * @access public
+	 * @access private
 	 */
-	query(): void {
+	_query(): void {
 
 		// Fetch the values from the parent
 		const oValues = this.parent.value;
@@ -206,10 +150,10 @@ export default class DefineSearch extends React.Component {
 	 * Passed the new search parameters and triggers the user to search
 	 *
 	 * @name search
-	 * @access public
+	 * @access private
 	 * @param values The search parameters encoded as JSON
 	 */
-	search(values: string | null): void {
+	_search(values: string | null): void {
 
 		// If we have no search string
 		if(values === null) {
@@ -234,7 +178,53 @@ export default class DefineSearch extends React.Component {
 		this.parent.value = oValues;
 
 		// Run the search
-		this.props.onSubmit(oValues);
+		this.props.onSearch(oValues);
+	}
+
+	/**
+	 * Component Did Mount
+	 *
+	 * Called when the component is finished being added to the DOM
+	 *
+	 * @name componentDidMount
+	 * @access public
+	 */
+	componentDidMount() {
+
+		// Track hash changes
+		hash.subscribe(this.props.hash, this._search);
+
+		// If we have a hash value
+		const sHash = hash.get(this.props.hash);
+		if(sHash) {
+			this._search(sHash);
+		}
+	}
+
+	/**
+	 * Component Will Unmount
+	 *
+	 * Called just before the component is removed from the DOM
+	 *
+	 * @name componentWillUnmount
+	 * @access public
+	 */
+	componentWillUnmount() {
+
+		// Stop tracking hash changes
+		hash.unsubscribe(this.props.hash, this._search);
+	}
+
+	/**
+	 * Clear
+	 *
+	 * Resets all the elements in the component
+	 *
+	 * @name clear
+	 * @access public
+	 */
+	clear(): void {
+		hash.set(this.props.hash);
 	}
 
 	/**
@@ -260,20 +250,20 @@ export default class DefineSearch extends React.Component {
 	 */
 	render() {
 		return (
-			<Box className={"search _" + this.state.name}>
+			<Box className={`search _${this.state.name}`}>
 				<DefineParent
 					dynamicOptions={this.props.dynamicOptions}
 					gridSizes={this.props.gridSizes}
 					label={this.props.label}
 					ref={(el: DefineParent) => this.parent = el}
-					name={this.props.name}
+					name={this.state.name}
 					node={this.props.tree}
-					onEnter={this.query}
+					onEnterPressed={this._query}
 					type="search"
 					validation={false}
 				/>
 				<Box className="actions">
-					<Button variant="contained" color="primary" onClick={this.query}>Search</Button>
+					<Button variant="contained" color="primary" onClick={this._query}>Search</Button>
 				</Box>
 			</Box>
 		);

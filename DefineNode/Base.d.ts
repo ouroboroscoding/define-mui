@@ -10,7 +10,7 @@
 import { Base } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { labelOptions, onChangeCallback, onEnterCallback, variantOptions } from './';
+import { labelOptions, onChangeCallback, onEnterPressedCallback, variantOptions } from './';
 export type DefineNodeBaseProps = {
     display: Record<string, any>;
     error?: any;
@@ -18,7 +18,7 @@ export type DefineNodeBaseProps = {
     name: string;
     node: Base;
     onChange?: onChangeCallback;
-    onEnter?: onEnterCallback;
+    onEnterPressed?: onEnterPressedCallback;
     placeholder?: string;
     ref?: any;
     value?: any;
@@ -45,7 +45,7 @@ export default class DefineNodeBase extends React.Component {
         name: PropTypes.Validator<string>;
         node: PropTypes.Validator<Node>;
         onChange: PropTypes.Requireable<(...args: any[]) => any>;
-        onEnter: PropTypes.Requireable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>;
+        onEnterPressed: PropTypes.Requireable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>;
         placeholder: PropTypes.Requireable<string>;
         value: PropTypes.Requireable<any>;
     };

@@ -15,13 +15,6 @@ import { isObject } from '@ouroboros/tools';
 import React from 'react';
 
 // Types
-export type gridSizesStruct = {
-	xs: number,
-	sm: number,
-	md: number,
-	lg: number,
-	xl: number
-};
 export type onSubmitCallback = (values: Record<string, any>) => boolean;
 
 // Private variables

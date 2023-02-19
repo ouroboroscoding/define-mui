@@ -9,7 +9,6 @@
  * @created 2023-02-15
  */
 import Base from './Base';
-import { OptionsCallbackType } from './Types';
 /**
  * Custom
  *
@@ -21,7 +20,6 @@ import { OptionsCallbackType } from './Types';
  * @extends Base
  */
 export default class Custom extends Base {
-    _data: string[][];
     /**
      * Options Custom
      *
@@ -44,16 +42,4 @@ export default class Custom extends Base {
      * 				the key	and the second element being the name
      */
     set(data: string[][]): void;
-    /**
-     * Track
-     *
-     * Stores a callback function to be called whenever the key changes
-     *
-     * @name track
-     * @access public
-     * @param callback The function to call when data changes
-     * @param remove Set to true to remove the callback
-     * @returns the current data, or void on callback removal
-     */
-    track(callback: OptionsCallbackType, remove?: boolean): void | string[][];
 }

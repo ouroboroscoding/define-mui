@@ -7,7 +7,7 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-15
  */
-import { OptionsCallbackType } from './Types';
+export type optionsCallback = (data: string[][]) => void;
 /**
  * Options Base
  *
@@ -17,8 +17,8 @@ import { OptionsCallbackType } from './Types';
  * @access public
  */
 export default class OptionsBase {
-    _CLONE_SKIP_: boolean;
-    _callbacks: OptionsCallbackType[];
+    _callbacks: optionsCallback[];
+    _data: string[][];
     /**
      * Constructor
      *
@@ -28,7 +28,7 @@ export default class OptionsBase {
      * @access private
      * @returns a new instance
      */
-    constructor();
+    constructor(data?: string[][]);
     /**
      * Notify
      *
@@ -36,19 +36,28 @@ export default class OptionsBase {
      *
      * @name notify
      * @access public
-     * @param data The data to send to all callbacks
      */
-    notify(data: string[][]): void;
+    notify(): void;
     /**
-     * Track
+     * Subscribe
      *
-     * Stores a callback function to be called whenever the select data needs
+     * Stores a callback function to be called whenever the option data needs
      * to change
      *
-     * @name track
+     * @name subscribe
      * @access public
      * @param callback The function to call when data changes
-     * @param remove Set to false to remove the callback
+     * @returns current data
      */
-    track(callback: OptionsCallbackType, remove?: boolean): void;
+    subscribe(callback: optionsCallback, remove?: boolean): string[][];
+    /**
+     * Unsubscribe
+     *
+     * Removes a callback that was added via subscribe
+     *
+     * @name unsubscribe
+     * @access public
+     * @param callback The function used to subscribe
+     */
+    unsubscribe(callback: optionsCallback): void;
 }

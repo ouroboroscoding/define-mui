@@ -31,14 +31,14 @@ export type labelOptions = 'above' | 'none' | 'placeholder';
 export type typeOptions = 'create' | 'search' | 'update';
 export type variantOptions = 'filled' | 'outlined' | 'standard';
 export type onChangeCallback = (val: any) => void;
-export type onEnterCallback = () => void;
+export type onEnterPressedCallback = () => void;
 export type DefineNodeProps = {
     error: string | false;
     label?: labelOptions;
     name: string;
     node: Node;
     onChange?: onChangeCallback;
-    onEnter?: onEnterCallback;
+    onEnterPressed?: onEnterPressedCallback;
     placeholder?: string;
     ref?: any;
     type: typeOptions;
@@ -67,7 +67,7 @@ export default class DefineNode extends DefineBase {
         name: PropTypes.Validator<string>;
         node: PropTypes.Validator<Node>;
         onChange: PropTypes.Requireable<(...args: any[]) => any>;
-        onEnter: PropTypes.Requireable<(...args: any[]) => any>;
+        onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
         placeholder: PropTypes.Requireable<string>;
         type: PropTypes.Validator<string>;
         value: PropTypes.Requireable<any>;

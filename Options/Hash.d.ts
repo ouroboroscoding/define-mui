@@ -8,7 +8,6 @@
  * @created 2023-02-15
  */
 import Base from './Base';
-import { OptionsCallbackType } from './Types';
 /**
  * Hash
  *
@@ -46,15 +45,4 @@ export default class Hash extends Base {
      * @returns the current key, or void on setting new key
      */
     key(key?: string): void | string;
-    /**
-     * Track
-     *
-     * Stores a callback function to be called whenever the key changes
-     *
-     * @name track
-     * @access public
-     * @param callback The function to call when data changes
-     * @param remove Set to false to remove the callback
-     */
-    track(callback: OptionsCallbackType, remove?: boolean): string[][] | undefined;
 }

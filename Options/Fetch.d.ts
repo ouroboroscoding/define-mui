@@ -8,7 +8,9 @@
  * @created 2023-02-15
  */
 import Base from './Base';
-import { OptionsCallbackType, FetchType, FieldsType } from './Types';
+import { optionsCallback } from './Base';
+export type FetchType = () => Promise<Record<string, any>[]>;
+export type FieldsType = (data: Record<string, any>) => string[];
 /**
  * Select Rest
  *
@@ -19,7 +21,6 @@ import { OptionsCallbackType, FetchType, FieldsType } from './Types';
  * @extends SelectBase
  */
 export default class SelectRest extends Base {
-    _data: string[][];
     _fetch: FetchType;
     _fetched: boolean;
     _fields: string[] | FieldsType;
@@ -43,10 +44,10 @@ export default class SelectRest extends Base {
      *
      * Stores a callback function to be called whenever the data changes
      *
-     * @name track
+     * @name subscribe
      * @access public
      * @param callback The function to call when data changes
      * @param remove Set to false to remove the callback
      */
-    track(callback: OptionsCallbackType, remove?: boolean): string[][] | undefined;
+    subscribe(callback: optionsCallback): string[][];
 }

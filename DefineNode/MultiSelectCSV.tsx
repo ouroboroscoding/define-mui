@@ -33,12 +33,12 @@ import DefineNodeBase from './Base';
 
 // Local Options
 import { OptionsBase } from '../Options';
-import { OptionsCallbackType } from '../Options/Types';
 
 // Types
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 
 // Types
+import { optionsCallback } from '../Options';
 type DefineNodeMultiSelectCSVState = {
 	defaultValues: string[] | null,
 	options: string[][]
@@ -62,7 +62,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 	declare state: DefineNodeMultiSelectCSVState & DefineNodeBaseState;
 
 	// Callback for setting dynamic options
-	callback: OptionsCallbackType;
+	callback: optionsCallback;
 
 	// List of Checkbox elements
 	checks: HTMLInputElement[]
@@ -132,7 +132,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 		if(this.callback) {
 
 			// Stop tracking
-			this.props.display.options.track(this.callback, true);
+			this.props.display.options.unsubscribe(this.callback);
 		}
 	}
 

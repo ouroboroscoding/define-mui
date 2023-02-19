@@ -54,7 +54,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
             if (lDisplayOptions instanceof OptionsBase) {
                 this.callback = this.dynamicData.bind(this);
                 // Get default data and add callback
-                lDisplayOptions = lDisplayOptions.track(this.callback);
+                lDisplayOptions = lDisplayOptions.subscribe(this.callback);
             }
             // Else, if we have a list but the elements aren't lists
             else if (!(lDisplayOptions[0] instanceof Array)) {
@@ -86,7 +86,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
     componentWillUnmount() {
         // If there's a callback for dynamic options
         if (this.callback) {
-            this.props.display.options.track(this.callback, true);
+            this.props.display.options.unsubscribe(this.callback);
         }
     }
     /**
