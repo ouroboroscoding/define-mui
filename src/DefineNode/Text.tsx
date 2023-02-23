@@ -23,7 +23,7 @@ import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Types
-import { MinMax } from '@ouroboros/define/Types';
+import { Types } from '@ouroboros/define';
 import { DefineNodeBaseProps } from './Base';
 
 /**
@@ -107,7 +107,7 @@ export default class DefineNodeText extends DefineNodeBase {
 		if(iDisplayMax) {
 			inputProps.maxLength = iDisplayMax
 		} else {
-			const minmax = (this.props.node as Node).minmax() as MinMax;
+			const minmax = (this.props.node as Node).minmax() as Types.MinMax;
 			if(minmax.maximum) {
 				inputProps.maxLength = minmax.maximum;
 			}

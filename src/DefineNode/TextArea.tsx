@@ -23,7 +23,7 @@ import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Types
-import { MinMax } from '@ouroboros/define/Types';
+import { Types } from '@ouroboros/define';
 import { DefineNodeBaseProps } from './Base';
 
 /**
@@ -123,7 +123,7 @@ export default class DefineNodeTextArea extends DefineNodeBase {
 		}
 
 		// If there's a max, add it to props
-		const minmax = (this.props.node as Node).minmax() as MinMax;
+		const minmax = (this.props.node as Node).minmax() as Types.MinMax;
 		if(minmax.maximum) {
 			props.inputProps = {maxLength: minmax.maximum};
 		}

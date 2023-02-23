@@ -23,7 +23,7 @@ import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Types
-import { MinMax } from '@ouroboros/define/Types';
+import { Types } from '@ouroboros/define';
 import { DefineNodeBaseProps } from './Base';
 
 /**
@@ -94,7 +94,7 @@ export default class DefineNodeNumber extends DefineNodeBase {
 
 		// Initial input props
 		const inputProps: Record<string, any> = {};
-		const minmax = (this.props.node as Node).minmax() as MinMax;
+		const minmax = (this.props.node as Node).minmax() as Types.MinMax;
 		if(minmax.minimum) {
 			inputProps.min = minmax.minimum;
 		}
