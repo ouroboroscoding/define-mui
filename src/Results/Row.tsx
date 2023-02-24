@@ -383,7 +383,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 							gridSizes={props.gridSizes}
 							gridSpacing={props.gridSpacing}
 							onCancel={() => updateSet(false)}
-							onSubmit={props.onUpdate as onSubmitCallback}
+							onSubmit={submit}
 							ref={refUpdateForm}
 							tree={props.info.tree}
 							type="update"

@@ -10,7 +10,7 @@
 
 // Ouroboros
 import { isObject, ucfirst } from '@ouroboros/tools';
-import { Base, Node } from '@ouroboros/define';
+import { Node } from '@ouroboros/define';
 
 // NPM modules
 import PropTypes from 'prop-types';
@@ -407,4 +407,4 @@ export default class DefineNode extends DefineBase {
 }
 
 // Register the component with the generator
-DefineBase.register('DefineNode', DefineNode);
+DefineBase.register('Node', DefineNode);

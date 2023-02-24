@@ -79,7 +79,7 @@ export default class Form extends React.Component {
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
 		onCancel: PropTypes.func,
 		onSubmit: PropTypes.func.isRequired,
-		title: PropTypes.oneOf([PropTypes.string, PropTypes.bool]),
+		title: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 		tree: PropTypes.instanceOf(Tree).isRequired,
 		type: PropTypes.oneOf(['create', 'update']).isRequired,
 		value: PropTypes.object,
@@ -190,7 +190,7 @@ export default class Form extends React.Component {
 		if(!empty(oValue)) {
 
 			// Init the key
-			const mKey = (this.props.type === 'update' && this.state.primary in this.props.value[this.state.primary]) ?
+			const mKey = (this.props.type === 'update' && this.state.primary in this.props.value) ?
 							this.props.value[this.state.primary] :
 							null;
 

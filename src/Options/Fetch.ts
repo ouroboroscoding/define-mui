@@ -8,24 +8,23 @@
  * @created 2023-02-15
  */
 
-// Import the base class
-import Base from './Base';
+// Ouroboros modules
+import Subscribe, { SubscribeCallback, SubscribeReturn } from '@ouroboros/subscribe';
 
 // Import types
-import { optionsCallback } from './Base';
 export type FetchType = () => Promise<Record<string, any>[]>;
 export type FieldsType = (data: Record<string, any>) => string[];
 
 /**
- * Select Rest
+ * Fetch
  *
  * Class to allow for dynamic data in selects/dropdowns built from rest requests
  *
- * @name SelectRest
+ * @name Fetch
  * @access public
- * @extends SelectBase
+ * @extends
  */
-export default class SelectRest extends Base {
+export default class Fetch extends Subscribe {
 
 	// Instance variables
 	_fetch: FetchType;
@@ -33,11 +32,11 @@ export default class SelectRest extends Base {
 	_fields: string[] | FieldsType;
 
 	/**
-	 * Select Rest
+	 * Fetch
 	 *
 	 * Creates an instance of the class with default data
 	 *
-	 * @name SelectRest
+	 * @name OptionsFetch
 	 * @access public
 	 * @param fetch The function called to return the data
 	 * @param fields A list of [key, value], or a function
@@ -69,10 +68,10 @@ export default class SelectRest extends Base {
 	 * @param callback The function to call when data changes
 	 * @param remove Set to false to remove the callback
 	 */
-	subscribe(callback: optionsCallback) {
+	subscribe(callback: SubscribeCallback): SubscribeReturn {
 
 		// Call the base class subscribe
-		super.subscribe(callback);
+		const oReturn = super.subscribe(callback);
 
 		// If we don't have the data yet
 		if(!this._fetched) {
@@ -82,21 +81,21 @@ export default class SelectRest extends Base {
 			this._fetch().then(data => {
 
 				// Generate the name/value pairs
-				this._data = [];
+				const lData = [];
 				for(const o of data) {
 					if(typeof this._fields === 'function') {
-						this._data.push(this._fields(o));
+						lData.push(this._fields(o));
 					} else {
-						this._data.push([o[this._fields[0]], o[this._fields[1]]]);
+						lData.push([o[this._fields[0]], o[this._fields[1]]]);
 					}
 				}
 
 				// Notify the subscribeers
-				this.notify();
+				this.notify(lData);
 			});
 		}
 
-		// Return the current data
-		return this._data;
+		// Return the current data and unsubscribe
+		return oReturn;
 	}
 }

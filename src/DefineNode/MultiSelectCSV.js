@@ -8,6 +8,7 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-17
  */
+import Subscribe from '@ouroboros/subscribe';
 // NPM modules
 import React from 'react';
 // Material UI
@@ -23,8 +24,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 // Local components
 import DefineNodeBase from './Base';
-// Local Options
-import { OptionsBase } from '../Options';
 /**
  * Node Multi Select CSV
  *
@@ -39,6 +38,8 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
     callback;
     // List of Checkbox elements
     checks;
+    // Subscribe data
+    subscribe;
     /**
      * Constructor
      *
@@ -56,9 +57,10 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         let lDisplayOptions = props.display.options;
         // If we got data
         if (lDisplayOptions) {
-            // If the options are a dynamic OptionsBase instance
-            if (lDisplayOptions instanceof OptionsBase) {
+            // If the options are a dynamic Subscribe instance
+            if (lDisplayOptions instanceof Subscribe) {
                 this.callback = this.dynamicData.bind(this);
+                lDisplayOptions = [];
             }
         }
         // Else, get the options from the node
@@ -81,6 +83,23 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         this.submit = this.submit.bind(this);
     }
     /**
+     * Component Did Mount
+     *
+     * Called right after the component is added to the DOM
+     *
+     * @name componentDidMount
+     * @access public
+     */
+    componentDidMount() {
+        // If there's a callback for dynamic options
+        if (this.callback) {
+            // Subscribe to the changes in options
+            this.subscribe = this.props.display.options.subscribe(this.callback);
+            // Store the current options
+            this.setState({ options: this.subscribe.data });
+        }
+    }
+    /**
      * Component Will Unmount
      *
      * Called right before the component is removed from the DOM
@@ -89,10 +108,10 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
      * @access public
      */
     componentWillUnmount() {
-        // If there's a callback for dynamic options
-        if (this.callback) {
+        // If there's a subscribe value
+        if (this.subscribe) {
             // Stop tracking
-            this.props.display.options.unsubscribe(this.callback);
+            this.subscribe.unsubscribe();
         }
     }
     /**

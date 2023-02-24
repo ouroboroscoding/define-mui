@@ -9,8 +9,8 @@
  * @created 2023-02-15
  */
 
-// Import the base class
-import Base from './Base';
+// Ouroboros modules
+import Subscribe from '@ouroboros/subscribe';
 
 /**
  * Custom
@@ -20,12 +20,12 @@ import Base from './Base';
  *
  * @name Custom
  * @access public
- * @extends Base
+ * @extends Subscribe
  */
-export default class Custom extends Base {
+export default class Custom extends Subscribe {
 
 	/**
-	 * Options Custom
+	 * Custom
 	 *
 	 * Creates an instance of the class with default data
 	 *
@@ -52,10 +52,7 @@ export default class Custom extends Base {
 	 */
 	set(data: string[][]): void {
 
-		// Store the new data
-		this._data = data;
-
 		// Notify
-		this.notify();
+		this.notify(data);
 	}
 }

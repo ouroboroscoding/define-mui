@@ -9,9 +9,9 @@
  * @created 2023-02-17
  */
 /// <reference types="react" />
+import { SubscribeCallback, SubscribeReturn } from '@ouroboros/subscribe';
 import DefineNodeBase from './Base';
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
-import { optionsCallback } from '../Options';
 type DefineNodeMultiSelectCSVState = {
     defaultValues: string[] | null;
     options: string[][];
@@ -28,8 +28,9 @@ type DefineNodeMultiSelectCSVState = {
 export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
     props: DefineNodeBaseProps;
     state: DefineNodeMultiSelectCSVState & DefineNodeBaseState;
-    callback: optionsCallback;
+    callback: SubscribeCallback;
     checks: HTMLInputElement[];
+    subscribe: SubscribeReturn;
     /**
      * Constructor
      *
@@ -41,6 +42,15 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
      * @returns a new instance
      */
     constructor(props: DefineNodeBaseProps);
+    /**
+     * Component Did Mount
+     *
+     * Called right after the component is added to the DOM
+     *
+     * @name componentDidMount
+     * @access public
+     */
+    componentDidMount(): void;
     /**
      * Component Will Unmount
      *

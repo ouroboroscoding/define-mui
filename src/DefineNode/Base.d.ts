@@ -47,7 +47,7 @@ export default class DefineNodeBase extends React.Component {
         display: PropTypes.Validator<object>;
         error: PropTypes.Requireable<NonNullable<string | boolean | null | undefined>>;
         name: PropTypes.Validator<string>;
-        node: PropTypes.Validator<Node>;
+        node: PropTypes.Validator<Base>;
         onChange: PropTypes.Requireable<(...args: any[]) => any>;
         onEnterPressed: PropTypes.Requireable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>;
         placeholder: PropTypes.Requireable<string>;

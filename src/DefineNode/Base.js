@@ -7,6 +7,8 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-15
  */
+// Ouroboros
+import { Base } from '@ouroboros/define';
 // NPM modules
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -25,7 +27,7 @@ export default class DefineNodeBase extends React.Component {
         display: PropTypes.object.isRequired,
         error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
         name: PropTypes.string.isRequired,
-        node: PropTypes.instanceOf(Node).isRequired,
+        node: PropTypes.instanceOf(Base).isRequired,
         onChange: PropTypes.func,
         onEnterPressed: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
         placeholder: PropTypes.string,

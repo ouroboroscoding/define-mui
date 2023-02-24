@@ -7,8 +7,8 @@
  * @copyright Ouroboros Coding
  * @created 2023-02-15
  */
-// Import the base class
-import Base from './Base';
+// Ouroboros modules
+import Subscribe from '@ouroboros/subscribe';
 /**
  * Hash
  *
@@ -17,9 +17,9 @@ import Base from './Base';
  *
  * @name Hash
  * @access public
- * @extends SelectBase
+ * @extends Subscribe
  */
-export default class Hash extends Base {
+export default class Hash extends Subscribe {
     // Instance variables
     _hash;
     _key;
@@ -57,10 +57,8 @@ export default class Hash extends Base {
         if (key !== undefined) {
             // Store the new key
             this._key = key;
-            // Set the data
-            this._data = this._key in this._hash ? this._hash[this._key] : [];
-            // Notify
-            this.notify();
+            // Set the data and notify subscribers
+            this.notify(this._key in this._hash ? this._hash[this._key] : []);
         }
         // Else, return the current key
         else {

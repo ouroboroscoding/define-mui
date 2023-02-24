@@ -11,6 +11,7 @@
 
 // Ouroboros modules
 import { Node } from '@ouroboros/define';
+import Subscribe, { SubscribeCallback, SubscribeReturn } from '@ouroboros/subscribe';
 
 // NPM modules
 import React from 'react';
@@ -30,14 +31,10 @@ import Typography from '@mui/material/Typography';
 // Local components
 import DefineNodeBase from './Base';
 
-// Local Options
-import { OptionsBase } from '../Options';
-
 // Types
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 
 // Types
-import { optionsCallback } from '../Options';
 type DefineNodeMultiSelectCSVState = {
 	defaultValues: string[] | null,
 	options: string[][]
@@ -61,10 +58,13 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 	declare state: DefineNodeMultiSelectCSVState & DefineNodeBaseState;
 
 	// Callback for setting dynamic options
-	callback: optionsCallback;
+	callback: SubscribeCallback;
 
 	// List of Checkbox elements
 	checks: HTMLInputElement[]
+
+	// Subscribe data
+	subscribe: SubscribeReturn;
 
 	/**
 	 * Constructor
@@ -87,9 +87,10 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 		// If we got data
 		if(lDisplayOptions) {
 
-			// If the options are a dynamic OptionsBase instance
-			if(lDisplayOptions instanceof OptionsBase) {
+			// If the options are a dynamic Subscribe instance
+			if(lDisplayOptions instanceof Subscribe) {
 				this.callback = this.dynamicData.bind(this);
+				lDisplayOptions = [];
 			}
 		}
 		// Else, get the options from the node
@@ -118,6 +119,27 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 	}
 
 	/**
+	 * Component Did Mount
+	 *
+	 * Called right after the component is added to the DOM
+	 *
+	 * @name componentDidMount
+	 * @access public
+	 */
+	componentDidMount(): void {
+
+		// If there's a callback for dynamic options
+		if(this.callback) {
+
+			// Subscribe to the changes in options
+			this.subscribe = this.props.display.options.subscribe(this.callback);
+
+			// Store the current options
+			this.setState({ options: this.subscribe.data });
+		}
+	}
+
+	/**
 	 * Component Will Unmount
 	 *
 	 * Called right before the component is removed from the DOM
@@ -127,11 +149,11 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 	 */
 	componentWillUnmount() {
 
-		// If there's a callback for dynamic options
-		if(this.callback) {
+		// If there's a subscribe value
+		if(this.subscribe) {
 
 			// Stop tracking
-			this.props.display.options.unsubscribe(this.callback);
+			this.subscribe.unsubscribe();
 		}
 	}
 

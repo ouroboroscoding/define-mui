@@ -8,17 +8,16 @@
  * @created 2023-02-18
  */
 import { Tree } from '@ouroboros/define';
+import Subscribe, { SubscribeCallback } from '@ouroboros/subscribe';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { OptionsBase } from '../Options';
 import { onDeleteCallback, onKeyCopyCallback } from './Row';
 import { onSubmitCallback } from '../Form';
 import { gridSizesStruct } from '../DefineParent';
-import { optionsCallback } from '../Options';
 import { actionStruct, menuStruct } from './Row';
 export type dynCallbacksStruct = {
-    optionsInstance: OptionsBase;
-    callback: optionsCallback;
+    optionsInstance: Subscribe;
+    callback: SubscribeCallback;
 };
 export type infoStruct = {
     copyPrimary: boolean;

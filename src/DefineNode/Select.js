@@ -7,6 +7,7 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-17
  */
+import Subscribe from '@ouroboros/subscribe';
 import { afindi } from '@ouroboros/tools';
 // NPM modules
 import React from 'react';
@@ -18,8 +19,6 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 // Local components
 import DefineNodeBase from './Base';
-// Options modules
-import { OptionsBase } from '../Options';
 /**
  * Node Select
  *
@@ -32,6 +31,8 @@ import { OptionsBase } from '../Options';
 export default class DefineNodeSelect extends DefineNodeBase {
     // Callback for dynamic data
     callback;
+    // Subscribe return
+    subscribe;
     /**
      * Constructor
      *
@@ -49,11 +50,10 @@ export default class DefineNodeSelect extends DefineNodeBase {
         let lDisplayOptions = props.display.options;
         // If we got data
         if (lDisplayOptions) {
-            // If the options are a dynamic OptionsBase
-            if (lDisplayOptions instanceof OptionsBase) {
+            // If the options are a dynamic Subscribe
+            if (lDisplayOptions instanceof Subscribe) {
                 this.callback = this.dynamicData.bind(this);
-                // Get default data and add callback
-                lDisplayOptions = lDisplayOptions.subscribe(this.callback);
+                lDisplayOptions = [];
             }
             // Else, if we have a list but the elements aren't lists
             else if (!(lDisplayOptions[0] instanceof Array)) {
@@ -75,6 +75,23 @@ export default class DefineNodeSelect extends DefineNodeBase {
         this.change = this.change.bind(this);
     }
     /**
+     * Component Did Mount
+     *
+     * Called right after the component is added to the DOM
+     *
+     * @name componentDidMount
+     * @access public
+     */
+    componentDidMount() {
+        // If there's a callback for dynamic options
+        if (this.callback) {
+            // Subscribe to the changes in options
+            this.subscribe = this.props.display.options.subscribe(this.callback);
+            // Store the current options
+            this.setState({ options: this.subscribe.data });
+        }
+    }
+    /**
      * Component Will Unmount
      *
      * Called right before the component is removed from the DOM
@@ -83,9 +100,10 @@ export default class DefineNodeSelect extends DefineNodeBase {
      * @access public
      */
     componentWillUnmount() {
-        // If there's a callback for dynamic options
-        if (this.callback) {
-            this.props.display.options.unsubscribe(this.callback);
+        // If there's a subscribe value
+        if (this.subscribe) {
+            // Stop tracking
+            this.subscribe.unsubscribe();
         }
     }
     /**

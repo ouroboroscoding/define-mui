@@ -7,11 +7,11 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-17
  */
+import { SubscribeCallback, SubscribeReturn } from '@ouroboros/subscribe';
 import React from 'react';
 import { SelectChangeEvent } from '@mui/material/Select';
 import DefineNodeBase from './Base';
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
-import { optionsCallback } from '../Options';
 type DefineNodeSelectState = {
     options: string[][];
 };
@@ -27,7 +27,8 @@ type DefineNodeSelectState = {
 export default class DefineNodeSelect extends DefineNodeBase {
     props: DefineNodeBaseProps;
     state: DefineNodeSelectState & DefineNodeBaseState;
-    callback: optionsCallback;
+    callback: SubscribeCallback;
+    subscribe: SubscribeReturn;
     /**
      * Constructor
      *
@@ -39,6 +40,15 @@ export default class DefineNodeSelect extends DefineNodeBase {
      * @returns a new instance
      */
     constructor(props: DefineNodeBaseProps);
+    /**
+     * Component Did Mount
+     *
+     * Called right after the component is added to the DOM
+     *
+     * @name componentDidMount
+     * @access public
+     */
+    componentDidMount(): void;
     /**
      * Component Will Unmount
      *

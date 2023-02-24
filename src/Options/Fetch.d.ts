@@ -7,29 +7,28 @@
  * @copyright Ouroboros Coding
  * @created 2023-02-15
  */
-import Base from './Base';
-import { optionsCallback } from './Base';
+import Subscribe, { SubscribeCallback, SubscribeReturn } from '@ouroboros/subscribe';
 export type FetchType = () => Promise<Record<string, any>[]>;
 export type FieldsType = (data: Record<string, any>) => string[];
 /**
- * Select Rest
+ * Fetch
  *
  * Class to allow for dynamic data in selects/dropdowns built from rest requests
  *
- * @name SelectRest
+ * @name Fetch
  * @access public
- * @extends SelectBase
+ * @extends
  */
-export default class SelectRest extends Base {
+export default class Fetch extends Subscribe {
     _fetch: FetchType;
     _fetched: boolean;
     _fields: string[] | FieldsType;
     /**
-     * Select Rest
+     * Fetch
      *
      * Creates an instance of the class with default data
      *
-     * @name SelectRest
+     * @name OptionsFetch
      * @access public
      * @param fetch The function called to return the data
      * @param fields A list of [key, value], or a function
@@ -49,5 +48,5 @@ export default class SelectRest extends Base {
      * @param callback The function to call when data changes
      * @param remove Set to false to remove the callback
      */
-    subscribe(callback: optionsCallback): string[][];
+    subscribe(callback: SubscribeCallback): SubscribeReturn;
 }

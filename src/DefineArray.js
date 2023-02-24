@@ -338,4 +338,4 @@ export default class DefineArray extends DefineBase {
     }
 }
 // Register the component
-DefineBase.register('DefineArray', DefineArray);
+DefineBase.register('ArrayNode', DefineArray);

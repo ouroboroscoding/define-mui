@@ -9,6 +9,7 @@
  */
 // Ouroboros modules
 import { Decimal, Tree } from '@ouroboros/define';
+import Subscribe from '@ouroboros/subscribe';
 import { clone, ucfirst } from '@ouroboros/tools';
 // NPM modules
 import { createObjectCsvStringifier } from 'csv-writer-browser';
@@ -26,8 +27,6 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Tooltip from '@mui/material/Tooltip';
-// Options components
-import { OptionsBase } from '../Options';
 // Components
 import PaginationActions from './PaginationActions';
 import Row from './Row';
@@ -152,8 +151,8 @@ export default class Results extends React.PureComponent {
             }
             // If there's options
             if (oNode.options) {
-                // If the options are a dynamic OptionsBase
-                if (oNode.options instanceof OptionsBase) {
+                // If the options are a dynamic Subscribe
+                if (oNode.options instanceof Subscribe) {
                     oOptions[k] = true;
                     this.dynCallbacks[k] = {
                         optionsInstance: oNode.options,
@@ -200,7 +199,8 @@ export default class Results extends React.PureComponent {
     componentDidMount() {
         const oOptions = clone(this.state.options);
         for (const f of Object.keys(this.dynCallbacks)) {
-            oOptions[f] = this.dynCallbacks[f].optionsInstance.subscribe(this.dynCallbacks[f].callback).reduce((o, l) => Object.assign(o, { [l[0]]: l[1] }), {});
+            const oSubscribe = this.dynCallbacks[f].optionsInstance.subscribe(this.dynCallbacks[f].callback);
+            oOptions[f] = oSubscribe.data.reduce((o, l) => Object.assign(o, { [l[0]]: l[1] }), {});
         }
         this.setState({ options: oOptions });
     }
@@ -214,7 +214,8 @@ export default class Results extends React.PureComponent {
      */
     componentWillUnmount() {
         for (const f of Object.keys(this.dynCallbacks)) {
-            this.dynCallbacks[f].optionsInstance.unsubscribe(this.dynCallbacks[f].callback);
+            this.dynCallbacks[f].optionsInstance.subscribeUnsubscribe(this.dynCallbacks[f].callback);
+            delete this.dynCallbacks[f];
         }
     }
     /**

@@ -62,7 +62,7 @@ export default class Form extends React.Component {
         label: PropTypes.Requireable<string>;
         onCancel: PropTypes.Requireable<(...args: any[]) => any>;
         onSubmit: PropTypes.Validator<(...args: any[]) => any>;
-        title: PropTypes.Requireable<PropTypes.Requireable<boolean> | PropTypes.Requireable<string>>;
+        title: PropTypes.Requireable<NonNullable<string | boolean | null | undefined>>;
         tree: PropTypes.Validator<Tree>;
         type: PropTypes.Validator<string>;
         value: PropTypes.Requireable<object>;

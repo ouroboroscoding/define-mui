@@ -10,6 +10,7 @@
 
 // Ouroboros modules
 import { Node } from '@ouroboros/define';
+import Subscribe, { SubscribeCallback, SubscribeReturn } from '@ouroboros/subscribe';
 import { afindi } from '@ouroboros/tools';
 
 // NPM modules
@@ -26,14 +27,10 @@ import Typography from '@mui/material/Typography';
 // Local components
 import DefineNodeBase from './Base';
 
-// Options modules
-import { OptionsBase } from '../Options';
-
 // Types
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 
 // Types
-import { optionsCallback } from '../Options';
 type DefineNodeSelectState = {
 	options: string[][]
 }
@@ -56,7 +53,10 @@ export default class DefineNodeSelect extends DefineNodeBase {
 	declare state: DefineNodeSelectState & DefineNodeBaseState;
 
 	// Callback for dynamic data
-	callback: optionsCallback;
+	callback: SubscribeCallback;
+
+	// Subscribe return
+	subscribe: SubscribeReturn;
 
 	/**
 	 * Constructor
@@ -79,12 +79,10 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		// If we got data
 		if(lDisplayOptions) {
 
-			// If the options are a dynamic OptionsBase
-			if(lDisplayOptions instanceof OptionsBase) {
+			// If the options are a dynamic Subscribe
+			if(lDisplayOptions instanceof Subscribe) {
 				this.callback = this.dynamicData.bind(this);
-
-				// Get default data and add callback
-				lDisplayOptions = lDisplayOptions.subscribe(this.callback);
+				lDisplayOptions = [];
 			}
 
 			// Else, if we have a list but the elements aren't lists
@@ -112,6 +110,27 @@ export default class DefineNodeSelect extends DefineNodeBase {
 	}
 
 	/**
+	 * Component Did Mount
+	 *
+	 * Called right after the component is added to the DOM
+	 *
+	 * @name componentDidMount
+	 * @access public
+	 */
+	componentDidMount(): void {
+
+		// If there's a callback for dynamic options
+		if(this.callback) {
+
+			// Subscribe to the changes in options
+			this.subscribe = this.props.display.options.subscribe(this.callback);
+
+			// Store the current options
+			this.setState({ options: this.subscribe.data });
+		}
+	}
+
+	/**
 	 * Component Will Unmount
 	 *
 	 * Called right before the component is removed from the DOM
@@ -121,9 +140,11 @@ export default class DefineNodeSelect extends DefineNodeBase {
 	 */
 	componentWillUnmount() {
 
-		// If there's a callback for dynamic options
-		if(this.callback) {
-			this.props.display.options.unsubscribe(this.callback);
+		// If there's a subscribe value
+		if(this.subscribe) {
+
+			// Stop tracking
+			this.subscribe.unsubscribe();
 		}
 	}
 

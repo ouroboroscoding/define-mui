@@ -261,4 +261,4 @@ export default class DefineHash extends DefineBase {
 }
 
 // Register the component
-DefineBase.register('Hash', DefineHash);
+DefineBase.register('HashNode', DefineHash);

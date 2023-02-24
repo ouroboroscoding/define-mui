@@ -7,7 +7,7 @@
  * @copyright Ouroboros Coding
  * @created 2023-02-15
  */
-import Base from './Base';
+import Subscribe from '@ouroboros/subscribe';
 /**
  * Hash
  *
@@ -16,9 +16,9 @@ import Base from './Base';
  *
  * @name Hash
  * @access public
- * @extends SelectBase
+ * @extends Subscribe
  */
-export default class Hash extends Base {
+export default class Hash extends Subscribe {
     _hash: Record<string, string[][]>;
     _key: string;
     /**

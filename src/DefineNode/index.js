@@ -302,4 +302,4 @@ export default class DefineNode extends DefineBase {
     }
 }
 // Register the component with the generator
-DefineBase.register('DefineNode', DefineNode);
+DefineBase.register('Node', DefineNode);

@@ -10,7 +10,8 @@
 
 // Ouroboros modules
 import { Decimal, Node, Tree } from '@ouroboros/define';
-import { afindi, clone, ucfirst } from '@ouroboros/tools';
+import Subscribe, { SubscribeCallback } from '@ouroboros/subscribe';
+import { clone, ucfirst } from '@ouroboros/tools';
 
 // NPM modules
 import { createObjectCsvStringifier } from 'csv-writer-browser';
@@ -30,9 +31,6 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Tooltip from '@mui/material/Tooltip';
 
-// Options components
-import { OptionsBase } from '../Options';
-
 // Components
 import PaginationActions from './PaginationActions';
 import Row, { onDeleteCallback, onKeyCopyCallback } from './Row';
@@ -41,12 +39,11 @@ import TotalsRow from './TotalsRow';
 // Types
 import { onSubmitCallback } from '../Form';
 import { gridSizesStruct } from '../DefineParent';
-import { optionsCallback } from '../Options';
 import { actionStruct, menuStruct } from './Row';
 import { SelectChangeEvent } from '@mui/material';
 export type dynCallbacksStruct = {
-	optionsInstance: OptionsBase,
-	callback: optionsCallback
+	optionsInstance: Subscribe,
+	callback: SubscribeCallback
 }
 export type infoStruct = {
 	copyPrimary: boolean,
@@ -225,8 +222,8 @@ export default class Results extends React.PureComponent {
 			// If there's options
 			if(oNode.options) {
 
-				// If the options are a dynamic OptionsBase
-				if(oNode.options instanceof OptionsBase) {
+				// If the options are a dynamic Subscribe
+				if(oNode.options instanceof Subscribe) {
 					oOptions[k] = true;
 					this.dynCallbacks[k] = {
 						optionsInstance: oNode.options,
@@ -276,9 +273,10 @@ export default class Results extends React.PureComponent {
 	componentDidMount() {
 		const oOptions: optionsType = clone(this.state.options);
 		for(const f of Object.keys(this.dynCallbacks)) {
-			oOptions[f] = this.dynCallbacks[f].optionsInstance.subscribe(this.dynCallbacks[f].callback).reduce((o: Record<string, string>, l: string[]) => Object.assign(o, {[l[0]]: l[1]}), {});
+			const oSubscribe = this.dynCallbacks[f].optionsInstance.subscribe(this.dynCallbacks[f].callback)
+			oOptions[f] = oSubscribe.data.reduce((o: Record<string, string>, l: string[]) => Object.assign(o, {[l[0]]: l[1]}), {});
 		}
-		this.setState({options: oOptions});
+		this.setState({ options: oOptions });
 	}
 
 	/**
@@ -291,7 +289,8 @@ export default class Results extends React.PureComponent {
 	 */
 	componentWillUnmount() {
 		for(const f of Object.keys(this.dynCallbacks)) {
-			this.dynCallbacks[f].optionsInstance.unsubscribe(this.dynCallbacks[f].callback);
+			this.dynCallbacks[f].optionsInstance.subscribeUnsubscribe(this.dynCallbacks[f].callback);
+			delete this.dynCallbacks[f];
 		}
 	}
 
@@ -441,7 +440,7 @@ export default class Results extends React.PureComponent {
 	_optionCallback(field: string, options: string[][]) {
 		const oOptions = clone(this.state.options);
 		oOptions[field] = options.reduce((o, l) => Object.assign(o, {[l[0]]: l[1]}), {});
-		this.setState({options: oOptions});
+		this.setState({ options: oOptions });
 	}
 
 	/**

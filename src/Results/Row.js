@@ -249,7 +249,7 @@ export default function ResultsRow(props) {
         update &&
             React.createElement(TableRow, null,
                 React.createElement(TableCell, { colSpan: props.fields.length + 1 },
-                    React.createElement(Form, { gridSizes: props.gridSizes, gridSpacing: props.gridSpacing, onCancel: () => updateSet(false), onSubmit: props.onUpdate, ref: refUpdateForm, tree: props.info.tree, type: "update", value: props.data }))),
+                    React.createElement(Form, { gridSizes: props.gridSizes, gridSpacing: props.gridSpacing, onCancel: () => updateSet(false), onSubmit: submit, ref: refUpdateForm, tree: props.info.tree, type: "update", value: props.data }))),
         omap(actions, (b, i) => React.createElement(TableRow, { key: i, className: "action_row" },
             React.createElement(TableCell, { colSpan: props.fields.length + 1 }, b === true ? React.createElement(props.actions[parseInt(i, 10)].component, {
                 onClose: () => action(i),
