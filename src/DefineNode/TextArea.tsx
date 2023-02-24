@@ -19,7 +19,6 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Types
@@ -141,4 +140,4 @@ export default class DefineNodeTextArea extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNode.pluginAdd('textarea', DefineNodeTextArea);
+DefineNodeBase.pluginAdd('textarea', DefineNodeTextArea);

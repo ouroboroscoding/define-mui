@@ -49,17 +49,17 @@ export default class DefineNodeSearchOption extends React.Component {
             case 'text':
             case 'textarea':
                 lOpts = [
-                    <option key="exact" value="exact">Exact</option>,
-                    <option key="value" value="start">Starts with</option>,
-                    <option key="end" value="end">Ends with</option>,
-                    <option key="asterisk" value="asterisk">Uses *</option>
+                    React.createElement("option", { key: "exact", value: "exact" }, "Exact"),
+                    React.createElement("option", { key: "value", value: "start" }, "Starts with"),
+                    React.createElement("option", { key: "end", value: "end" }, "Ends with"),
+                    React.createElement("option", { key: "asterisk", value: "asterisk" }, "Uses *")
                 ];
                 break;
             default:
                 lOpts = [
-                    <option key="exact" value="exact">Exact</option>,
-                    <option key="greater" value="greater">Greater than (inclusive)</option>,
-                    <option key="less" value="less">Less than (inclusive)</option>
+                    React.createElement("option", { key: "exact", value: "exact" }, "Exact"),
+                    React.createElement("option", { key: "greater", value: "greater" }, "Greater than (inclusive)"),
+                    React.createElement("option", { key: "less", value: "less" }, "Less than (inclusive)")
                 ];
                 break;
         }
@@ -95,12 +95,10 @@ export default class DefineNodeSearchOption extends React.Component {
      */
     render() {
         if (this.state.options) {
-            return (<Select className="selectSearchType" inputRef={el => this.select = el} native onChange={this.change} variant={this.props.variant} value={this.state.value === null ? '' : this.state.value}>
-					{this.state.options}
-				</Select>);
+            return (React.createElement(Select, { className: "selectSearchType", inputRef: el => this.select = el, native: true, onChange: this.change, variant: this.props.variant, value: this.state.value === null ? '' : this.state.value }, this.state.options));
         }
         else {
-            return (<div className="selectSearchEmpty">&nbsp;</div>);
+            return (React.createElement("div", { className: "selectSearchEmpty" }, "\u00A0"));
         }
     }
     /**

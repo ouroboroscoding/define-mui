@@ -29,6 +29,10 @@ export type DefineNodeBaseState = {
     error?: string | false;
     value: any;
 };
+type RegisterType = {
+    class_: typeof DefineNodeBase;
+    default_: any;
+};
 /**
  * Define Node Base
  *
@@ -49,8 +53,10 @@ export default class DefineNodeBase extends React.Component {
         placeholder: PropTypes.Requireable<string>;
         value: PropTypes.Requireable<any>;
     };
+    static _plugins: Record<string, RegisterType>;
     props: DefineNodeBaseProps;
     state: DefineNodeBaseState;
+    static pluginAdd(name: string, componentClass: typeof DefineNodeBase, defaultValue?: any): void;
     /**
      * Constructor
      *
@@ -121,3 +127,4 @@ export default class DefineNodeBase extends React.Component {
      */
     set value(val: any);
 }
+export {};

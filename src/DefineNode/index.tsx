@@ -73,13 +73,6 @@ type DefineNodeState = {
 	type: string,
 	value?: any
 };
-type RegisterType = {
-	class_: typeof DefineNodeBase,
-	default_: any
-};
-
-// Registered components
-const _plugins: Record<string, RegisterType> = {};
 
 /**
  * DefineNode
@@ -116,10 +109,7 @@ export default class DefineNode extends DefineBase {
 
 	// Registered Node types
 	static pluginAdd(name: string, componentClass: typeof DefineNodeBase, defaultValue: any = '') {
-		_plugins[name] = {
-			class_: componentClass,
-			default_: defaultValue,
-		}
+		DefineNodeBase.pluginAdd(name, componentClass, defaultValue);
 	}
 
 	// The components current state
@@ -289,8 +279,8 @@ export default class DefineNode extends DefineBase {
 
 		// Get the component name based on the type
 		let ElName: typeof DefineNodeBase | null = null;
-		if(this.state.type in _plugins) {
-			ElName = _plugins[this.state.type].class_;
+		if(this.state.type in DefineNodeBase._plugins) {
+			ElName = DefineNodeBase._plugins[this.state.type].class_;
 		} else {
 			throw new Error(`Invalid type in define/Node: ${this.state.type}`);
 		}
@@ -298,7 +288,7 @@ export default class DefineNode extends DefineBase {
 		// Get the value
 		const mValue = this.state.value !== null ?
 						this.state.value :
-						_plugins[this.state.type].default_;
+						DefineNodeBase._plugins[this.state.type].default_;
 
 		return (
 			<React.Fragment>

@@ -19,7 +19,6 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Types
@@ -130,4 +129,4 @@ export default class DefineNodePassword extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNode.pluginAdd('password', DefineNodePassword);
+DefineNodeBase.pluginAdd('password', DefineNodePassword);

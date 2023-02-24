@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography';
 // React Phone Input
 import PhoneInput from 'react-phone-input-material-ui';
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 /**
  * Node Phone Number
@@ -75,20 +74,18 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
      */
     render() {
         // Render
-        return (<React.Fragment>
-				{this.props.label === 'above' &&
-                <Typography>{this.props.display.title}</Typography>}
-				<FormControl className={'node_' + this.props.name} error={this.state.error !== false}>
-					<PhoneInput component={TextField} inputProps={{
-                label: this.props.display.title,
-                onKeyPress: this.keyPressed,
-                variant: this.props.variant
-            }} onChange={this.change} value={this.state.value === null ? '' : this.state.value}/>
-					{this.state.error &&
-                <FormHelperText>{this.state.error}</FormHelperText>}
-				</FormControl>
-			</React.Fragment>);
+        return (React.createElement(React.Fragment, null,
+            this.props.label === 'above' &&
+                React.createElement(Typography, null, this.props.display.title),
+            React.createElement(FormControl, { className: 'node_' + this.props.name, error: this.state.error !== false },
+                React.createElement(PhoneInput, { component: TextField, inputProps: {
+                        label: this.props.display.title,
+                        onKeyPress: this.keyPressed,
+                        variant: this.props.variant
+                    }, onChange: this.change, value: this.state.value === null ? '' : this.state.value }),
+                this.state.error &&
+                    React.createElement(FormHelperText, null, this.state.error))));
     }
 }
 // Register with Node
-DefineNode.pluginAdd('phone_number', DefineNodePhoneNumber);
+DefineNodeBase.pluginAdd('phone_number', DefineNodePhoneNumber);

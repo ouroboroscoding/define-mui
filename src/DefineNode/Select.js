@@ -17,7 +17,6 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 // Options modules
 import { OptionsBase } from '../Options';
@@ -144,26 +143,22 @@ export default class DefineNodeSelect extends DefineNodeBase {
      */
     render() {
         // Init the option elements
-        const lOpts = [<option key={0} value=''></option>];
+        const lOpts = [React.createElement("option", { key: 0, value: '' })];
         // Add the other options
         let i = 1;
         for (const o of this.state.options) {
-            lOpts.push(<option key={i} value={o[0]}>{o[1]}</option>);
+            lOpts.push(React.createElement("option", { key: i, value: o[0] }, o[1]));
             ++i;
         }
-        return (<React.Fragment>
-				{this.props.label === 'above' &&
-                <Typography>{this.props.display.title}</Typography>}
-				<FormControl className={'node_' + this.props.name} error={this.state.error !== false} variant={this.props.variant}>
-					{this.props.label === 'placeholder' &&
-                <InputLabel id={this.props.name}>{this.props.display.title}</InputLabel>}
-					<Select label={this.props.display.title} labelId={this.props.name} native onChange={this.change} value={this.state.value === null ? '' : this.state.value}>
-						{lOpts}
-					</Select>
-					{this.state.error &&
-                <FormHelperText>{this.state.error}</FormHelperText>}
-				</FormControl>
-			</React.Fragment>);
+        return (React.createElement(React.Fragment, null,
+            this.props.label === 'above' &&
+                React.createElement(Typography, null, this.props.display.title),
+            React.createElement(FormControl, { className: 'node_' + this.props.name, error: this.state.error !== false, variant: this.props.variant },
+                this.props.label === 'placeholder' &&
+                    React.createElement(InputLabel, { id: this.props.name }, this.props.display.title),
+                React.createElement(Select, { label: this.props.display.title, labelId: this.props.name, native: true, onChange: this.change, value: this.state.value === null ? '' : this.state.value }, lOpts),
+                this.state.error &&
+                    React.createElement(FormHelperText, null, this.state.error))));
     }
     /**
      * Options (set)
@@ -178,4 +173,4 @@ export default class DefineNodeSelect extends DefineNodeBase {
     }
 }
 // Register with Node
-DefineNode.pluginAdd('select', DefineNodeSelect);
+DefineNodeBase.pluginAdd('select', DefineNodeSelect);

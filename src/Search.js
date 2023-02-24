@@ -193,11 +193,9 @@ export default class DefineSearch extends React.Component {
      * @access public
      */
     render() {
-        return (<Box className={`search _${this.state.name}`}>
-				<DefineParent dynamicOptions={this.props.dynamicOptions} gridSizes={this.props.gridSizes} label={this.props.label} ref={(el) => this.parent = el} name={this.state.name} node={this.props.tree} onEnterPressed={this._query} type="search" validation={false}/>
-				<Box className="actions">
-					<Button variant="contained" color="primary" onClick={this._query}>Search</Button>
-				</Box>
-			</Box>);
+        return (React.createElement(Box, { className: `search _${this.state.name}` },
+            React.createElement(DefineParent, { dynamicOptions: this.props.dynamicOptions, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.state.name, node: this.props.tree, onEnterPressed: this._query, type: "search", validation: false }),
+            React.createElement(Box, { className: "actions" },
+                React.createElement(Button, { variant: "contained", color: "primary", onClick: this._query }, "Search"))));
     }
 }

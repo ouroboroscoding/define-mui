@@ -14,7 +14,6 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 /**
  * Node Bool
@@ -68,10 +67,9 @@ export default class DefineNodeBool extends DefineNodeBase {
      * @access public
      */
     render() {
-        return (<Box>
-				<FormControlLabel className={'node_' + this.props.name} control={<Checkbox color="primary" checked={this.state.value ? true : false} onChange={this.change}/>} label={<span className={this.state.error !== false ? 'nodeBoolError' : 'false'}>{this.props.display.title}</span>}/>
-			</Box>);
+        return (React.createElement(Box, null,
+            React.createElement(FormControlLabel, { className: 'node_' + this.props.name, control: React.createElement(Checkbox, { color: "primary", checked: this.state.value ? true : false, onChange: this.change }), label: React.createElement("span", { className: this.state.error !== false ? 'nodeBoolError' : 'false' }, this.props.display.title) })));
     }
 }
 // Register with Node
-DefineNode.pluginAdd('bool', DefineNodeBool);
+DefineNodeBase.pluginAdd('bool', DefineNodeBool);

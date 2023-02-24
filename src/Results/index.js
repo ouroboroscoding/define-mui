@@ -440,40 +440,26 @@ export default class Results extends React.PureComponent {
      * @access public
      */
     render() {
-        return (<TableContainer className="results">
-				<Table stickyHeader aria-label="sticky table">
-					<TableHead>
-						<TableRow>
-							{this.titles.map(title => (<TableCell key={title.key} sortDirection={this.state.orderBy === title.key ? this.state.order : false} className={'field_' + title.key}>
-									<TableSortLabel active={this.state.orderBy === title.key} direction={this.state.orderBy === title.key ? this.state.order : 'asc'} data-key={title.key} onClick={this._orderChange}>
-										{title.text}
-									</TableSortLabel>
-								</TableCell>))}
-							{this.props.actions &&
-                <TableCell align="right" className="actions">
-									<Tooltip title="Export CSV">
-										<IconButton onClick={this._exportCsv}>
-											<i className="fa-solid fa-file-csv"/>
-										</IconButton>
-									</Tooltip>
-								</TableCell>}
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{(this.state.rowsPerPage > 0 ?
-                this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => <Row actions={this.props.actions} custom={this.props.custom} data={row} errors={this.props.errors} fields={this.fields} gridSizes={this.props.gridSizes} gridSpacing={this.props.gridSpacing} info={this.info} key={row[this.info.primary]} menu={this.props.menu} options={this.state.options} onDelete={this.props.onDelete} onKeyCopy={this.props.onKeyCopy} onUpdate={this.props.onUpdate}/>)}
-					</TableBody>
-					<TableFooter>
-						{this.props.totals &&
-                <TotalsRow actions={this.props.actions ? true : false} fields={this.fields} info={this.info} totals={this.state.totals || {}}/>}
-						<TableRow>
-							<TablePagination colSpan={this.titles.length + 1} count={this.state.data.length} onPageChange={this._pageChange} onRowsPerPageChange={this._perPageChange} page={this.state.page} rowsPerPage={this.state.rowsPerPage} rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]} ActionsComponent={PaginationActions} SelectProps={{
-                inputProps: { 'aria-label': 'rows per page' },
-                native: true,
-            }}/>
-						</TableRow>
-					</TableFooter>
-				</Table>
-			</TableContainer>);
+        return (React.createElement(TableContainer, { className: "results" },
+            React.createElement(Table, { stickyHeader: true, "aria-label": "sticky table" },
+                React.createElement(TableHead, null,
+                    React.createElement(TableRow, null,
+                        this.titles.map(title => (React.createElement(TableCell, { key: title.key, sortDirection: this.state.orderBy === title.key ? this.state.order : false, className: 'field_' + title.key },
+                            React.createElement(TableSortLabel, { active: this.state.orderBy === title.key, direction: this.state.orderBy === title.key ? this.state.order : 'asc', "data-key": title.key, onClick: this._orderChange }, title.text)))),
+                        this.props.actions &&
+                            React.createElement(TableCell, { align: "right", className: "actions" },
+                                React.createElement(Tooltip, { title: "Export CSV" },
+                                    React.createElement(IconButton, { onClick: this._exportCsv },
+                                        React.createElement("i", { className: "fa-solid fa-file-csv" })))))),
+                React.createElement(TableBody, null, (this.state.rowsPerPage > 0 ?
+                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy, onUpdate: this.props.onUpdate }))),
+                React.createElement(TableFooter, null,
+                    this.props.totals &&
+                        React.createElement(TotalsRow, { actions: this.props.actions ? true : false, fields: this.fields, info: this.info, totals: this.state.totals || {} }),
+                    React.createElement(TableRow, null,
+                        React.createElement(TablePagination, { colSpan: this.titles.length + 1, count: this.state.data.length, onPageChange: this._pageChange, onRowsPerPageChange: this._perPageChange, page: this.state.page, rowsPerPage: this.state.rowsPerPage, rowsPerPageOptions: [10, 20, 50, { label: 'All', value: -1 }], ActionsComponent: PaginationActions, SelectProps: {
+                                inputProps: { 'aria-label': 'rows per page' },
+                                native: true,
+                            } }))))));
     }
 }

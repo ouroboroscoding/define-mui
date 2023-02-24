@@ -12,6 +12,7 @@ import { ucfirst } from '@ouroboros/tools';
 import { Hash } from '@ouroboros/define';
 // NPM modules
 import PropTypes from 'prop-types';
+import React from 'react';
 // Material UI
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -138,11 +139,10 @@ export default class DefineHash extends DefineBase {
             variant: this.props.variant
         };
         // Render custom type
-        return (<Box className="nodeHash">
-				{this.state.display.title &&
-                <Typography className="legend">{this.state.display.title}</Typography>}
-				<ElName {...oProps}/>
-			</Box>);
+        return (React.createElement(Box, { className: "nodeHash" },
+            this.state.display.title &&
+                React.createElement(Typography, { className: "legend" }, this.state.display.title),
+            React.createElement(ElName, { ...oProps })));
     }
     /**
      * Reset

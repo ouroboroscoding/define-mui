@@ -39,15 +39,10 @@ export default function TotalsRow(props) {
         }
     }
     // Render
-    return (<TableRow>
-			{props.fields.map((f, i) => <TableCell key={i} className={'total field_' + f}>
-					{oCells[f]}
-				</TableCell>)}
-			{props.actions &&
-            <TableCell key={-1} className="total actions" align="right">
-					&nbsp;
-				</TableCell>}
-		</TableRow>);
+    return (React.createElement(TableRow, null,
+        props.fields.map((f, i) => React.createElement(TableCell, { key: i, className: 'total field_' + f }, oCells[f])),
+        props.actions &&
+            React.createElement(TableCell, { key: -1, className: "total actions", align: "right" }, "\u00A0")));
 }
 // Valid props
 TotalsRow.propTypes = {

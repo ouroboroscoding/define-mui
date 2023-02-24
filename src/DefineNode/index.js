@@ -33,8 +33,6 @@ import DefineNodeTextArea from './TextArea';
 import DefineNodeTime from './Time';
 // Export Node types
 export { DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime, DefineNodeHidden, DefineNodeMultiSelectCSV, DefineNodeNumber, DefineNodePassword, DefineNodePhoneNumber, DefineNodePrice, DefineNodeSelect, DefineNodeText, DefineNodeTextArea, DefineNodeTime };
-// Registered components
-const _plugins = {};
 /**
  * DefineNode
  *
@@ -68,10 +66,7 @@ export default class DefineNode extends DefineBase {
     };
     // Registered Node types
     static pluginAdd(name, componentClass, defaultValue = '') {
-        _plugins[name] = {
-            class_: componentClass,
-            default_: defaultValue,
-        };
+        DefineNodeBase.pluginAdd(name, componentClass, defaultValue);
     }
     state;
     // Child elements
@@ -214,8 +209,8 @@ export default class DefineNode extends DefineBase {
     render() {
         // Get the component name based on the type
         let ElName = null;
-        if (this.state.type in _plugins) {
-            ElName = _plugins[this.state.type].class_;
+        if (this.state.type in DefineNodeBase._plugins) {
+            ElName = DefineNodeBase._plugins[this.state.type].class_;
         }
         else {
             throw new Error(`Invalid type in define/Node: ${this.state.type}`);
@@ -223,12 +218,11 @@ export default class DefineNode extends DefineBase {
         // Get the value
         const mValue = this.state.value !== null ?
             this.state.value :
-            _plugins[this.state.type].default_;
-        return (<React.Fragment>
-				<ElName display={this.state.display} error={this.props.error} label={this.props.label} onChange={this.props.onChange} onEnterPressed={this.props.onEnterPressed} name={this.props.name} node={this.props.node} ref={(el) => this._el = el} value={mValue} validation={this.props.validation} variant={this.props.variant}/>
-				{this.props.type === 'search' &&
-                <DefineNodeSearchOption ref={(el) => this._search = el} type={this.state.type} variant={this.props.variant}/>}
-			</React.Fragment>);
+            DefineNodeBase._plugins[this.state.type].default_;
+        return (React.createElement(React.Fragment, null,
+            React.createElement(ElName, { display: this.state.display, error: this.props.error, label: this.props.label, onChange: this.props.onChange, onEnterPressed: this.props.onEnterPressed, name: this.props.name, node: this.props.node, ref: (el) => this._el = el, value: mValue, validation: this.props.validation, variant: this.props.variant }),
+            this.props.type === 'search' &&
+                React.createElement(DefineNodeSearchOption, { ref: (el) => this._search = el, type: this.state.type, variant: this.props.variant })));
     }
     /**
      * Reset

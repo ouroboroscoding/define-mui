@@ -217,20 +217,18 @@ export default class DefineParent extends DefineBase {
                 case 'ArrayNode':
                 case 'HashNode':
                 case 'Parent':
-                    lElements.push(<Grid key={sField} item {...gridSizes}>
-							{DefineBase.create(sClass, {
-                            label: this.props.label,
-                            nodeVariant: this.props.nodeVariant,
-                            ref: (el) => this.fields[sField] = el,
-                            name: sField,
-                            node: oChild,
-                            onEnterPressed: this.props.onEnterPressed,
-                            returnAll: this.props.returnAll,
-                            type: this.props.type,
-                            value: mValue,
-                            validation: this.props.validation
-                        })}
-						</Grid>);
+                    lElements.push(React.createElement(Grid, { key: sField, item: true, ...gridSizes }, DefineBase.create(sClass, {
+                        label: this.props.label,
+                        nodeVariant: this.props.nodeVariant,
+                        ref: (el) => this.fields[sField] = el,
+                        name: sField,
+                        node: oChild,
+                        onEnterPressed: this.props.onEnterPressed,
+                        returnAll: this.props.returnAll,
+                        type: this.props.type,
+                        value: mValue,
+                        validation: this.props.validation
+                    })));
                     break;
                 case 'Node':
                     const oProps = {
@@ -249,9 +247,7 @@ export default class DefineParent extends DefineBase {
                         oProps.onChange = oDynamicOptions[sField];
                     }
                     // Create the new element and push it to the list
-                    lElements.push(<Grid key={sField} item {...gridSizes}>
-							{DefineBase.create(sClass, oProps)}
-						</Grid>);
+                    lElements.push(React.createElement(Grid, { key: sField, item: true, ...gridSizes }, DefineBase.create(sClass, oProps)));
                     break;
                 default:
                     throw new Error('Invalid Node type in parent of child: ' + sField);
@@ -273,13 +269,10 @@ export default class DefineParent extends DefineBase {
      * @access public
      */
     render() {
-        return (<React.Fragment>
-				{this.state.title &&
-                <Typography variant="h6">{this.state.title}</Typography>}
-				<Grid container spacing={this.props.gridSpacing} className={"nodeParent _" + this.props.name}>
-					{this.state.elements}
-				</Grid>
-			</React.Fragment>);
+        return (React.createElement(React.Fragment, null,
+            this.state.title &&
+                React.createElement(Typography, { variant: "h6" }, this.state.title),
+            React.createElement(Grid, { container: true, spacing: this.props.gridSpacing, className: "nodeParent _" + this.props.name }, this.state.elements)));
     }
     /**
      * Reset

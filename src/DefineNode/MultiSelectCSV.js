@@ -22,7 +22,6 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 // Local Options
 import { OptionsBase } from '../Options';
@@ -200,29 +199,20 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         else if (this.props.placeholder) {
             props.placeholder = this.props.placeholder;
         }
-        return (<React.Fragment>
-				{this.props.label === 'above' &&
-                <Typography>{this.props.display.title}</Typography>}
-				<TextField {...props}/>
-				{this.state.defaultValues !== null &&
-                <Dialog maxWidth="lg" onClose={this.cancel} open={true}>
-					<DialogTitle>{this.props.display.title}</DialogTitle>
-					<DialogContent dividers>
-						<Grid container spacing={2}>
-							{this.state.options.map(o => <Grid item xs={12} md={4} lg={2} key={o[0]}>
-									<FormControlLabel control={<Checkbox color="primary" defaultChecked={this.state.defaultValues.includes(o[0]) ? true : false} inputRef={ref => this.checks.push(ref)} inputProps={{
-                                value: o[0]
-                            }}/>} label={o[1]}/>
-								</Grid>)}
-						</Grid>
-					</DialogContent>
-					<DialogActions>
-						<Button variant="contained" color="primary" onClick={this.submit}>
-							Submit
-						</Button>
-					</DialogActions>
-				</Dialog>}
-			</React.Fragment>);
+        return (React.createElement(React.Fragment, null,
+            this.props.label === 'above' &&
+                React.createElement(Typography, null, this.props.display.title),
+            React.createElement(TextField, { ...props }),
+            this.state.defaultValues !== null &&
+                React.createElement(Dialog, { maxWidth: "lg", onClose: this.cancel, open: true },
+                    React.createElement(DialogTitle, null, this.props.display.title),
+                    React.createElement(DialogContent, { dividers: true },
+                        React.createElement(Grid, { container: true, spacing: 2 }, this.state.options.map(o => React.createElement(Grid, { item: true, xs: 12, md: 4, lg: 2, key: o[0] },
+                            React.createElement(FormControlLabel, { control: React.createElement(Checkbox, { color: "primary", defaultChecked: this.state.defaultValues.includes(o[0]) ? true : false, inputRef: ref => this.checks.push(ref), inputProps: {
+                                        value: o[0]
+                                    } }), label: o[1] }))))),
+                    React.createElement(DialogActions, null,
+                        React.createElement(Button, { variant: "contained", color: "primary", onClick: this.submit }, "Submit")))));
     }
     /**
      * Options (set)
@@ -237,4 +227,4 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
     }
 }
 // Register with Node
-DefineNode.pluginAdd('multiselectcsv', DefineNodeMultiSelectCSV);
+DefineNodeBase.pluginAdd('multiselectcsv', DefineNodeMultiSelectCSV);

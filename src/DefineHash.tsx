@@ -14,6 +14,7 @@ import { Hash } from '@ouroboros/define';
 
 // NPM modules
 import PropTypes from 'prop-types';
+import React from 'react';
 
 // Material UI
 import Box from '@mui/material/Box';

@@ -21,7 +21,6 @@ import Typography from '@mui/material/Typography';
 import PhoneInput from 'react-phone-input-material-ui'
 
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Types
@@ -116,4 +115,4 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNode.pluginAdd('phone_number', DefineNodePhoneNumber);
+DefineNodeBase.pluginAdd('phone_number', DefineNodePhoneNumber);

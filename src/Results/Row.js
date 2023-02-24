@@ -108,19 +108,16 @@ export default function ResultsRow(props) {
      *
      * @param value The new values to update
      */
-    function submit(value) {
-        // Pass the data to the user
-        if (props.onUpdate) {
-            const mResult = props.onUpdate(value);
-            // If we didn't get success
-            if (mResult === true) {
-                updateSet(false);
-            }
-            // Return the result
-            return mResult;
-        }
-        // Else, return failure
-        return true;
+    function submit(value, key) {
+        // Create a new promise and return it
+        return new Promise((resolve, reject) => {
+            props.onUpdate(value, key).then((result) => {
+                if (result) {
+                    updateSet(false);
+                }
+                resolve(result);
+            }, reject);
+        });
     }
     // Generate each cell based on type
     const lCells = [];
@@ -132,11 +129,9 @@ export default function ResultsRow(props) {
         let mContent = null;
         // If we have a primary key and we can copy it
         if (props.info.copyPrimary && sField === props.info.primary) {
-            mContent = (<Tooltip title="Copy Record Key">
-					<IconButton onClick={copyKey}>
-						<i className="fa-solid fa-key"/>
-					</IconButton>
-				</Tooltip>);
+            mContent = (React.createElement(Tooltip, { title: "Copy Record Key" },
+                React.createElement(IconButton, { onClick: copyKey },
+                    React.createElement("i", { className: "fa-solid fa-key" }))));
         }
         else {
             // If we have a custom processor for the field
@@ -182,7 +177,7 @@ export default function ResultsRow(props) {
                     }
                     // If we have a string with newlines
                     else if (typeof mValue === 'string' && mValue.includes('\n')) {
-                        mContent = mValue.split('\n').map((s, j) => <p key={j}>{s}</p>);
+                        mContent = mValue.split('\n').map((s, j) => React.createElement("p", { key: j }, s));
                     }
                     // Else, set it as is
                     else {
@@ -194,105 +189,76 @@ export default function ResultsRow(props) {
                 }
             }
         }
-        lCells.push(<TableCell key={i} className={'field_' + props.fields[i]}>
-				{mContent}
-			</TableCell>);
+        lCells.push(React.createElement(TableCell, { key: i, className: 'field_' + props.fields[i] }, mContent));
     }
     // If we have actions
     if (props.actions) {
         // Generate the actions cell
-        lCells.push(<TableCell key={-1} className="actions" align="right">
-				{props.actions.map((a, i) => {
+        lCells.push(React.createElement(TableCell, { key: -1, className: "actions", align: "right" },
+            props.actions.map((a, i) => {
                 if (a.dynamic && typeof a.dynamic === 'function') {
                     a = Object.assign(a, a.dynamic(props.data));
                 }
                 // If there's a url
                 if (a.url) {
-                    return (<Link key={i} to={a.url}>
-								<Tooltip key={i} title={a.tooltip}>
-									<IconButton data-index={i} className="icon">
-										<i className={a.icon + ' ' + (actions[i.toString()] ? 'open' : 'closed')}/>
-									</IconButton>
-								</Tooltip>
-							</Link>);
+                    return (React.createElement(Link, { key: i, to: a.url },
+                        React.createElement(Tooltip, { key: i, title: a.tooltip },
+                            React.createElement(IconButton, { "data-index": i, className: "icon" },
+                                React.createElement("i", { className: a.icon + ' ' + (actions[i.toString()] ? 'open' : 'closed') })))));
                 }
                 // Else, there should be a callback or component
                 else {
-                    return (<Tooltip key={i} title={a.tooltip}>
-								<IconButton data-index={i} className="icon" onClick={ev => action(ev.currentTarget.dataset.index)}>
-									<i className={a.icon + ' ' + (actions[i.toString()] ? 'open' : 'closed')}/>
-								</IconButton>
-							</Tooltip>);
+                    return (React.createElement(Tooltip, { key: i, title: a.tooltip },
+                        React.createElement(IconButton, { "data-index": i, className: "icon", onClick: ev => action(ev.currentTarget.dataset.index) },
+                            React.createElement("i", { className: a.icon + ' ' + (actions[i.toString()] ? 'open' : 'closed') }))));
                 }
-            })}
-				{props.onUpdate &&
-                <Tooltip title="Edit the record">
-						<IconButton className="icon" onClick={ev => updateSet(b => !b)}>
-							<i className={'fa-solid fa-edit ' + (update ? 'open' : 'closed')}/>
-						</IconButton>
-					</Tooltip>}
-				{props.onDelete &&
-                <Tooltip title="Delete the record">
-						<IconButton className="icon" onClick={() => removeSet(true)}>
-							<i className="fa-solid fa-trash-alt"/>
-						</IconButton>
-					</Tooltip>}
-				{props.menu.length > 0 &&
-                <Tooltip title="More">
-						<IconButton className="icon" onClick={ev => menuSet(b => b ? false : ev.currentTarget)}>
-							<i className="fa-solid fa-ellipsis-vertical"/>
-						</IconButton>
-					</Tooltip>}
-				{menu !== false &&
-                <Menu anchorEl={menu} open={true} onClose={ev => menuSet(false)}>
-						{props.menu.map((o, i) => <MenuItem key={i} onClick={ev => {
-                            menuSet(false);
-                            o.callback(props.data);
-                        }}>
-								{o.icon &&
-                            <ListItemIcon>
-										<i className={o.icon}/>
-									</ListItemIcon>}
-								{o.title}
-							</MenuItem>)}
-					</Menu>}
-				{remove &&
-                <Dialog onClose={() => removeSet(false)} open={true}>
-						<DialogTitle>Confirm Delete</DialogTitle>
-						<DialogContent>
-							<Typography>Please confirm you wish to delete this record.</Typography>
-						</DialogContent>
-						<DialogActions>
-							<Button color="secondary" onClick={() => removeSet(false)} variant="contained">Cancel</Button>
-							<Button color="primary" onClick={() => { removeSet(false); props.onDelete(props.data[props.info.primary]); }} variant="contained">Delete</Button>
-						</DialogActions>
-					</Dialog>}
-			</TableCell>);
+            }),
+            props.onUpdate &&
+                React.createElement(Tooltip, { title: "Edit the record" },
+                    React.createElement(IconButton, { className: "icon", onClick: ev => updateSet(b => !b) },
+                        React.createElement("i", { className: 'fa-solid fa-edit ' + (update ? 'open' : 'closed') }))),
+            props.onDelete &&
+                React.createElement(Tooltip, { title: "Delete the record" },
+                    React.createElement(IconButton, { className: "icon", onClick: () => removeSet(true) },
+                        React.createElement("i", { className: "fa-solid fa-trash-alt" }))),
+            props.menu.length > 0 &&
+                React.createElement(Tooltip, { title: "More" },
+                    React.createElement(IconButton, { className: "icon", onClick: ev => menuSet(b => b ? false : ev.currentTarget) },
+                        React.createElement("i", { className: "fa-solid fa-ellipsis-vertical" }))),
+            menu !== false &&
+                React.createElement(Menu, { anchorEl: menu, open: true, onClose: ev => menuSet(false) }, props.menu.map((o, i) => React.createElement(MenuItem, { key: i, onClick: ev => {
+                        menuSet(false);
+                        o.callback(props.data);
+                    } },
+                    o.icon &&
+                        React.createElement(ListItemIcon, null,
+                            React.createElement("i", { className: o.icon })),
+                    o.title))),
+            remove &&
+                React.createElement(Dialog, { onClose: () => removeSet(false), open: true },
+                    React.createElement(DialogTitle, null, "Confirm Delete"),
+                    React.createElement(DialogContent, null,
+                        React.createElement(Typography, null, "Please confirm you wish to delete this record.")),
+                    React.createElement(DialogActions, null,
+                        React.createElement(Button, { color: "secondary", onClick: () => removeSet(false), variant: "contained" }, "Cancel"),
+                        React.createElement(Button, { color: "primary", onClick: () => { removeSet(false); props.onDelete(props.data[props.info.primary]); }, variant: "contained" }, "Delete")))));
     }
     // Render
-    return (<React.Fragment>
-			<TableRow>
-				{lCells}
-			</TableRow>
-			{update &&
-            <TableRow>
-					<TableCell colSpan={props.fields.length + 1}>
-						<Form gridSizes={props.gridSizes} gridSpacing={props.gridSpacing} onCancel={() => updateSet(false)} onSubmit={submit} ref={refUpdateForm} tree={props.info.tree} type="update" value={props.data}/>
-					</TableCell>
-				</TableRow>}
-			{omap(actions, (b, i) => <TableRow key={i} className="action_row">
-					<TableCell colSpan={props.fields.length + 1}>
-						{b === true ? React.createElement(props.actions[parseInt(i, 10)].component, {
+    return (React.createElement(React.Fragment, null,
+        React.createElement(TableRow, null, lCells),
+        update &&
+            React.createElement(TableRow, null,
+                React.createElement(TableCell, { colSpan: props.fields.length + 1 },
+                    React.createElement(Form, { gridSizes: props.gridSizes, gridSpacing: props.gridSpacing, onCancel: () => updateSet(false), onSubmit: props.onUpdate, ref: refUpdateForm, tree: props.info.tree, type: "update", value: props.data }))),
+        omap(actions, (b, i) => React.createElement(TableRow, { key: i, className: "action_row" },
+            React.createElement(TableCell, { colSpan: props.fields.length + 1 }, b === true ? React.createElement(props.actions[parseInt(i, 10)].component, {
                 onClose: () => action(i),
                 value: props.data
             }) : React.createElement(props.actions[parseInt(i, 10)].component, {
                 onClose: () => action(i),
                 value: props.data,
                 ...b
-            })}
-					</TableCell>
-				</TableRow>)}
-		</React.Fragment>);
+            }))))));
 }
 // Valid props
 ResultsRow.propTypes = {

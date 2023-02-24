@@ -12,7 +12,6 @@
 import React from 'react';
 
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 
 /**
@@ -45,4 +44,4 @@ export default class DefineNodeHidden extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNode.pluginAdd('hidden', DefineNodeHidden);
+DefineNodeBase.pluginAdd('hidden', DefineNodeHidden);

@@ -14,6 +14,7 @@ import { afindi, clone, combine, ucfirst } from '@ouroboros/tools';
 
 // NPM modules
 import PropTypes from 'prop-types';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 // Material UI

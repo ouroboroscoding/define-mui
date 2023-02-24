@@ -47,7 +47,7 @@ export default class Form extends React.Component {
         gridSpacing: PropTypes.number,
         label: PropTypes.oneOf(['above', 'none', 'placeholder']),
         onCancel: PropTypes.func,
-        onSubmit: PropTypes.func,
+        onSubmit: PropTypes.func.isRequired,
         title: PropTypes.oneOf([PropTypes.string, PropTypes.bool]),
         tree: PropTypes.instanceOf(Tree).isRequired,
         type: PropTypes.oneOf(['create', 'update']).isRequired,
@@ -55,7 +55,6 @@ export default class Form extends React.Component {
         variant: PropTypes.oneOf(['filled', 'outlined', 'standard'])
     };
     static defaultProps = {
-        cancel: false,
         gridSizes: { __default__: { xs: 12, sm: 6, lg: 3 } },
         gridSpacing: 2,
         label: 'placeholder',
@@ -92,6 +91,7 @@ export default class Form extends React.Component {
         };
         // Bind methods
         this._cancel = this._cancel.bind(this);
+        this._errors = this._errors.bind(this);
         this._submit = this._submit.bind(this);
     }
     /**
@@ -102,13 +102,24 @@ export default class Form extends React.Component {
      *
      * @name _cancel
      * @access private
-     * @
      */
     _cancel() {
         // If the prop is a function
         if (typeof this.props.onCancel === 'function') {
             this.props.onCancel();
         }
+    }
+    /**
+     * Errors
+     *
+     * Called to add errors that come back from an onSubmit callback
+     *
+     * @name _errors
+     * @access private
+     * @param errors The list of errors from define
+     */
+    _errors(errors) {
+        this.parent.error(errors);
     }
     /**
      * Submit
@@ -128,13 +139,12 @@ export default class Form extends React.Component {
         const oValue = this.parent.value;
         // If it's not empty
         if (!empty(oValue)) {
-            // Send the user the parent's values and store the result
-            const mResult = this.props.onSubmit(oValue);
-            // If we got errors
-            if (mResult !== true) {
-                // Send the errors to the parent
-                this.parent.error(mResult);
-            }
+            // Init the key
+            const mKey = (this.props.type === 'update' && this.state.primary in this.props.value[this.state.primary]) ?
+                this.props.value[this.state.primary] :
+                null;
+            // Call the onSubmit and pass it the primary key value
+            this.props.onSubmit(oValue, mKey).then(result => { return; }, errors => this.parent.error(errors));
         }
     }
     /**
@@ -174,16 +184,14 @@ export default class Form extends React.Component {
             submit = 'Update';
         }
         // Render
-        return (<Box className={"form _" + this.props.tree._name}>
-				{title &&
-                <Typography className="form_title">{title}</Typography>}
-				<DefineParent dynamicOptions={this.props.dynamicOptions} fields={this.props.fields} gridSizes={this.props.gridSizes} label={this.props.label} ref={(el) => this.parent = el} name={this.props.tree._name} node={this.props.tree} onEnterPressed={this._submit} type={this.props.type} value={this.props.value}/>
-				<Box className="actions">
-					{this.props.onCancel &&
-                <Button variant="contained" color="secondary" onClick={this._cancel}>Cancel</Button>}
-					<Button variant="contained" color="primary" onClick={this._submit}>{submit}</Button>
-				</Box>
-			</Box>);
+        return (React.createElement(Box, { className: "form _" + this.props.tree._name },
+            title &&
+                React.createElement(Typography, { className: "form_title" }, title),
+            React.createElement(DefineParent, { dynamicOptions: this.props.dynamicOptions, fields: this.props.fields, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.props.tree._name, node: this.props.tree, onEnterPressed: this._submit, type: this.props.type, value: this.props.value }),
+            React.createElement(Box, { className: "actions" },
+                this.props.onCancel &&
+                    React.createElement(Button, { variant: "contained", color: "secondary", onClick: this._cancel }, "Cancel"),
+                React.createElement(Button, { variant: "contained", color: "primary", onClick: this._submit }, submit))));
     }
     /**
      * Reset

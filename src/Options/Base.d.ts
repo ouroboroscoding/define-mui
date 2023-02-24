@@ -17,6 +17,7 @@ export type optionsCallback = (data: string[][]) => void;
  * @access public
  */
 export default class OptionsBase {
+    static _CLONE_SKIP_: boolean;
     _callbacks: optionsCallback[];
     _data: string[][];
     /**

@@ -16,6 +16,8 @@
  * @access public
  */
 export default class OptionsBase {
+    // Do not allow cloning
+    static _CLONE_SKIP_ = true;
     // List of callbacks tracking changes in the data
     _callbacks;
     // The current data

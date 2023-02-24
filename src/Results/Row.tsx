@@ -167,23 +167,17 @@ export default function ResultsRow(props: ResultsRowProps) {
 	 *
 	 * @param value The new values to update
 	 */
-	function submit(value: Record<string, any>): string[][] | true {
+	function submit(value: Record<string, any>, key: any): Promise<boolean> {
 
-		// Pass the data to the user
-		if(props.onUpdate) {
-			const mResult = props.onUpdate(value);
-
-			// If we didn't get success
-			if(mResult === true) {
-				updateSet(false);
-			}
-
-			// Return the result
-			return mResult;
-		}
-
-		// Else, return failure
-		return true;
+		// Create a new promise and return it
+		return new Promise((resolve, reject) => {
+			(props.onUpdate as onSubmitCallback)(value, key).then((result: boolean) => {
+				if(result) {
+					updateSet(false);
+				}
+				resolve(result);
+			}, reject);
+		});
 	}
 
 	// Generate each cell based on type
@@ -389,7 +383,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 							gridSizes={props.gridSizes}
 							gridSpacing={props.gridSpacing}
 							onCancel={() => updateSet(false)}
-							onSubmit={submit}
+							onSubmit={props.onUpdate as onSubmitCallback}
 							ref={refUpdateForm}
 							tree={props.info.tree}
 							type="update"

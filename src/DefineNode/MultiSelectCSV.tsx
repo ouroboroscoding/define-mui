@@ -28,7 +28,6 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Local Options
@@ -314,4 +313,4 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNode.pluginAdd('multiselectcsv', DefineNodeMultiSelectCSV);
+DefineNodeBase.pluginAdd('multiselectcsv', DefineNodeMultiSelectCSV);

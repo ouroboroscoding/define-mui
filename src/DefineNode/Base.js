@@ -31,8 +31,17 @@ export default class DefineNodeBase extends React.Component {
         placeholder: PropTypes.string,
         value: PropTypes.any
     };
+    // Registered components
+    static _plugins = {};
     // State type
     state;
+    // Registered Node types
+    static pluginAdd(name, componentClass, defaultValue = '') {
+        DefineNodeBase._plugins[name] = {
+            class_: componentClass,
+            default_: defaultValue,
+        };
+    }
     /**
      * Constructor
      *

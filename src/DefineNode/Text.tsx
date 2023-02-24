@@ -19,7 +19,6 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Types
@@ -147,4 +146,4 @@ export default class DefineNodeText extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNode.pluginAdd('text', DefineNodeText);
+DefineNodeBase.pluginAdd('text', DefineNodeText);

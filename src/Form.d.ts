@@ -14,7 +14,7 @@ import DefineParent from './DefineParent';
 import { labelOptions, variantOptions } from './DefineNode';
 import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
 export type onCancelCallback = () => void;
-export type onSubmitCallback = (value: Record<string, any>) => string[][] | true;
+export type onSubmitCallback = (value: Record<string, any>, key: any) => Promise<boolean>;
 export type FormProps = {
     dynamicOptions?: dynamicOptionStruct[];
     fields?: string[];
@@ -23,10 +23,10 @@ export type FormProps = {
     label?: labelOptions;
     onCancel?: onCancelCallback;
     onSubmit: onSubmitCallback;
-    title?: string | boolean;
+    title: string | boolean;
     tree: Tree;
     type: 'create' | 'update';
-    value?: Record<string, any>;
+    value: Record<string, any>;
     variant?: variantOptions;
 };
 export type FormState = {
@@ -61,7 +61,7 @@ export default class Form extends React.Component {
         gridSpacing: PropTypes.Requireable<number>;
         label: PropTypes.Requireable<string>;
         onCancel: PropTypes.Requireable<(...args: any[]) => any>;
-        onSubmit: PropTypes.Requireable<(...args: any[]) => any>;
+        onSubmit: PropTypes.Validator<(...args: any[]) => any>;
         title: PropTypes.Requireable<PropTypes.Requireable<boolean> | PropTypes.Requireable<string>>;
         tree: PropTypes.Validator<Tree>;
         type: PropTypes.Validator<string>;
@@ -69,7 +69,6 @@ export default class Form extends React.Component {
         variant: PropTypes.Requireable<string>;
     };
     static defaultProps: {
-        cancel: boolean;
         gridSizes: {
             __default__: {
                 xs: number;
@@ -105,9 +104,18 @@ export default class Form extends React.Component {
      *
      * @name _cancel
      * @access private
-     * @
      */
     _cancel(): void;
+    /**
+     * Errors
+     *
+     * Called to add errors that come back from an onSubmit callback
+     *
+     * @name _errors
+     * @access private
+     * @param errors The list of errors from define
+     */
+    _errors(errors: string[][]): void;
     /**
      * Submit
      *

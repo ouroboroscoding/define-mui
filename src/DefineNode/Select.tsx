@@ -24,7 +24,6 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Options modules
@@ -241,4 +240,4 @@ export default class DefineNodeSelect extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNode.pluginAdd('select', DefineNodeSelect);
+DefineNodeBase.pluginAdd('select', DefineNodeSelect);

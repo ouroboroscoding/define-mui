@@ -28,7 +28,7 @@ import DefineParent from './DefineParent';
 import { labelOptions, variantOptions } from './DefineNode';
 import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
 export type onCancelCallback = () => void;
-export type onSubmitCallback = (value: Record<string, any>) => string[][] | true;
+export type onSubmitCallback = (value: Record<string, any>, key: any) => Promise<boolean>;
 export type FormProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	fields?: string[],
@@ -37,10 +37,10 @@ export type FormProps = {
 	label?: labelOptions,
 	onCancel?: onCancelCallback,
 	onSubmit: onSubmitCallback,
-	title?: string | boolean,
+	title: string | boolean,
 	tree: Tree,
 	type: 'create' | 'update',
-	value?: Record<string, any>,
+	value: Record<string, any>,
 	variant?: variantOptions
 };
 export type FormState = {
@@ -78,7 +78,7 @@ export default class Form extends React.Component {
 		gridSpacing: PropTypes.number,
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
 		onCancel: PropTypes.func,
-		onSubmit: PropTypes.func,
+		onSubmit: PropTypes.func.isRequired,
 		title: PropTypes.oneOf([PropTypes.string, PropTypes.bool]),
 		tree: PropTypes.instanceOf(Tree).isRequired,
 		type: PropTypes.oneOf(['create', 'update']).isRequired,
@@ -86,7 +86,6 @@ export default class Form extends React.Component {
 		variant: PropTypes.oneOf(['filled', 'outlined', 'standard'])
 	};
 	static defaultProps = {
-		cancel: false,
 		gridSizes: {__default__: {xs: 12, sm: 6, lg: 3}},
 		gridSpacing: 2,
 		label: 'placeholder',
@@ -134,6 +133,7 @@ export default class Form extends React.Component {
 
 		// Bind methods
 		this._cancel = this._cancel.bind(this);
+		this._errors = this._errors.bind(this);
 		this._submit = this._submit.bind(this);
 	}
 
@@ -145,14 +145,26 @@ export default class Form extends React.Component {
 	 *
 	 * @name _cancel
 	 * @access private
-	 * @
 	 */
-	_cancel() {
+	_cancel(): void {
 
 		// If the prop is a function
 		if(typeof this.props.onCancel === 'function') {
 			this.props.onCancel();
 		}
+	}
+
+	/**
+	 * Errors
+	 *
+	 * Called to add errors that come back from an onSubmit callback
+	 *
+	 * @name _errors
+	 * @access private
+	 * @param errors The list of errors from define
+	 */
+	_errors(errors: string[][]) {
+		this.parent.error(errors);
 	}
 
 	/**
@@ -177,15 +189,16 @@ export default class Form extends React.Component {
 		// If it's not empty
 		if(!empty(oValue)) {
 
-			// Send the user the parent's values and store the result
-			const mResult = this.props.onSubmit(oValue);
+			// Init the key
+			const mKey = (this.props.type === 'update' && this.state.primary in this.props.value[this.state.primary]) ?
+							this.props.value[this.state.primary] :
+							null;
 
-			// If we got errors
-			if(mResult !== true) {
-
-				// Send the errors to the parent
-				this.parent.error(mResult);
-			}
+			// Call the onSubmit and pass it the primary key value
+			this.props.onSubmit(oValue, mKey).then(
+				result => { return },
+				errors => this.parent.error(errors)
+			);
 		}
 	}
 

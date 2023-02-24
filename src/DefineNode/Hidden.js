@@ -10,7 +10,6 @@
 // NPM modules
 import React from 'react';
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 /**
  * Node Hidden
@@ -31,8 +30,8 @@ export default class DefineNodeHidden extends DefineNodeBase {
      * @access public
      */
     render() {
-        return (<input type="hidden" value={this.state.value === null ? '' : this.state.value}/>);
+        return (React.createElement("input", { type: "hidden", value: this.state.value === null ? '' : this.state.value }));
     }
 }
 // Register with Node
-DefineNode.pluginAdd('hidden', DefineNodeHidden);
+DefineNodeBase.pluginAdd('hidden', DefineNodeHidden);

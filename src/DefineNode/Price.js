@@ -14,7 +14,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 /**
  * Node Price
@@ -96,7 +95,7 @@ export default class DefineNodePrice extends DefineNodeBase {
             variant: this.props.variant,
             inputProps,
             InputProps: {
-                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                startAdornment: React.createElement(InputAdornment, { position: "start" }, "$"),
             }
         };
         // If the label is a placeholder
@@ -108,12 +107,11 @@ export default class DefineNodePrice extends DefineNodeBase {
             props.placeholder = this.props.placeholder;
         }
         // Render
-        return (<React.Fragment>
-				{this.props.label === 'above' &&
-                <Typography>{this.props.display.title}</Typography>}
-				<TextField {...props}/>
-			</React.Fragment>);
+        return (React.createElement(React.Fragment, null,
+            this.props.label === 'above' &&
+                React.createElement(Typography, null, this.props.display.title),
+            React.createElement(TextField, { ...props })));
     }
 }
 // Register with Node
-DefineNode.pluginAdd('price', DefineNodePrice);
+DefineNodeBase.pluginAdd('price', DefineNodePrice);

@@ -39,18 +39,13 @@ export default function PaginationActions(props) {
         props.onPageChange(event, props.page - 1);
     }
     // Render
-    return (<div style={{ flexShrink: 0 }}>
-			<IconButton onClick={first} disabled={props.page === 0} aria-label="First Page">
-				<i className="fa-solid fa-angle-double-left"/>
-			</IconButton>
-			<IconButton onClick={prev} disabled={props.page === 0} aria-label="Previous Page">
-				<i className="fa-solid fa-angle-left"/>
-			</IconButton>
-			<IconButton onClick={next} disabled={props.page >= Math.max(0, Math.ceil(props.count / props.rowsPerPage) - 1)} aria-label="Next Page">
-				<i className="fa-solid fa-angle-right"/>
-			</IconButton>
-			<IconButton onClick={last} disabled={props.page >= Math.max(0, Math.ceil(props.count / props.rowsPerPage) - 1)} aria-label="Last Page">
-				<i className="fa-solid fa-angle-double-right"/>
-			</IconButton>
-		</div>);
+    return (React.createElement("div", { style: { flexShrink: 0 } },
+        React.createElement(IconButton, { onClick: first, disabled: props.page === 0, "aria-label": "First Page" },
+            React.createElement("i", { className: "fa-solid fa-angle-double-left" })),
+        React.createElement(IconButton, { onClick: prev, disabled: props.page === 0, "aria-label": "Previous Page" },
+            React.createElement("i", { className: "fa-solid fa-angle-left" })),
+        React.createElement(IconButton, { onClick: next, disabled: props.page >= Math.max(0, Math.ceil(props.count / props.rowsPerPage) - 1), "aria-label": "Next Page" },
+            React.createElement("i", { className: "fa-solid fa-angle-right" })),
+        React.createElement(IconButton, { onClick: last, disabled: props.page >= Math.max(0, Math.ceil(props.count / props.rowsPerPage) - 1), "aria-label": "Last Page" },
+            React.createElement("i", { className: "fa-solid fa-angle-double-right" }))));
 }

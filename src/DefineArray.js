@@ -12,6 +12,7 @@ import { ArrayNode } from '@ouroboros/define';
 import { afindi, clone, ucfirst } from '@ouroboros/tools';
 // NPM modules
 import PropTypes from 'prop-types';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 // Material UI
 import Box from '@mui/material/Box';
@@ -208,15 +209,14 @@ export default class DefineArray extends DefineBase {
                 variant: this.props.variant
             };
             // Render plugin type
-            return (<ElName {...oProps}/>);
+            return (React.createElement(ElName, { ...oProps }));
         }
         // Render
-        return (<Box className="nodeArray">
-				{this.state.display.title &&
-                <Typography className="legend">{this.state.display.title}</Typography>}
-				{this.state.elements.map(o => <Box key={o.key} className="element flexColumns">
-						<Box className="data flexGrow">
-							{DefineBase.create(this.state.nodeClass, {
+        return (React.createElement(Box, { className: "nodeArray" },
+            this.state.display.title &&
+                React.createElement(Typography, { className: "legend" }, this.state.display.title),
+            this.state.elements.map(o => React.createElement(Box, { key: o.key, className: "element flexColumns" },
+                React.createElement(Box, { className: "data flexGrow" }, DefineBase.create(this.state.nodeClass, {
                     ref: (el) => this.nodes[o.key] = el,
                     name: this.props.name,
                     node: this.child,
@@ -225,26 +225,16 @@ export default class DefineArray extends DefineBase {
                     type: this.props.type,
                     value: o.value,
                     validation: this.props.validation
-                })}
-						</Box>
-						<Box className="actions flexStatic">
-							<Tooltip title="Remove">
-								<IconButton onClick={ev => this.remove(o.key)}>
-									<i className="fas fa-minus-circle" style={{ color: red[500] }}/>
-								</IconButton>
-							</Tooltip>
-						</Box>
-					</Box>)}
-				<Box className="element">
-					<Box className="actions">
-						<Tooltip title="Add">
-							<IconButton onClick={ev => this.add()}>
-								<i className="fas fa-plus-circle" style={{ color: green[500] }}/>
-							</IconButton>
-						</Tooltip>
-					</Box>
-				</Box>
-			</Box>);
+                })),
+                React.createElement(Box, { className: "actions flexStatic" },
+                    React.createElement(Tooltip, { title: "Remove" },
+                        React.createElement(IconButton, { onClick: ev => this.remove(o.key) },
+                            React.createElement("i", { className: "fas fa-minus-circle", style: { color: red[500] } })))))),
+            React.createElement(Box, { className: "element" },
+                React.createElement(Box, { className: "actions" },
+                    React.createElement(Tooltip, { title: "Add" },
+                        React.createElement(IconButton, { onClick: ev => this.add() },
+                            React.createElement("i", { className: "fas fa-plus-circle", style: { color: green[500] } })))))));
     }
     /**
      * Reset

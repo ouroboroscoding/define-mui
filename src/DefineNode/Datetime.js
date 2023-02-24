@@ -13,7 +13,6 @@ import React from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 /**
  * Node Datetime
@@ -93,12 +92,11 @@ export default class DefineNodeDatetime extends DefineNodeBase {
             props.label = this.props.display.title;
         }
         // Render
-        return (<React.Fragment>
-				{this.props.label === 'above' &&
-                <Typography>{this.props.display.title}</Typography>}
-				<TextField {...props}/>
-			</React.Fragment>);
+        return (React.createElement(React.Fragment, null,
+            this.props.label === 'above' &&
+                React.createElement(Typography, null, this.props.display.title),
+            React.createElement(TextField, { ...props })));
     }
 }
 // Register with Node
-DefineNode.pluginAdd('datetime', DefineNodeDatetime);
+DefineNodeBase.pluginAdd('datetime', DefineNodeDatetime);

@@ -49,7 +49,7 @@ export default class DefineBase extends React.Component {
         // Get the component
         const Component = _components[name];
         // Return
-        return (<Component {...props}/>);
+        return (React.createElement(Component, { ...props }));
     }
     // Called to register a child class with the create method
     static register(name, component) {

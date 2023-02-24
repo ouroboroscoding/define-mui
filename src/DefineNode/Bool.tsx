@@ -17,7 +17,6 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 // Local components
-import DefineNode from './';
 import DefineNodeBase from './Base';
 
 // Types
@@ -97,4 +96,4 @@ export default class DefineNodeBool extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNode.pluginAdd('bool', DefineNodeBool);
+DefineNodeBase.pluginAdd('bool', DefineNodeBool);
