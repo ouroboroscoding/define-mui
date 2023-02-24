@@ -7,6 +7,8 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-15
  */
+// Ouroboros modules
+import { cloneAddClass } from '@ouroboros/tools';
 /**
  * Options Base
  *
@@ -16,8 +18,6 @@
  * @access public
  */
 export default class OptionsBase {
-    // Do not allow cloning
-    static _CLONE_SKIP_ = true;
     // List of callbacks tracking changes in the data
     _callbacks;
     // The current data
@@ -86,3 +86,5 @@ export default class OptionsBase {
         }
     }
 }
+// Have it be ignored by clone
+cloneAddClass(OptionsBase);
