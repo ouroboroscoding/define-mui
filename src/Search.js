@@ -83,25 +83,8 @@ export default class DefineSearch extends React.Component {
         };
         // Bind methods
         this.clear = this.clear.bind(this);
-        this._query = this._query.bind(this);
+        this.query = this.query.bind(this);
         this._search = this._search.bind(this);
-    }
-    /**
-     * Query
-     *
-     * Called to set the hash value and trigger a new search
-     *
-     * @name query
-     * @access private
-     */
-    _query() {
-        // Fetch the values from the parent
-        const oValues = this.parent.value;
-        // If there's anything
-        if (!empty(oValues)) {
-            // Turn them into JSON and store them in the hash
-            hash.set(this.props.hash, JSON.stringify(oValues));
-        }
     }
     /**
      * Search
@@ -185,6 +168,23 @@ export default class DefineSearch extends React.Component {
         this.parent.error(errorTree(error));
     }
     /**
+     * Query
+     *
+     * Called to set the hash value and trigger a new search
+     *
+     * @name query
+     * @access public
+     */
+    query() {
+        // Fetch the values from the parent
+        const oValues = this.parent.value;
+        // If there's anything
+        if (!empty(oValues)) {
+            // Turn them into JSON and store them in the hash
+            hash.set(this.props.hash, JSON.stringify(oValues));
+        }
+    }
+    /**
      * Render
      *
      * Generates the actual DOM elements of the component
@@ -194,8 +194,8 @@ export default class DefineSearch extends React.Component {
      */
     render() {
         return (React.createElement(Box, { className: `search _${this.state.name}` },
-            React.createElement(DefineParent, { dynamicOptions: this.props.dynamicOptions, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.state.name, node: this.props.tree, onEnterPressed: this._query, type: "search", validation: false }),
+            React.createElement(DefineParent, { dynamicOptions: this.props.dynamicOptions, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.state.name, node: this.props.tree, onEnterPressed: this.query, type: "search", validation: false }),
             React.createElement(Box, { className: "actions" },
-                React.createElement(Button, { variant: "contained", color: "primary", onClick: this._query }, "Search"))));
+                React.createElement(Button, { variant: "contained", color: "primary", onClick: this.query }, "Search"))));
     }
 }

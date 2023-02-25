@@ -82,15 +82,6 @@ export default class DefineSearch extends React.Component {
      */
     constructor(props: DefineSearchProps);
     /**
-     * Query
-     *
-     * Called to set the hash value and trigger a new search
-     *
-     * @name query
-     * @access private
-     */
-    _query(): void;
-    /**
      * Search
      *
      * Passed the new search parameters and triggers the user to search
@@ -137,6 +128,15 @@ export default class DefineSearch extends React.Component {
      * @param error The error(s) associated with the search
      */
     error(error: string[][]): void;
+    /**
+     * Query
+     *
+     * Called to set the hash value and trigger a new search
+     *
+     * @name query
+     * @access public
+     */
+    query(): void;
     /**
      * Render
      *

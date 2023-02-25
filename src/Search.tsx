@@ -119,29 +119,8 @@ export default class DefineSearch extends React.Component {
 
 		// Bind methods
 		this.clear = this.clear.bind(this);
-		this._query = this._query.bind(this);
+		this.query = this.query.bind(this);
 		this._search = this._search.bind(this);
-	}
-
-	/**
-	 * Query
-	 *
-	 * Called to set the hash value and trigger a new search
-	 *
-	 * @name query
-	 * @access private
-	 */
-	_query(): void {
-
-		// Fetch the values from the parent
-		const oValues = this.parent.value;
-
-		// If there's anything
-		if(!empty(oValues)) {
-
-			// Turn them into JSON and store them in the hash
-			hash.set(this.props.hash, JSON.stringify(oValues));
-		}
 	}
 
 	/**
@@ -241,6 +220,27 @@ export default class DefineSearch extends React.Component {
 	}
 
 	/**
+	 * Query
+	 *
+	 * Called to set the hash value and trigger a new search
+	 *
+	 * @name query
+	 * @access public
+	 */
+	query(): void {
+
+		// Fetch the values from the parent
+		const oValues = this.parent.value;
+
+		// If there's anything
+		if(!empty(oValues)) {
+
+			// Turn them into JSON and store them in the hash
+			hash.set(this.props.hash, JSON.stringify(oValues));
+		}
+	}
+
+	/**
 	 * Render
 	 *
 	 * Generates the actual DOM elements of the component
@@ -258,12 +258,12 @@ export default class DefineSearch extends React.Component {
 					ref={(el: DefineParent) => this.parent = el}
 					name={this.state.name}
 					node={this.props.tree}
-					onEnterPressed={this._query}
+					onEnterPressed={this.query}
 					type="search"
 					validation={false}
 				/>
 				<Box className="actions">
-					<Button variant="contained" color="primary" onClick={this._query}>Search</Button>
+					<Button variant="contained" color="primary" onClick={this.query}>Search</Button>
 				</Box>
 			</Box>
 		);
