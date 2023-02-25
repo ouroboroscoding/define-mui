@@ -220,7 +220,7 @@ export default class DefineNode extends DefineBase {
             this.state.value :
             DefineNodeBase._plugins[this.state.type].default_;
         return (React.createElement(React.Fragment, null,
-            React.createElement(ElName, { display: this.state.display, error: this.props.error, label: this.props.label, onChange: this.props.onChange, onEnterPressed: this.props.onEnterPressed, name: this.props.name, node: this.props.node, ref: (el) => this._el = el, value: mValue, validation: this.props.validation, variant: this.props.variant }),
+            React.createElement(ElName, { display: this.state.display, error: this.props.error, label: this.props.label, onChange: this.props.onChange, onEnterPressed: this.props.onEnterPressed, name: this.props.name, node: this.props.node, ref: (el) => this._el = el, type: this.props.type, value: mValue, validation: this.props.validation, variant: this.props.variant }),
             this.props.type === 'search' &&
                 React.createElement(DefineNodeSearchOption, { ref: (el) => this._search = el, type: this.state.type, variant: this.props.variant })));
     }

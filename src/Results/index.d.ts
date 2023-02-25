@@ -31,7 +31,7 @@ export type titleStruct = {
     text: string;
 };
 export type ResultsProps = {
-    actions: actionStruct[];
+    actions: actionStruct[] | false;
     custom: Record<string, any>;
     data: Record<string, any>[];
     errors: Record<string, any>;

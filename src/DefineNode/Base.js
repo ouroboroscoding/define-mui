@@ -31,6 +31,7 @@ export default class DefineNodeBase extends React.Component {
         onChange: PropTypes.func,
         onEnterPressed: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
         placeholder: PropTypes.string,
+        type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
         value: PropTypes.any
     };
     // Registered components

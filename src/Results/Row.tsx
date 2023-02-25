@@ -58,10 +58,10 @@ export type menuStruct = {
 	title: string
 };
 export type componentConstructor = string | React.FunctionComponent<{ onClose: () => void; value: Record<string, any>; }> | React.ComponentClass<{ onClose: () => void; value: Record<string, any>; }, any>
-export type onDeleteCallback = (key: any) => boolean;
+export type onDeleteCallback = (key: any) => void;
 export type onKeyCopyCallback = (key: any) => void;
 export type ResultsRowProps = {
-	actions: actionStruct[],
+	actions: actionStruct[] | false,
 	custom: Record<string, any>,
 	data: Record<string, any>,
 	errors?: Record<string, any>,
@@ -109,7 +109,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 	function action(index: string): void {
 
 		// If we don't have actions
-		if(props.actions.length === 0) {
+		if(props.actions === false || props.actions.length === 0) {
 			return;
 		}
 
@@ -395,10 +395,10 @@ export default function ResultsRow(props: ResultsRowProps) {
 			{omap(actions, (b, i) =>
 				<TableRow key={i} className="action_row">
 					<TableCell colSpan={props.fields.length + 1}>
-						{b === true ? React.createElement((props.actions[parseInt(i, 10)].component as componentConstructor), {
+						{b === true ? React.createElement(((props.actions as actionStruct[])[parseInt(i, 10)].component as componentConstructor), {
 							onClose: () => action(i),
 							value: props.data
-						}) : React.createElement((props.actions[parseInt(i, 10)].component as componentConstructor), {
+						}) : React.createElement(((props.actions as actionStruct[])[parseInt(i, 10)].component as componentConstructor), {
 							onClose: () => action(i),
 							value: props.data,
 							...b

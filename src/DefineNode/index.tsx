@@ -301,6 +301,7 @@ export default class DefineNode extends DefineBase {
 					name={this.props.name}
 					node={this.props.node}
 					ref={(el: DefineNodeBase) => this._el = el}
+					type={this.props.type}
 					value={mValue}
 					validation={this.props.validation}
 					variant={this.props.variant}

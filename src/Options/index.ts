@@ -1,3 +1,3 @@
-export { default as OptionsCustom } from './Custom';
-export { default as OptionsFetch } from './Fetch';
-export { default as OptionsHash } from './Hash';
+export { default as Custom } from './Custom';
+export { default as Fetch } from './Fetch';
+export { default as Hash } from './Hash';

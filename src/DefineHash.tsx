@@ -28,7 +28,7 @@ import { DefineNodeBase } from './DefineNode';
 import { errorTree } from './Shared';
 
 // Types
-import { labelOptions, onEnterPressedCallback, variantOptions } from './DefineNode';
+import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 import { DefineNodeBaseProps } from './DefineNode/Base';
 export type DefineHashProps = {
 	error?: any,
@@ -37,7 +37,7 @@ export type DefineHashProps = {
 	node: Hash,
 	onEnterPressed?: onEnterPressedCallback,
 	placeholder?: string,
-	type: 'create' | 'update',
+	type: typeOptions,
 	value?: Record<any, any>,
 	validation?: boolean,
 	variant: variantOptions
@@ -182,6 +182,7 @@ export default class DefineHash extends DefineBase {
 			node: this.props.node,
 			onEnterPressed: this.props.onEnterPressed,
 			placeholder: this.props.placeholder,
+			type: this.props.type,
 			value: this.props.value,
 			validation: this.props.validation,
 			variant: this.props.variant

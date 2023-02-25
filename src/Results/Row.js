@@ -59,7 +59,7 @@ export default function ResultsRow(props) {
      */
     function action(index) {
         // If we don't have actions
-        if (props.actions.length === 0) {
+        if (props.actions === false || props.actions.length === 0) {
             return;
         }
         // Get the real index

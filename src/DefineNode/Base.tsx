@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 // Types
-import { labelOptions, onChangeCallback, onEnterPressedCallback, variantOptions } from './';
+import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './';
 export type DefineNodeBaseProps = {
 	display: Record<string, any>,
 	error?: any,
@@ -27,6 +27,7 @@ export type DefineNodeBaseProps = {
 	onEnterPressed?: onEnterPressedCallback,
 	placeholder?: string,
 	ref?: any,
+	type: typeOptions,
 	value?: any,
 	validation?: boolean,
 	variant: variantOptions
@@ -60,6 +61,7 @@ export default class DefineNodeBase extends React.Component {
 		onChange: PropTypes.func,
 		onEnterPressed: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
 		placeholder: PropTypes.string,
+		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
 		value: PropTypes.any
 	}
 

@@ -204,6 +204,7 @@ export default class DefineArray extends DefineBase {
                 node: this.props.node,
                 onEnterPressed: this.props.onEnterPressed,
                 placeholder: this.props.placeholder,
+                type: this.props.type,
                 value: this.props.value,
                 validation: this.props.validation,
                 variant: this.props.variant

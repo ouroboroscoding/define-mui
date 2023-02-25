@@ -12,7 +12,7 @@ import { Hash } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
-import { labelOptions, onEnterPressedCallback, variantOptions } from './DefineNode';
+import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 export type DefineHashProps = {
     error?: any;
     label?: labelOptions;
@@ -20,7 +20,7 @@ export type DefineHashProps = {
     node: Hash;
     onEnterPressed?: onEnterPressedCallback;
     placeholder?: string;
-    type: 'create' | 'update';
+    type: typeOptions;
     value?: Record<any, any>;
     validation?: boolean;
     variant: variantOptions;

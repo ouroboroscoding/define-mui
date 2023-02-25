@@ -40,7 +40,6 @@ import TotalsRow from './TotalsRow';
 import { onSubmitCallback } from '../Form';
 import { gridSizesStruct } from '../DefineParent';
 import { actionStruct, menuStruct } from './Row';
-import { SelectChangeEvent } from '@mui/material';
 export type dynCallbacksStruct = {
 	optionsInstance: Subscribe,
 	callback: SubscribeCallback
@@ -57,7 +56,7 @@ export type titleStruct = {
 	text: string
 };
 export type ResultsProps = {
-	actions: actionStruct[],
+	actions: actionStruct[] | false,
 	custom: Record<string, any>,
 	data: Record<string, any>[],
 	errors: Record<string, any>,

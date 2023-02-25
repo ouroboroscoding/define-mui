@@ -34,10 +34,10 @@ export type componentConstructor = string | React.FunctionComponent<{
     onClose: () => void;
     value: Record<string, any>;
 }, any>;
-export type onDeleteCallback = (key: any) => boolean;
+export type onDeleteCallback = (key: any) => void;
 export type onKeyCopyCallback = (key: any) => void;
 export type ResultsRowProps = {
-    actions: actionStruct[];
+    actions: actionStruct[] | false;
     custom: Record<string, any>;
     data: Record<string, any>;
     errors?: Record<string, any>;
