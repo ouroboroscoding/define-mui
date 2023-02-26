@@ -35,7 +35,7 @@
 	"dependencies": {
 		"@ouroboros/browser": "^0.1.4",
 		"@ouroboros/dates": "^0.1.0",
-		"@ouroboros/subscribe": "^1.0.0",
+		"@ouroboros/subscribe": "^1.0.1",
 		"@ouroboros/tools": "^0.3.3",
 		"csv-writer-browser": "^1.0.0",
 		"react-phone-input-material-ui": "^2.17.4",

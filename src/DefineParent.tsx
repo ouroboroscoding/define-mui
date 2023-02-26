@@ -190,12 +190,12 @@ export default class DefineParent extends DefineBase {
 			oErrors = errors;
 		}
 
-		// Go through each earrpr
-		for(const k of Object.keys(errors)) {
+		// Go through each error
+		for(const k of Object.keys(oErrors)) {
 			if(k in this.fields) {
-				this.fields[k].error(errors[k]);
+				this.fields[k].error(oErrors[k]);
 			} else {
-				throw new Error(`Field not found error: ${k} = ${errors[k]}`);
+				throw new Error(`Field not found error: ${k} = ${oErrors[k]}`);
 			}
 		}
 	}
