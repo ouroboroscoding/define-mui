@@ -34,18 +34,18 @@ export type dynamicOptionStruct = {
 	trigger: string,
 	options: Record<string, any>
 }
-export type gridSizesStruct = {
-	xs: number,
-	sm: number,
-	md: number,
-	lg: number,
-	xl: number
-};
+export type gridSizesStruct = Record<string, {
+	xs?: number,
+	sm?: number,
+	md?: number,
+	lg?: number,
+	xl?: number
+}>;
 export type DefineParentProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	error?: Record<string, any>,
 	fields?: string[],
-	gridSizes: Record<string, gridSizesStruct>,
+	gridSizes?: gridSizesStruct,
 	gridSpacing?: number,
 	label?: labelOptions,
 	name: string,
@@ -293,8 +293,8 @@ export default class DefineParent extends DefineBase {
 				null;
 
 			// Grid sizes
-			const gridSizes = this.props.gridSizes[sField] ||
-							this.props.gridSizes.__default__ ||
+			const gridSizes = (this.props.gridSizes as gridSizesStruct)[sField] ||
+							(this.props.gridSizes as gridSizesStruct).__default__ ||
 							{xs: 12, sm: 6, lg: 3}
 
 			// Check what kind of node it is

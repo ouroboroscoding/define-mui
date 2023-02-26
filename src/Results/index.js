@@ -80,6 +80,8 @@ export default class Results extends React.PureComponent {
         order: 'asc',
         totals: false
     };
+    // Holds the default key copy function
+    static defaultOnCopyKey = false;
     // State type
     state;
     // Instance variables
@@ -87,6 +89,19 @@ export default class Results extends React.PureComponent {
     info;
     titles;
     dynCallbacks;
+    /**
+     * Set On Copy Key
+     *
+     * Used to set a default callback for all onCopyKey calls
+     *
+     * @name setOnCopyKey
+     * @static
+     * @access public
+     * @param callback The callback to run if none is specifically set on the
+     */
+    static setOnCopyKey(callback) {
+        Results.defaultOnCopyKey = callback;
+    }
     /**
      * Constructor
      *
@@ -453,7 +468,7 @@ export default class Results extends React.PureComponent {
                                     React.createElement(IconButton, { onClick: this._exportCsv },
                                         React.createElement("i", { className: "fa-solid fa-file-csv" })))))),
                 React.createElement(TableBody, null, (this.state.rowsPerPage > 0 ?
-                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy, onUpdate: this.props.onUpdate }))),
+                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy || Results.defaultOnCopyKey, onUpdate: this.props.onUpdate }))),
                 React.createElement(TableFooter, null,
                     this.props.totals &&
                         React.createElement(TotalsRow, { actions: this.props.actions ? true : false, fields: this.fields, info: this.info, totals: this.state.totals || {} }),

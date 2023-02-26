@@ -82,9 +82,9 @@ export default class DefineSearch extends React.Component {
             name: props.name || props.tree._name
         };
         // Bind methods
+        this._search = this._search.bind(this);
         this.clear = this.clear.bind(this);
         this.query = this.query.bind(this);
-        this._search = this._search.bind(this);
     }
     /**
      * Search
@@ -113,7 +113,7 @@ export default class DefineSearch extends React.Component {
         // Set the parent's values
         this.parent.value = oValues;
         // Run the search
-        this.props.onSearch(oValues);
+        this.props.onSearch(oValues).then(result => { return; }, errors => this.parent.error(errors));
     }
     /**
      * Component Did Mount
@@ -197,5 +197,20 @@ export default class DefineSearch extends React.Component {
             React.createElement(DefineParent, { dynamicOptions: this.props.dynamicOptions, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.state.name, node: this.props.tree, onEnterPressed: this.query, type: "search", validation: false }),
             React.createElement(Box, { className: "actions" },
                 React.createElement(Button, { variant: "contained", color: "primary", onClick: this.query }, "Search"))));
+    }
+    /**
+     * Reset
+     *
+     * Calls reset on the Parent
+     *
+     * @name reset
+     * @access public
+     */
+    reset() {
+        // If we have a parent
+        if (this.parent) {
+            // Call reset on the parent
+            this.parent.reset();
+        }
     }
 }

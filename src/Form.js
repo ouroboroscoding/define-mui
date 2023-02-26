@@ -202,8 +202,11 @@ export default class Form extends React.Component {
      * @access public
      */
     reset() {
-        // Call reset on the parent
-        this.parent.reset();
+        // If we have a parent
+        if (this.parent) {
+            // Call reset on the parent
+            this.parent.reset();
+        }
     }
     /**
      * Value (get)

@@ -17,18 +17,18 @@ export type dynamicOptionStruct = {
     trigger: string;
     options: Record<string, any>;
 };
-export type gridSizesStruct = {
-    xs: number;
-    sm: number;
-    md: number;
-    lg: number;
-    xl: number;
-};
+export type gridSizesStruct = Record<string, {
+    xs?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+}>;
 export type DefineParentProps = {
     dynamicOptions?: dynamicOptionStruct[];
     error?: Record<string, any>;
     fields?: string[];
-    gridSizes: Record<string, gridSizesStruct>;
+    gridSizes?: gridSizesStruct;
     gridSpacing?: number;
     label?: labelOptions;
     name: string;

@@ -33,13 +33,13 @@ import Tooltip from '@mui/material/Tooltip';
 
 // Components
 import PaginationActions from './PaginationActions';
-import Row, { onDeleteCallback, onKeyCopyCallback } from './Row';
+import Row from './Row';
 import TotalsRow from './TotalsRow';
 
 // Types
 import { onSubmitCallback } from '../Form';
 import { gridSizesStruct } from '../DefineParent';
-import { actionStruct, menuStruct } from './Row';
+import { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
 export type dynCallbacksStruct = {
 	optionsInstance: Subscribe,
 	callback: SubscribeCallback
@@ -135,6 +135,9 @@ export default class Results extends React.PureComponent {
 		totals: false
 	}
 
+	// Holds the default key copy function
+	private static defaultOnCopyKey: onKeyCopyCallback | false = false;
+
 	// Props type
 	declare props: ResultsProps;
 
@@ -146,6 +149,20 @@ export default class Results extends React.PureComponent {
 	info: infoStruct;
 	titles: titleStruct[];
 	dynCallbacks: Record<string, dynCallbacksStruct>;
+
+	/**
+	 * Set On Copy Key
+	 *
+	 * Used to set a default callback for all onCopyKey calls
+	 *
+	 * @name setOnCopyKey
+	 * @static
+	 * @access public
+	 * @param callback The callback to run if none is specifically set on the
+	 */
+	static setOnCopyKey(callback: onKeyCopyCallback): void {
+		Results.defaultOnCopyKey = callback;
+	}
 
 	/**
 	 * Constructor
@@ -596,7 +613,7 @@ export default class Results extends React.PureComponent {
 								menu={this.props.menu}
 								options={this.state.options}
 								onDelete={this.props.onDelete}
-								onKeyCopy={this.props.onKeyCopy}
+								onKeyCopy={this.props.onKeyCopy || Results.defaultOnCopyKey}
 								onUpdate={this.props.onUpdate}
 							/>
 						)}

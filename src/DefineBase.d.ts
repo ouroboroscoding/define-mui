@@ -8,7 +8,6 @@
  * @created 2023-02-14
  */
 import React from 'react';
-export type onSubmitCallback = (values: Record<string, any>) => boolean;
 /**
  * Define Base
  *

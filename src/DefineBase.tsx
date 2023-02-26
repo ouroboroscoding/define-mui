@@ -14,9 +14,6 @@ import { isObject } from '@ouroboros/tools';
 // NPM modules
 import React from 'react';
 
-// Types
-export type onSubmitCallback = (values: Record<string, any>) => boolean;
-
 // Private variables
 const _components: Record<string, typeof DefineBase> = {};
 

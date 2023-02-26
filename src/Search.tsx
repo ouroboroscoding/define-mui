@@ -26,16 +26,16 @@ import DefineParent from './DefineParent';
 import { errorTree } from './Shared';
 
 // Types
-import { onSubmitCallback } from './DefineBase';
 import { labelOptions } from './DefineNode';
 import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
+export type onSearchCallback = (value: Record<string, any>) => Promise<boolean>;
 export type DefineSearchProps = {
 	dynamicOptions?: dynamicOptionStruct[],
-	gridSizes?: Record<string, gridSizesStruct>,
+	gridSizes?: gridSizesStruct,
 	hash: string,
 	label?: labelOptions,
 	name?: string,
-	onSearch: onSubmitCallback,
+	onSearch: onSearchCallback,
 	tree: Tree
 };
 type DefineSearchState = {
@@ -118,9 +118,9 @@ export default class DefineSearch extends React.Component {
 		}
 
 		// Bind methods
+		this._search = this._search.bind(this);
 		this.clear = this.clear.bind(this);
 		this.query = this.query.bind(this);
-		this._search = this._search.bind(this);
 	}
 
 	/**
@@ -157,7 +157,10 @@ export default class DefineSearch extends React.Component {
 		this.parent.value = oValues;
 
 		// Run the search
-		this.props.onSearch(oValues);
+		this.props.onSearch(oValues).then(
+			result => { return },
+			errors => this.parent.error(errors)
+		);
 	}
 
 	/**
@@ -267,5 +270,23 @@ export default class DefineSearch extends React.Component {
 				</Box>
 			</Box>
 		);
+	}
+
+	/**
+	 * Reset
+	 *
+	 * Calls reset on the Parent
+	 *
+	 * @name reset
+	 * @access public
+	 */
+	reset(): void {
+
+		// If we have a parent
+		if(this.parent) {
+
+			// Call reset on the parent
+			this.parent.reset();
+		}
 	}
 }

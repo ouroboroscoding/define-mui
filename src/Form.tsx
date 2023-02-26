@@ -32,7 +32,7 @@ export type onSubmitCallback = (value: Record<string, any>, key: any) => Promise
 export type FormProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	fields?: string[],
-	gridSizes?: Record<string, gridSizesStruct>,
+	gridSizes?: gridSizesStruct,
 	gridSpacing?: number,
 	label?: labelOptions,
 	onCancel?: onCancelCallback,
@@ -278,8 +278,12 @@ export default class Form extends React.Component {
 	 */
 	reset(): void {
 
-		// Call reset on the parent
-		this.parent.reset();
+		// If we have a parent
+		if(this.parent) {
+
+			// Call reset on the parent
+			this.parent.reset();
+		}
 	}
 
 	/**

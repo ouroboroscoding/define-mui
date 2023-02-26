@@ -18,7 +18,7 @@ export type onSubmitCallback = (value: Record<string, any>, key: any) => Promise
 export type FormProps = {
     dynamicOptions?: dynamicOptionStruct[];
     fields?: string[];
-    gridSizes?: Record<string, gridSizesStruct>;
+    gridSizes?: gridSizesStruct;
     gridSpacing?: number;
     label?: labelOptions;
     onCancel?: onCancelCallback;

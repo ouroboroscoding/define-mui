@@ -74,7 +74,7 @@ export default function ResultsRow(props) {
             // Clone the current actions
             const oActions = clone(actions);
             // Remove or add it to the actions
-            if (actions[index] !== false) {
+            if (index in oActions) {
                 delete oActions[index];
             }
             else {
@@ -106,7 +106,10 @@ export default function ResultsRow(props) {
      * Called when the Form's submit button is clicked and there's new data
      * to update
      *
+     * @name submit
+     * @access private
      * @param value The new values to update
+     * @param key Optional, the key associated with the record
      */
     function submit(value, key) {
         // Create a new promise and return it
@@ -119,6 +122,7 @@ export default function ResultsRow(props) {
             }, reject);
         });
     }
+    // RENDER
     // Generate each cell based on type
     const lCells = [];
     for (let i = 0; i < props.fields.length; ++i) {
@@ -250,14 +254,14 @@ export default function ResultsRow(props) {
             React.createElement(TableRow, null,
                 React.createElement(TableCell, { colSpan: props.fields.length + 1 },
                     React.createElement(Form, { gridSizes: props.gridSizes, gridSpacing: props.gridSpacing, onCancel: () => updateSet(false), onSubmit: submit, ref: refUpdateForm, tree: props.info.tree, type: "update", value: props.data }))),
-        omap(actions, (b, i) => React.createElement(TableRow, { key: i, className: "action_row" },
-            React.createElement(TableCell, { colSpan: props.fields.length + 1 }, b === true ? React.createElement(props.actions[parseInt(i, 10)].component, {
+        omap(actions, (m, i) => React.createElement(TableRow, { key: i, className: "action_row" },
+            React.createElement(TableCell, { colSpan: props.fields.length + 1 }, m === true ? React.createElement(props.actions[parseInt(i, 10)].component, {
                 onClose: () => action(i),
                 value: props.data
             }) : React.createElement(props.actions[parseInt(i, 10)].component, {
                 onClose: () => action(i),
                 value: props.data,
-                ...b
+                ...m
             }))))));
 }
 // Valid props

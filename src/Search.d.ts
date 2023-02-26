@@ -11,16 +11,16 @@ import { Tree } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DefineParent from './DefineParent';
-import { onSubmitCallback } from './DefineBase';
 import { labelOptions } from './DefineNode';
 import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
+export type onSearchCallback = (value: Record<string, any>) => Promise<boolean>;
 export type DefineSearchProps = {
     dynamicOptions?: dynamicOptionStruct[];
-    gridSizes?: Record<string, gridSizesStruct>;
+    gridSizes?: gridSizesStruct;
     hash: string;
     label?: labelOptions;
     name?: string;
-    onSearch: onSubmitCallback;
+    onSearch: onSearchCallback;
     tree: Tree;
 };
 type DefineSearchState = {
@@ -146,5 +146,14 @@ export default class DefineSearch extends React.Component {
      * @access public
      */
     render(): JSX.Element;
+    /**
+     * Reset
+     *
+     * Calls reset on the Parent
+     *
+     * @name reset
+     * @access public
+     */
+    reset(): void;
 }
 export {};

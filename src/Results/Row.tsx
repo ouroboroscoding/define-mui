@@ -130,7 +130,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 			const oActions: Record<string, any> = clone(actions);
 
 			// Remove or add it to the actions
-			if(actions[index] !== false) {
+			if(index in oActions) {
 				delete oActions[index];
 			} else {
 				oActions[index] = props.actions[iIndex].props || true;
@@ -165,7 +165,10 @@ export default function ResultsRow(props: ResultsRowProps) {
 	 * Called when the Form's submit button is clicked and there's new data
 	 * to update
 	 *
+	 * @name submit
+	 * @access private
 	 * @param value The new values to update
+	 * @param key Optional, the key associated with the record
 	 */
 	function submit(value: Record<string, any>, key: any): Promise<boolean> {
 
@@ -179,6 +182,8 @@ export default function ResultsRow(props: ResultsRowProps) {
 			}, reject);
 		});
 	}
+
+	// RENDER
 
 	// Generate each cell based on type
 	const lCells = [];
@@ -392,16 +397,16 @@ export default function ResultsRow(props: ResultsRowProps) {
 					</TableCell>
 				</TableRow>
 			}
-			{omap(actions, (b, i) =>
+			{omap(actions, (m, i) =>
 				<TableRow key={i} className="action_row">
 					<TableCell colSpan={props.fields.length + 1}>
-						{b === true ? React.createElement(((props.actions as actionStruct[])[parseInt(i, 10)].component as componentConstructor), {
+						{m === true ? React.createElement(((props.actions as actionStruct[])[parseInt(i, 10)].component as componentConstructor), {
 							onClose: () => action(i),
 							value: props.data
 						}) : React.createElement(((props.actions as actionStruct[])[parseInt(i, 10)].component as componentConstructor), {
 							onClose: () => action(i),
 							value: props.data,
-							...b
+							...m
 						})}
 					</TableCell>
 				</TableRow>

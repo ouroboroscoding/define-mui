@@ -11,10 +11,9 @@ import { Tree } from '@ouroboros/define';
 import Subscribe, { SubscribeCallback } from '@ouroboros/subscribe';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { onDeleteCallback, onKeyCopyCallback } from './Row';
 import { onSubmitCallback } from '../Form';
 import { gridSizesStruct } from '../DefineParent';
-import { actionStruct, menuStruct } from './Row';
+import { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
 export type dynCallbacksStruct = {
     optionsInstance: Subscribe;
     callback: SubscribeCallback;
@@ -112,12 +111,24 @@ export default class Results extends React.PureComponent {
         order: string;
         totals: boolean;
     };
+    private static defaultOnCopyKey;
     props: ResultsProps;
     state: ResultsState;
     fields: string[];
     info: infoStruct;
     titles: titleStruct[];
     dynCallbacks: Record<string, dynCallbacksStruct>;
+    /**
+     * Set On Copy Key
+     *
+     * Used to set a default callback for all onCopyKey calls
+     *
+     * @name setOnCopyKey
+     * @static
+     * @access public
+     * @param callback The callback to run if none is specifically set on the
+     */
+    static setOnCopyKey(callback: onKeyCopyCallback): void;
     /**
      * Constructor
      *
