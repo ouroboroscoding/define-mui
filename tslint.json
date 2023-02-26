@@ -4,5 +4,7 @@
 		"tslint-config-prettier"
 	],
 	"rules": {
+		"comment-format": false,
+		"no-bitwise": false
 	}
 }

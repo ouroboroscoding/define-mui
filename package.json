@@ -1,12 +1,12 @@
 {
 	"name": "@ouroboros/define-mui",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Components for use on @ouroboros/define types",
-	"main": "index.js",
-	"types": "index.d.ts",
+	"main": "src/index.js",
+	"types": "src/index.d.ts",
 	"scripts": {
 		"build": "tslint -p tsconfig.json && tsc",
-		"clean": "rm lib/*",
+		"clean": "cd src; find . -type f -name \"*.js\" -delete; find . -type f -name \"*.d.ts\" -delete",
 		"test": "echo \"Error: no test specified.\" && exit 1"
 	},
 	"repository": {
@@ -25,6 +25,7 @@
 		"url": "https://github.com/ouroboroscoding/define-mui/issues"
 	},
 	"devDependencies": {
+		"@types/node": "^18.14.0",
 		"@types/react": "^18.0.28",
 		"@types/uuid": "^9.0.0",
 		"tslint": "^6.1.3",
@@ -32,16 +33,20 @@
 		"typescript": "^4.8.3"
 	},
 	"dependencies": {
-		"@ouroboros/define": "file:../define",
-		"@ouroboros/tools": "../tools",
+		"@ouroboros/browser": "^0.1.4",
+		"@ouroboros/dates": "^0.1.0",
+		"@ouroboros/subscribe": "^1.0.1",
+		"@ouroboros/tools": "^0.3.3",
 		"csv-writer-browser": "^1.0.0",
 		"react-phone-input-material-ui": "^2.17.4",
+		"react-router-dom": "^6.2.2",
 		"uuid": "^9.0.0"
 	},
 	"peerDependencies": {
 		"@emotion/react": "^11.8.2",
 		"@emotion/styled": "^11.8.1",
 		"@mui/material": "^5.5.1",
+		"@ouroboros/define": "^1.0.0",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"
 	}
