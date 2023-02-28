@@ -8,9 +8,10 @@
  * @created 2023-02-18
  */
 // Ouroboros modules
+import clone from '@ouroboros/clone';
 import { Decimal, Tree } from '@ouroboros/define';
 import Subscribe from '@ouroboros/subscribe';
-import { clone, ucfirst } from '@ouroboros/tools';
+import { ucfirst } from '@ouroboros/tools';
 // NPM modules
 import { createObjectCsvStringifier } from 'csv-writer-browser';
 import PropTypes from 'prop-types';

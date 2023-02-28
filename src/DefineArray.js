@@ -8,8 +8,9 @@
  * @created 2023-02-14
  */
 // Ouroboros
+import clone from '@ouroboros/clone';
 import { ArrayNode } from '@ouroboros/define';
-import { afindi, clone, ucfirst } from '@ouroboros/tools';
+import { afindi, ucfirst } from '@ouroboros/tools';
 // NPM modules
 import PropTypes from 'prop-types';
 import React from 'react';

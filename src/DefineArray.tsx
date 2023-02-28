@@ -9,8 +9,9 @@
  */
 
 // Ouroboros
+import clone from '@ouroboros/clone';
 import { Base, ArrayNode } from '@ouroboros/define';
-import { afindi, clone, combine, ucfirst } from '@ouroboros/tools';
+import { afindi, ucfirst } from '@ouroboros/tools';
 
 // NPM modules
 import PropTypes from 'prop-types';

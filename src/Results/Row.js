@@ -9,8 +9,10 @@
  */
 // Ouroboros modules
 import { clipboard } from '@ouroboros/browser';
+import clone from '@ouroboros/clone';
 import { iso } from '@ouroboros/dates';
-import { clone, omap } from '@ouroboros/tools';
+import { omap } from '@ouroboros/tools';
+// NPM modules
 import PropTypes from 'prop-types';
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';

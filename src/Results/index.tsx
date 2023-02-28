@@ -9,9 +9,10 @@
  */
 
 // Ouroboros modules
+import clone from '@ouroboros/clone';
 import { Decimal, Node, Tree } from '@ouroboros/define';
 import Subscribe, { SubscribeCallback } from '@ouroboros/subscribe';
-import { clone, ucfirst } from '@ouroboros/tools';
+import { ucfirst } from '@ouroboros/tools';
 
 // NPM modules
 import { createObjectCsvStringifier } from 'csv-writer-browser';

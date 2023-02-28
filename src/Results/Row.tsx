@@ -10,12 +10,11 @@
 
 // Ouroboros modules
 import { clipboard } from '@ouroboros/browser';
-import { iso, elapsed } from '@ouroboros/dates';
-import { Decimal, Tree } from '@ouroboros/define';
-import { afindi, clone, omap, ucfirst } from '@ouroboros/tools';
+import clone from '@ouroboros/clone';
+import { iso } from '@ouroboros/dates';
+import { omap } from '@ouroboros/tools';
 
 // NPM modules
-import { createObjectCsvStringifier } from 'csv-writer-browser';
 import PropTypes from 'prop-types';
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
