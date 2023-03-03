@@ -58,7 +58,7 @@ export default class Hash extends Subscribe {
             // Store the new key
             this._key = key;
             // Set the data and notify subscribers
-            this.notify(this._key in this._hash ? this._hash[this._key] : []);
+            this.set(this._key in this._hash ? this._hash[this._key] : []);
         }
         // Else, return the current key
         else {

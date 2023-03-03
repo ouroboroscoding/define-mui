@@ -91,7 +91,7 @@ export default class Fetch extends Subscribe {
 				}
 
 				// Notify the subscribeers
-				this.notify(lData);
+				this.set(lData);
 			});
 		}
 

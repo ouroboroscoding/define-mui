@@ -28,7 +28,7 @@ import DefineParent from './DefineParent';
 import { labelOptions, variantOptions } from './DefineNode';
 import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
 export type onCancelCallback = () => void;
-export type onSubmitCallback = (value: Record<string, any>, key: any) => Promise<boolean>;
+export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	fields?: string[],
@@ -194,11 +194,39 @@ export default class Form extends React.Component {
 							this.props.value[this.state.primary] :
 							null;
 
-			// Call the onSubmit and pass it the primary key value
-			this.props.onSubmit(oValue, mKey).then(
-				result => { return },
-				errors => this.parent.error(errors)
-			);
+			// Call the onSubmit and store the result
+			const mRes = this.props.onSubmit(oValue, mKey);
+
+			// If we got a true value, reset errors
+			if(mRes === true) {
+
+				// If we still have the parent
+				if(this.parent) {
+					this.parent.error([]);
+				}
+			}
+
+			// If we got false, do nothing
+			else if(mRes === false) {
+				return;
+			}
+
+			// Else, if we got an array, set the errors
+			else if(Array.isArray(mRes)) {
+				this.parent.error(mRes);
+			}
+
+			// If we got a promise back
+			else if(mRes instanceof Promise) {
+				mRes.then(
+					result => {
+						if(result && this.parent) {
+							this.parent.error([]);
+						}
+					},
+					errors => this.parent.error(errors)
+				);
+			}
 		}
 	}
 

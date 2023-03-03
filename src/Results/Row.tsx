@@ -169,17 +169,38 @@ export default function ResultsRow(props: ResultsRowProps) {
 	 * @param value The new values to update
 	 * @param key Optional, the key associated with the record
 	 */
-	function submit(value: Record<string, any>, key: any): Promise<boolean> {
+	function submit(value: Record<string, any>, key: any): boolean | string[][] | Promise<boolean> {
 
-		// Create a new promise and return it
-		return new Promise((resolve, reject) => {
-			(props.onUpdate as onSubmitCallback)(value, key).then((result: boolean) => {
-				if(result) {
-					updateSet(false);
-				}
-				resolve(result);
-			}, reject);
-		});
+		// Call the onUpdate prop and store the result
+		const mRes = (props.onUpdate as onSubmitCallback)(value, key);
+
+		// If we got a promise
+		if(mRes instanceof Promise) {
+
+			// Create a new promise and return it
+			return new Promise((resolve, reject) => {
+				mRes.then((result: boolean) => {
+					if(result) {
+						updateSet(false);
+					}
+					resolve(result);
+				}, reject);
+			});
+		}
+
+		// Else
+		else {
+
+			// If we got true
+			if(mRes === true) {
+
+				// Hide the form
+				updateSet(false);
+			}
+
+			// Return the result to the Form
+			return mRes;
+		}
 	}
 
 	// RENDER
@@ -241,7 +262,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 
 					// Else if the type is a bool
 					else if(props.info.types[sField] === 'bool') {
-						mContent = mValue === 1 ? 'True' : 'False';
+						mContent = mValue ? 'True' : 'False';
 					}
 
 					// Else, if the type is a price
@@ -320,7 +341,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 						</IconButton>
 					</Tooltip>
 				}
-				{props.onDelete &&
+				{(props.onDelete && props.info.primary && props.data[props.info.primary]) &&
 					<Tooltip title="Delete the record">
 						<IconButton className="icon" onClick={() => removeSet(true)}>
 							<i className="fa-solid fa-trash-alt" />
