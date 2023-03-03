@@ -306,7 +306,7 @@ export default class Results extends React.PureComponent {
 	 */
 	componentWillUnmount() {
 		for(const f of Object.keys(this.dynCallbacks)) {
-			this.dynCallbacks[f].optionsInstance.subscribeUnsubscribe(this.dynCallbacks[f].callback);
+			this.dynCallbacks[f].optionsInstance.unsubscribe(this.dynCallbacks[f].callback);
 			delete this.dynCallbacks[f];
 		}
 	}

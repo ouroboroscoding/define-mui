@@ -9,14 +9,14 @@
  */
 
 // Ouroboros modules
-import { iso } from '@ouroboros/dates';
+import { iso, timestamp } from '@ouroboros/dates';
 
 // NPM modules
 import React from 'react';
 
 // Material UI
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 // Local components
@@ -26,22 +26,22 @@ import DefineNodeBase from './Base';
 import { DefineNodeBaseProps } from './Base';
 
 /**
- * Node Datetime
+ * Node Timestamp
  *
- * Handles values that represent a date with a time
+ * Handles values that represent seconds since 1970
  *
- * @name DefineNodeDatetime
+ * @name DefineNodeTimestamp
  * @access public
  * @extends DefineNodeBase
  */
-export default class DefineNodeDatetime extends DefineNodeBase {
+export default class DefineNodeTimestamp extends DefineNodeBase {
 
 	/**
 	 * Constructor
 	 *
 	 * Creates a new instance
 	 *
-	 * @name DefineNodeDatetime
+	 * @name DefineNodeTimestamp
 	 * @access public
 	 * @param props Properties passed to the component
 	 * @returns a new instance
@@ -63,31 +63,35 @@ export default class DefineNodeDatetime extends DefineNodeBase {
 	 */
 	change(part: 'date' | 'time', value: string): void {
 
-		// Init the new value
-		let newDatetime: string;
+		// Convert the current timestamp into a date/time
+		const sCurrent = iso(this.state.value, true);
 
 		// If we got the date part
+		let newDatetime: string;
 		if(part === 'date') {
-			newDatetime = value + ' ' + this.state.value.substring(11, 19);
+			newDatetime = value + ' ' + sCurrent.substring(11, 19);
 		} else {
-			newDatetime = this.state.value.substring(0, 10) + ' ' + value;
+			newDatetime = sCurrent.substring(0, 10) + ' ' + value;
 		}
+
+		// Convert it to a timestamp
+		const newTimestamp = timestamp(newDatetime, false);
 
 		// Check if it's valid
 		let error: string | false = false;
-		if(this.props.validation && !this.props.node.valid(newDatetime)) {
-			error = 'Invalid Date/Time';
+		if(this.props.validation && !this.props.node.valid(newTimestamp)) {
+			error = 'Invalid Timestamp';
 		}
 
 		// Update the state
 		this.setState({
 			error,
-			value: newDatetime
+			value: newTimestamp
 		});
 
 		// If there's a callback
 		if(this.props.onChange) {
-			this.props.onChange(newDatetime);
+			this.props.onChange(newTimestamp);
 		}
 	}
 
@@ -101,30 +105,32 @@ export default class DefineNodeDatetime extends DefineNodeBase {
 	 */
 	render() {
 
-		// Render
+		const sDatetime = iso(this.state.value);
 		return (
-			<Box className={`field_${this.props.name} node_datetime`}>
+			<Box className={`field_${this.props.name} node_timestamp`}>
 				{this.props.label === 'above' &&
 					<Typography>{this.props.display.title}</Typography>
 				}
 				<Box className="flexColumns">
 					<TextField
+						className="date"
 						error={this.state.error !== false}
 						helperText={this.state.error}
 						label={this.props.label === 'placeholder' ? this.props.display.title : ''}
 						onChange={ev => this.change('date', ev.target.value)}
 						onKeyPress={this.keyPressed}
 						type="date"
-						value={this.state.value.substring(0, 10)}
+						value={sDatetime.substring(0,10)}
 						variant={this.props.variant}
 					/>
 					&nbsp;&nbsp;
 					<TextField
+						className="time"
 						error={this.state.error !== false}
 						onChange={ev => this.change('time', ev.target.value)}
 						onKeyPress={this.keyPressed}
 						type="time"
-						value={this.state.value.substring(11, 19)}
+						value={sDatetime.substring(11, 19)}
 						variant={this.props.variant}
 					/>
 				</Box>
@@ -134,4 +140,4 @@ export default class DefineNodeDatetime extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNodeBase.pluginAdd('datetime', DefineNodeDatetime);
+DefineNodeBase.pluginAdd('timestamp', DefineNodeTimestamp);

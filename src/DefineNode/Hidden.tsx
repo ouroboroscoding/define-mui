@@ -36,6 +36,7 @@ export default class DefineNodeHidden extends DefineNodeBase {
 	render() {
 		return (
 			<input
+				className={`field_${this.props.name} node_hidden`}
 				type="hidden"
 				value={this.state.value === null ? '' : this.state.value}
 			/>

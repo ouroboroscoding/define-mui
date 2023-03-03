@@ -11,21 +11,21 @@
 import DefineNodeBase from './Base';
 import { DefineNodeBaseProps } from './Base';
 /**
- * Node Datetime
+ * Node Timestamp
  *
- * Handles values that represent a date with a time
+ * Handles values that represent seconds since 1970
  *
- * @name DefineNodeDatetime
+ * @name DefineNodeTimestamp
  * @access public
  * @extends DefineNodeBase
  */
-export default class DefineNodeDatetime extends DefineNodeBase {
+export default class DefineNodeTimestamp extends DefineNodeBase {
     /**
      * Constructor
      *
      * Creates a new instance
      *
-     * @name DefineNodeDatetime
+     * @name DefineNodeTimestamp
      * @access public
      * @param props Properties passed to the component
      * @returns a new instance

@@ -198,7 +198,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         this.checks = [];
         // Initial props
         const props = {
-            className: 'node_' + this.props.name,
+            className: `field_${this.props.name} node_multiselectcsv`,
             error: this.state.error !== false,
             helperText: this.state.error,
             type: 'text',

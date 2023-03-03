@@ -26,7 +26,8 @@ import DefineNodeSelect from './Select';
 import DefineNodeText from './Text';
 import DefineNodeTextArea from './TextArea';
 import DefineNodeTime from './Time';
-export { DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime, DefineNodeHidden, DefineNodeMultiSelectCSV, DefineNodeNumber, DefineNodePassword, DefineNodePhoneNumber, DefineNodePrice, DefineNodeSelect, DefineNodeText, DefineNodeTextArea, DefineNodeTime };
+import DefineNodeTimestamp from './Timestamp';
+export { DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime, DefineNodeHidden, DefineNodeMultiSelectCSV, DefineNodeNumber, DefineNodePassword, DefineNodePhoneNumber, DefineNodePrice, DefineNodeSelect, DefineNodeText, DefineNodeTextArea, DefineNodeTime, DefineNodeTimestamp };
 export type labelOptions = 'above' | 'none' | 'placeholder';
 export type typeOptions = 'create' | 'search' | 'update';
 export type variantOptions = 'filled' | 'outlined' | 'standard';
@@ -117,7 +118,7 @@ export default class DefineNode extends DefineBase {
      * @param node The Node associated with the element
      * @returns string
      */
-    defaultType(node: Node): "select" | "time" | "text" | "number" | "bool" | "date" | "datetime" | "price";
+    defaultType(node: Node): "select" | "time" | "text" | "number" | "bool" | "date" | "datetime" | "price" | "timestamp";
     /**
      * Error
      *

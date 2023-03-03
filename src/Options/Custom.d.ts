@@ -20,26 +20,4 @@ import Subscribe from '@ouroboros/subscribe';
  * @extends Subscribe
  */
 export default class Custom extends Subscribe {
-    /**
-     * Custom
-     *
-     * Creates an instance of the class with default data
-     *
-     * @name Custom
-     * @access public
-     * @param data Default data
-     * @returns a new instance
-     */
-    constructor(data?: string[][]);
-    /**
-     * Set
-     *
-     * Called to set the new array of value and name
-     *
-     * @name set
-     * @access public
-     * @param data An array of arrays with the first element being
-     * 				the key	and the second element being the name
-     */
-    set(data: string[][]): void;
 }
