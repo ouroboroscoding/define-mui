@@ -81,7 +81,7 @@ export default class DefineNodeTextArea extends DefineNodeBase {
     render() {
         // Initial props
         const props = {
-            className: 'node_' + this.props.name,
+            className: `field_${this.props.name} node_textarea`,
             error: this.state.error !== false,
             helperText: this.state.error,
             onKeyPress: this.keyPressed,

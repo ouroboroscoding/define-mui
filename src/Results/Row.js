@@ -114,15 +114,30 @@ export default function ResultsRow(props) {
      * @param key Optional, the key associated with the record
      */
     function submit(value, key) {
-        // Create a new promise and return it
-        return new Promise((resolve, reject) => {
-            props.onUpdate(value, key).then((result) => {
-                if (result) {
-                    updateSet(false);
-                }
-                resolve(result);
-            }, reject);
-        });
+        // Call the onUpdate prop and store the result
+        const mRes = props.onUpdate(value, key);
+        // If we got a promise
+        if (mRes instanceof Promise) {
+            // Create a new promise and return it
+            return new Promise((resolve, reject) => {
+                mRes.then((result) => {
+                    if (result) {
+                        updateSet(false);
+                    }
+                    resolve(result);
+                }, reject);
+            });
+        }
+        // Else
+        else {
+            // If we got true
+            if (mRes === true) {
+                // Hide the form
+                updateSet(false);
+            }
+            // Return the result to the Form
+            return mRes;
+        }
     }
     // RENDER
     // Generate each cell based on type
@@ -171,7 +186,7 @@ export default function ResultsRow(props) {
                     }
                     // Else if the type is a bool
                     else if (props.info.types[sField] === 'bool') {
-                        mContent = mValue === 1 ? 'True' : 'False';
+                        mContent = mValue ? 'True' : 'False';
                     }
                     // Else, if the type is a price
                     else if (props.info.types[sField] === 'price') {
@@ -223,7 +238,7 @@ export default function ResultsRow(props) {
                 React.createElement(Tooltip, { title: "Edit the record" },
                     React.createElement(IconButton, { className: "icon", onClick: ev => updateSet(b => !b) },
                         React.createElement("i", { className: 'fa-solid fa-edit ' + (update ? 'open' : 'closed') }))),
-            props.onDelete &&
+            (props.onDelete && props.info.primary && props.data[props.info.primary]) &&
                 React.createElement(Tooltip, { title: "Delete the record" },
                     React.createElement(IconButton, { className: "icon", onClick: () => removeSet(true) },
                         React.createElement("i", { className: "fa-solid fa-trash-alt" }))),

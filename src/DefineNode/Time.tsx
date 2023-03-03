@@ -89,6 +89,7 @@ export default class DefineNodeTime extends DefineNodeBase {
 
 		// Initial props
 		const props: TextFieldProps = {
+			className: `field_${this.props.name} node_time`,
 			error: this.state.error !== false,
 			helperText: this.state.error,
 			onKeyPress: this.keyPressed,

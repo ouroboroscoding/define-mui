@@ -31,8 +31,9 @@ import DefineNodeSelect from './Select';
 import DefineNodeText from './Text';
 import DefineNodeTextArea from './TextArea';
 import DefineNodeTime from './Time';
+import DefineNodeTimestamp from './Timestamp';
 // Export Node types
-export { DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime, DefineNodeHidden, DefineNodeMultiSelectCSV, DefineNodeNumber, DefineNodePassword, DefineNodePhoneNumber, DefineNodePrice, DefineNodeSelect, DefineNodeText, DefineNodeTextArea, DefineNodeTime };
+export { DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime, DefineNodeHidden, DefineNodeMultiSelectCSV, DefineNodeNumber, DefineNodePassword, DefineNodePhoneNumber, DefineNodePrice, DefineNodeSelect, DefineNodeText, DefineNodeTextArea, DefineNodeTime, DefineNodeTimestamp };
 /**
  * DefineNode
  *
@@ -141,9 +142,11 @@ export default class DefineNode extends DefineBase {
             case 'decimal':
             case 'float':
             case 'int':
-            case 'timestamp':
             case 'uint':
                 return 'number';
+            // It it's a timestamp
+            case 'timestamp':
+                return 'timestamp';
             // Else it's its own type
             case 'bool':
             case 'date':

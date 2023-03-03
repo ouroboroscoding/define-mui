@@ -14,7 +14,7 @@ import DefineParent from './DefineParent';
 import { labelOptions, variantOptions } from './DefineNode';
 import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
 export type onCancelCallback = () => void;
-export type onSubmitCallback = (value: Record<string, any>, key: any) => Promise<boolean>;
+export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
     dynamicOptions?: dynamicOptionStruct[];
     fields?: string[];

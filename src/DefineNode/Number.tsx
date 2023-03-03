@@ -103,7 +103,7 @@ export default class DefineNodeNumber extends DefineNodeBase {
 
 		// Initial props
 		const props: TextFieldProps = {
-			className: 'node_' + this.props.name,
+			className: `field_${this.props.name} node_number`,
 			error: this.state.error !== false,
 			helperText: this.state.error,
 			onKeyPress: this.keyPressed,
