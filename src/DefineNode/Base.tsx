@@ -10,6 +10,7 @@
 
 // Ouroboros
 import { Base } from '@ouroboros/define';
+import { empty } from '@ouroboros/tools';
 
 // NPM modules
 import PropTypes from 'prop-types';
@@ -117,8 +118,23 @@ export default class DefineNodeBase extends React.Component {
 	 * @param prevProps The previous prop values
 	 */
 	componentDidUpdate(prevProps: DefineNodeBaseProps) {
+
+		// Init the new state
+		const oState: Record<string, any> = {};
+
+		// If the error changed
 		if(prevProps.error !== this.props.error) {
-			this.setState({error: this.props.error});
+			oState.error = this.props.error;
+		}
+
+		// If the value changed
+		if(prevProps.value !== this.props.value) {
+			oState.value = this.props.value;
+		}
+
+		// If we have changes, set the new state
+		if(!empty(oState)) {
+			this.setState(oState);
 		}
 	}
 
@@ -160,7 +176,7 @@ export default class DefineNodeBase extends React.Component {
 	 */
 	reset(): void {
 		this.setState({
-			value: null,
+			value: this.props.value === undefined ? null : this.props.value,
 			error: false
 		});
 	}

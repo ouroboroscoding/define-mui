@@ -14,6 +14,7 @@ import React from 'react';
 import { onSubmitCallback } from '../Form';
 import { gridSizesStruct } from '../DefineParent';
 import { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
+export type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct };
 export type dynCallbacksStruct = {
     optionsInstance: Subscribe;
     callback: SubscribeCallback;
@@ -35,7 +36,7 @@ export type ResultsProps = {
     data: Record<string, any>[];
     errors: Record<string, any>;
     fields: string[];
-    gridSizes: Record<string, gridSizesStruct>;
+    gridSizes: gridSizesStruct;
     gridSpacing: number;
     menu: menuStruct[];
     onDelete: onDeleteCallback | false;
@@ -251,4 +252,3 @@ export default class Results extends React.PureComponent {
      */
     render(): JSX.Element;
 }
-export {};
