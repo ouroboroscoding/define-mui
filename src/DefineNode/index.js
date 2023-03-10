@@ -8,7 +8,7 @@
  * @created 2023-02-15
  */
 // Ouroboros
-import { isObject, ucfirst } from '@ouroboros/tools';
+import { empty, isObject, ucfirst } from '@ouroboros/tools';
 import { Node } from '@ouroboros/define';
 // NPM modules
 import PropTypes from 'prop-types';
@@ -104,9 +104,19 @@ export default class DefineNode extends DefineBase {
      * @param prevProps The previously set properties
      */
     componentDidUpdate(prevProps) {
-        // If the Node changed
+        // Init the new state from the old
+        let oState = {};
+        // If the Node changed, overwrite the entire state
         if (prevProps.node !== this.props.node) {
-            this.setState(this.generateState());
+            oState = this.generateState();
+        }
+        // If the value change
+        if (prevProps.value !== this.props.value) {
+            oState.value = this.props.value;
+        }
+        // If we have changes, set the new state
+        if (!empty(oState)) {
+            this.setState(oState);
         }
     }
     /**
