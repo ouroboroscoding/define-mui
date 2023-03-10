@@ -20,4 +20,5 @@ import Subscribe from '@ouroboros/subscribe';
  * @extends Subscribe
  */
 export default class Custom extends Subscribe {
+    constructor();
 }

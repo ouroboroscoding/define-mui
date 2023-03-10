@@ -65,7 +65,7 @@ export type ResultsRowProps = {
 	data: Record<string, any>,
 	errors?: Record<string, any>,
 	fields: string[],
-	gridSizes?: Record<string, gridSizesStruct>,
+	gridSizes?: gridSizesStruct,
 	gridSpacing?: number,
 	info: Record<string, any>,
 	menu: menuStruct[],

@@ -22,4 +22,8 @@ import Subscribe from '@ouroboros/subscribe';
  * @access public
  * @extends Subscribe
  */
-export default class Custom extends Subscribe {}
+export default class Custom extends Subscribe {
+	constructor() {
+		super([]);
+	}
+}
