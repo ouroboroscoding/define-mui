@@ -88,7 +88,11 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
      * @access public
      */
     render() {
-        const sDatetime = iso(this.state.value);
+        // Generate the date/time from the current timestamp
+        const sDatetime = this.state.value ?
+            iso(this.state.value) :
+            '0000-00-00 00:00:00';
+        // Render
         return (React.createElement(Box, { className: `field_${this.props.name} node_timestamp` },
             this.props.label === 'above' &&
                 React.createElement(Typography, null, this.props.display.title),
