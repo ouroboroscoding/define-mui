@@ -69,13 +69,13 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
 			error = 'Invalid Value';
 		}
 
-		// Update the state
-		this.setState({ error, value });
-
 		// If there's a callback
 		if(this.props.onChange) {
-			this.props.onChange(value);
+			this.props.onChange(value, this.state.value);
 		}
+
+		// Update the state
+		this.setState({ error, value });
 	}
 
 	/**

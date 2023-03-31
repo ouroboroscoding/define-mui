@@ -60,15 +60,15 @@ export default class DefineNodeTextArea extends DefineNodeBase {
             !this.props.node.valid(event.target.value === '' ? null : event.target.value)) {
             error = 'Invalid Value';
         }
+        // If there's a callback
+        if (this.props.onChange) {
+            this.props.onChange(event.target.value, this.state.value);
+        }
         // Update the state
         this.setState({
             error,
             value: event.target.value
         });
-        // If there's a callback
-        if (this.props.onChange) {
-            this.props.onChange(event.target.value);
-        }
     }
     /**
      * Render
@@ -84,7 +84,6 @@ export default class DefineNodeTextArea extends DefineNodeBase {
             className: `field_${this.props.name} node_textarea`,
             error: this.state.error !== false,
             helperText: this.state.error,
-            onKeyPress: this.keyPressed,
             multiline: true,
             onChange: this.change,
             type: 'text',

@@ -47,6 +47,7 @@ export default class Form extends React.Component {
         gridSpacing: PropTypes.number,
         label: PropTypes.oneOf(['above', 'none', 'placeholder']),
         onCancel: PropTypes.func,
+        onNodeChange: PropTypes.objectOf(PropTypes.func),
         onSubmit: PropTypes.func.isRequired,
         title: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
         tree: PropTypes.instanceOf(Tree).isRequired,
@@ -210,7 +211,7 @@ export default class Form extends React.Component {
         return (React.createElement(Box, { className: "form _" + this.props.tree._name },
             title &&
                 React.createElement(Typography, { className: "form_title" }, title),
-            React.createElement(DefineParent, { dynamicOptions: this.props.dynamicOptions, fields: this.props.fields, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.props.tree._name, node: this.props.tree, onEnterPressed: this._submit, type: this.props.type, value: this.props.value }),
+            React.createElement(DefineParent, { dynamicOptions: this.props.dynamicOptions, fields: this.props.fields, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.props.tree._name, node: this.props.tree, onEnterPressed: this._submit, onNodeChange: this.props.onNodeChange, type: this.props.type, value: this.props.value }),
             React.createElement(Box, { className: "actions" },
                 this.props.onCancel &&
                     React.createElement(Button, { variant: "contained", color: "secondary", onClick: this._cancel }, "Cancel"),

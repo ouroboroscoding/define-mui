@@ -28,7 +28,13 @@ import { Hash as OptionsHash } from './Options';
 import { errorTree } from './Shared';
 
 // Types
-import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
+import type { Node } from '@ouroboros/define'
+import {
+	DefineNodeProps,
+	labelOptions,
+	onEnterPressedCallback,
+	typeOptions,
+	variantOptions } from './DefineNode';
 export type dynamicOptionStruct = {
 	node: string,
 	trigger: string,
@@ -41,6 +47,12 @@ export type gridSizesStruct = Record<string, {
 	lg?: number,
 	xl?: number
 }>;
+export type onNodeChangeCallback = (event: ParentChangeEvent) => void | Record<string, any>;
+export type ParentChangeEvent = {
+	data: Record<string, any>,
+	node: string,
+	oldValue: any
+};
 export type DefineParentProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	error?: Record<string, any>,
@@ -52,6 +64,7 @@ export type DefineParentProps = {
 	node: Parent,
 	nodeVariant: variantOptions
 	onEnterPressed?: onEnterPressedCallback,
+	onNodeChange?: Record<string, onNodeChangeCallback>
 	returnAll?: boolean,
 	type: typeOptions,
 	value: Record<string, any>,
@@ -97,6 +110,7 @@ export default class DefineParent extends DefineBase {
 		name: PropTypes.string.isRequired,
 		node: PropTypes.instanceOf(Parent).isRequired,
 		nodeVariant: PropTypes.oneOf(['filled', 'outlined', 'standard']),
+		onNodeChange: PropTypes.objectOf(PropTypes.func),
 		onEnterPressed: PropTypes.func,
 		returnAll: PropTypes.bool,
 		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
@@ -320,11 +334,12 @@ export default class DefineParent extends DefineBase {
 					);
 					break;
 				case 'Node':
-					const oProps: Record<string, any> = {
+					const oProps: DefineNodeProps = {
+						error: false,
 						label: this.props.label,
 						ref: (el: DefineBase) => this.fields[sField] = el,
 						name: sField,
-						node: oChild,
+						node: oChild as Node,
 						onEnterPressed: this.props.onEnterPressed,
 						type: this.props.type,
 						value: mValue,
@@ -335,6 +350,11 @@ export default class DefineParent extends DefineBase {
 					// If we have a trigger
 					if(oDynamicOptions && sField in oDynamicOptions) {
 						oProps.onChange = oDynamicOptions[sField];
+					}
+
+					// If we have a callback
+					if(this.props.onNodeChange && sField in this.props.onNodeChange) {
+						oProps.onChange = (value: any, oldValue: any) => { this._nodeChanged(sField, value, oldValue) }
 					}
 
 					// Create the new element and push it to the list
@@ -355,6 +375,49 @@ export default class DefineParent extends DefineBase {
 			order: lOrder,
 			title: oReact.title || false
 		};
+	}
+
+	/**
+	 * Node Changed
+	 *
+	 * Called when a node that is setup to track changes changes
+	 *
+	 * @name nodeChanged
+	 * @access private
+	 * @param name The name of the node that changed
+	 * @param value The new value of the node
+	 * @param oldValue The old value of the node
+	 */
+	_nodeChanged(name: string, value: any, oldValue: any) {
+
+		// If we have a callback for the name
+		if(this.props.onNodeChange && name in this.props.onNodeChange) {
+
+			// Init the current values
+			const oValues: Record<string, any> = {};
+			for(const k of Object.keys(this.fields)) {
+				oValues[k] = this.fields[k].value;
+			}
+			oValues[name] = value;
+
+			// Create a new Parent change event and send it to the callback
+			const o: Record<string, any> | void = this.props.onNodeChange[name]({
+				data: oValues,
+				node: name,
+				oldValue
+			});
+
+			// If we got anything back
+			if(o) {
+
+				// Go through each field and update the value
+				for(const k in o) {
+					if(k in this.fields) {
+						this.fields[k].value = o[k];
+					}
+				}
+			}
+		}
 	}
 
 	/**

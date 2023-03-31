@@ -31,7 +31,7 @@ export { DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime, Def
 export type labelOptions = 'above' | 'none' | 'placeholder';
 export type typeOptions = 'create' | 'search' | 'update';
 export type variantOptions = 'filled' | 'outlined' | 'standard';
-export type onChangeCallback = (val: any) => void;
+export type onChangeCallback = (value: any, oldValue: any) => void;
 export type onEnterPressedCallback = () => void;
 export type DefineNodeProps = {
     error: string | false;
