@@ -174,16 +174,16 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         if (this.props.validation && !this.props.node.valid(sValue)) {
             error = 'Invalid Value';
         }
+        // If there's a callback
+        if (this.props.onChange) {
+            this.props.onChange(sValue, this.state.value);
+        }
         // Update the state
         this.setState({
             defaultValues: null,
             error,
             value: sValue
         });
-        // If there's a callback
-        if (this.props.onChange) {
-            this.props.onChange(sValue);
-        }
     }
     /**
      * Render

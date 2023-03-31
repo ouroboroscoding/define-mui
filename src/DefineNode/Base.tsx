@@ -208,7 +208,7 @@ export default class DefineNodeBase extends React.Component {
 
 		// Let anyone interested know
 		if(this.props.onChange) {
-			this.props.onChange(val);
+			this.props.onChange(val, this.state.value);
 		}
 
 		// Make sure it's valid

@@ -58,16 +58,16 @@ export default class DefineNodeBool extends DefineNodeBase {
 	 */
 	change(event: React.ChangeEvent<HTMLInputElement>) {
 
+		// If there's a callback
+		if(this.props.onChange) {
+			this.props.onChange(event.target.checked, this.state.value);
+		}
+
 		// Impossible for this to be invalid, so just store it
 		this.setState({
 			error: false,
 			value: event.target.checked
 		});
-
-		// If there's a callback
-		if(this.props.onChange) {
-			this.props.onChange(event.target.checked);
-		}
 	}
 
 	/**

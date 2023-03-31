@@ -24,6 +24,12 @@ export type gridSizesStruct = Record<string, {
     lg?: number;
     xl?: number;
 }>;
+export type onNodeChangeCallback = (event: ParentChangeEvent) => void | Record<string, any>;
+export type ParentChangeEvent = {
+    data: Record<string, any>;
+    node: string;
+    oldValue: any;
+};
 export type DefineParentProps = {
     dynamicOptions?: dynamicOptionStruct[];
     error?: Record<string, any>;
@@ -35,6 +41,7 @@ export type DefineParentProps = {
     node: Parent;
     nodeVariant: variantOptions;
     onEnterPressed?: onEnterPressedCallback;
+    onNodeChange?: Record<string, onNodeChangeCallback>;
     returnAll?: boolean;
     type: typeOptions;
     value: Record<string, any>;
@@ -77,6 +84,9 @@ export default class DefineParent extends DefineBase {
         name: PropTypes.Validator<string>;
         node: PropTypes.Validator<Parent>;
         nodeVariant: PropTypes.Requireable<string>;
+        onNodeChange: PropTypes.Requireable<{
+            [x: string]: ((...args: any[]) => any) | null | undefined;
+        }>;
         onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
         returnAll: PropTypes.Requireable<boolean>;
         type: PropTypes.Validator<string>;
@@ -147,6 +157,18 @@ export default class DefineParent extends DefineBase {
         order: string[];
         title: any;
     };
+    /**
+     * Node Changed
+     *
+     * Called when a node that is setup to track changes changes
+     *
+     * @name nodeChanged
+     * @access private
+     * @param name The name of the node that changed
+     * @param value The new value of the node
+     * @param oldValue The old value of the node
+     */
+    _nodeChanged(name: string, value: any, oldValue: any): void;
     /**
      * Render
      *

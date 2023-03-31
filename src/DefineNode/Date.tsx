@@ -61,16 +61,16 @@ export default class DefineNodeDate extends DefineNodeBase {
 			error = 'Invalid Date';
 		}
 
+		// If there's a callback
+		if(this.props.onChange) {
+			this.props.onChange(event.target.value, this.state.value);
+		}
+
 		// Update the state
 		this.setState({
 			error,
 			value: event.target.value
 		});
-
-		// If there's a callback
-		if(this.props.onChange) {
-			this.props.onChange(event.target.value);
-		}
 	}
 
 	/**

@@ -38,7 +38,7 @@ import Typography from '@mui/material/Typography';
 import Form from '../Form';
 
 // Types
-import { gridSizesStruct } from '../DefineParent';
+import { gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
 import { onSubmitCallback } from '../Form';
 export type actionCallback = (data: Record<string, any>) => void;
 export type actionDynamicCallback = (data: Record<string, any>) => Record<string, any>;
@@ -71,6 +71,7 @@ export type ResultsRowProps = {
 	menu: menuStruct[],
 	onDelete: onDeleteCallback | false,
 	onKeyCopy: onKeyCopyCallback | false,
+	onNodeChange?: Record<string, onNodeChangeCallback>,
 	onUpdate: onSubmitCallback | false,
 	options: Record<string, any>
 };
@@ -408,6 +409,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 							gridSizes={props.gridSizes}
 							gridSpacing={props.gridSpacing}
 							onCancel={() => updateSet(false)}
+							onNodeChange={props.onNodeChange}
 							onSubmit={submit}
 							ref={refUpdateForm}
 							tree={props.info.tree}
@@ -455,6 +457,7 @@ ResultsRow.propTypes = {
 	info: PropTypes.object.isRequired,
 	menu: PropTypes.array.isRequired,
 	onDelete: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]).isRequired,
+	onNodeChange: PropTypes.objectOf(PropTypes.func),
 	onUpdate: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]).isRequired,
 	options: PropTypes.object.isRequired
 }

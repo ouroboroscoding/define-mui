@@ -52,7 +52,7 @@ export type labelOptions = 'above' | 'none' | 'placeholder';
 export type typeOptions = 'create' | 'search' | 'update';
 export type variantOptions = 'filled' | 'outlined' | 'standard';
 //	Callbacks
-export type onChangeCallback = (val: any) => void;
+export type onChangeCallback = (value: any, oldValue: any) => void;
 export type onEnterPressedCallback = () => void;
 //	Props
 export type DefineNodeProps = {
