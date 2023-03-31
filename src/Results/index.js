@@ -61,6 +61,7 @@ export default class Results extends React.PureComponent {
         menu: PropTypes.array,
         onDelete: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
         onKeyCopy: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+        onNodeChange: PropTypes.objectOf(PropTypes.func),
         onUpdate: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
         order: PropTypes.string,
         orderBy: PropTypes.string.isRequired,
@@ -466,7 +467,7 @@ export default class Results extends React.PureComponent {
                                     React.createElement(IconButton, { onClick: this._exportCsv },
                                         React.createElement("i", { className: "fa-solid fa-file-csv" })))))),
                 React.createElement(TableBody, null, (this.state.rowsPerPage > 0 ?
-                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy || Results.defaultOnCopyKey, onUpdate: this.props.onUpdate }))),
+                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy || Results.defaultOnCopyKey, onNodeChange: this.props.onNodeChange, onUpdate: this.props.onUpdate }))),
                 React.createElement(TableFooter, null,
                     this.props.totals &&
                         React.createElement(TotalsRow, { actions: this.props.actions ? true : false, fields: this.fields, info: this.info, totals: this.state.totals || {} }),

@@ -12,7 +12,7 @@ import Subscribe, { SubscribeCallback } from '@ouroboros/subscribe';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { onSubmitCallback } from '../Form';
-import { gridSizesStruct } from '../DefineParent';
+import { gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
 import { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
 export type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct };
 export type dynCallbacksStruct = {
@@ -41,6 +41,7 @@ export type ResultsProps = {
     menu: menuStruct[];
     onDelete: onDeleteCallback | false;
     onKeyCopy: onKeyCopyCallback | false;
+    onNodeChange?: Record<string, onNodeChangeCallback>;
     onUpdate: onSubmitCallback | false;
     order: 'asc' | 'desc';
     orderBy: string;
@@ -86,6 +87,9 @@ export default class Results extends React.PureComponent {
         menu: PropTypes.Requireable<any[]>;
         onDelete: PropTypes.Requireable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>;
         onKeyCopy: PropTypes.Requireable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>;
+        onNodeChange: PropTypes.Requireable<{
+            [x: string]: ((...args: any[]) => any) | null | undefined;
+        }>;
         onUpdate: PropTypes.Requireable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>;
         order: PropTypes.Requireable<string>;
         orderBy: PropTypes.Validator<string>;

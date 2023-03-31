@@ -26,7 +26,7 @@ import DefineParent from './DefineParent';
 
 // Types
 import { labelOptions, variantOptions } from './DefineNode';
-import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
+import { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './DefineParent';
 export type onCancelCallback = () => void;
 export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
@@ -36,6 +36,7 @@ export type FormProps = {
 	gridSpacing?: number,
 	label?: labelOptions,
 	onCancel?: onCancelCallback,
+	onNodeChange?: Record<string, onNodeChangeCallback>,
 	onSubmit: onSubmitCallback,
 	title: string | boolean,
 	tree: Tree,
@@ -45,7 +46,7 @@ export type FormProps = {
 };
 export type FormState = {
 	primary: string
-}
+};
 
 /**
  * Form
@@ -78,6 +79,7 @@ export default class Form extends React.Component {
 		gridSpacing: PropTypes.number,
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
 		onCancel: PropTypes.func,
+		onNodeChange: PropTypes.objectOf(PropTypes.func),
 		onSubmit: PropTypes.func.isRequired,
 		title: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 		tree: PropTypes.instanceOf(Tree).isRequired,
@@ -283,6 +285,7 @@ export default class Form extends React.Component {
 					name={this.props.tree._name}
 					node={this.props.tree}
 					onEnterPressed={this._submit}
+					onNodeChange={this.props.onNodeChange}
 					type={this.props.type}
 					value={this.props.value}
 				/>

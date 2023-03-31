@@ -9,7 +9,7 @@
  */
 import PropTypes from 'prop-types';
 import React from 'react';
-import { gridSizesStruct } from '../DefineParent';
+import { gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
 import { onSubmitCallback } from '../Form';
 export type actionCallback = (data: Record<string, any>) => void;
 export type actionDynamicCallback = (data: Record<string, any>) => Record<string, any>;
@@ -48,6 +48,7 @@ export type ResultsRowProps = {
     menu: menuStruct[];
     onDelete: onDeleteCallback | false;
     onKeyCopy: onKeyCopyCallback | false;
+    onNodeChange?: Record<string, onNodeChangeCallback>;
     onUpdate: onSubmitCallback | false;
     options: Record<string, any>;
 };
@@ -82,6 +83,9 @@ declare namespace ResultsRow {
         info: PropTypes.Validator<object>;
         menu: PropTypes.Validator<any[]>;
         onDelete: PropTypes.Validator<NonNullable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>>;
+        onNodeChange: PropTypes.Requireable<{
+            [x: string]: ((...args: any[]) => any) | null | undefined;
+        }>;
         onUpdate: PropTypes.Validator<NonNullable<NonNullable<boolean | ((...args: any[]) => any) | null | undefined>>>;
         options: PropTypes.Validator<object>;
     };

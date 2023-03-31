@@ -65,16 +65,16 @@ export default class DefineNodeTime extends DefineNodeBase {
 			error = 'Invalid Time';
 		}
 
+		// If there's a callback
+		if(this.props.onChange) {
+			this.props.onChange(newTime, this.state.value);
+		}
+
 		// Update the state
 		this.setState({
 			error,
 			value: newTime
 		});
-
-		// If there's a callback
-		if(this.props.onChange) {
-			this.props.onChange(newTime);
-		}
 	}
 
 	/**

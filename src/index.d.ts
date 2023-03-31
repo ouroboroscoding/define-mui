@@ -8,3 +8,4 @@ export { default as Results } from './Results';
 export { default as Search } from './Search';
 export { errorTree } from './Shared';
 export type { DefineNodeBaseProps } from './DefineNode/Base';
+export type { ParentChangeEvent } from './DefineParent';

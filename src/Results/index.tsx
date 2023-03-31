@@ -39,7 +39,7 @@ import TotalsRow from './TotalsRow';
 
 // Types
 import { onSubmitCallback } from '../Form';
-import { gridSizesStruct } from '../DefineParent';
+import { gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
 import { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
 export type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct };
 export type dynCallbacksStruct = {
@@ -68,6 +68,7 @@ export type ResultsProps = {
 	menu: menuStruct[],
 	onDelete: onDeleteCallback | false,
 	onKeyCopy: onKeyCopyCallback | false,
+	onNodeChange?: Record<string, onNodeChangeCallback>,
 	onUpdate: onSubmitCallback | false,
 	order: 'asc' | 'desc',
 	orderBy: string,
@@ -116,6 +117,7 @@ export default class Results extends React.PureComponent {
 		menu: PropTypes.array,
 		onDelete: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
 		onKeyCopy: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+		onNodeChange: PropTypes.objectOf(PropTypes.func),
 		onUpdate: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
 		order: PropTypes.string,
 		orderBy: PropTypes.string.isRequired,
@@ -613,6 +615,7 @@ export default class Results extends React.PureComponent {
 								options={this.state.options}
 								onDelete={this.props.onDelete}
 								onKeyCopy={this.props.onKeyCopy || Results.defaultOnCopyKey}
+								onNodeChange={this.props.onNodeChange}
 								onUpdate={this.props.onUpdate}
 							/>
 						)}

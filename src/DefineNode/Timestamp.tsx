@@ -83,16 +83,16 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
 			error = 'Invalid Timestamp';
 		}
 
+		// If there's a callback
+		if(this.props.onChange) {
+			this.props.onChange(newTimestamp, this.state.value);
+		}
+
 		// Update the state
 		this.setState({
 			error,
 			value: newTimestamp
 		});
-
-		// If there's a callback
-		if(this.props.onChange) {
-			this.props.onChange(newTimestamp);
-		}
 	}
 
 	/**

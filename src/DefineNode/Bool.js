@@ -48,15 +48,15 @@ export default class DefineNodeBool extends DefineNodeBase {
      * @param event The event triggered by the change
      */
     change(event) {
+        // If there's a callback
+        if (this.props.onChange) {
+            this.props.onChange(event.target.checked, this.state.value);
+        }
         // Impossible for this to be invalid, so just store it
         this.setState({
             error: false,
             value: event.target.checked
         });
-        // If there's a callback
-        if (this.props.onChange) {
-            this.props.onChange(event.target.checked);
-        }
     }
     /**
      * Render

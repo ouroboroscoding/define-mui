@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DefineParent from './DefineParent';
 import { labelOptions, variantOptions } from './DefineNode';
-import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
+import { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './DefineParent';
 export type onCancelCallback = () => void;
 export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
@@ -22,6 +22,7 @@ export type FormProps = {
     gridSpacing?: number;
     label?: labelOptions;
     onCancel?: onCancelCallback;
+    onNodeChange?: Record<string, onNodeChangeCallback>;
     onSubmit: onSubmitCallback;
     title: string | boolean;
     tree: Tree;
@@ -61,6 +62,9 @@ export default class Form extends React.Component {
         gridSpacing: PropTypes.Requireable<number>;
         label: PropTypes.Requireable<string>;
         onCancel: PropTypes.Requireable<(...args: any[]) => any>;
+        onNodeChange: PropTypes.Requireable<{
+            [x: string]: ((...args: any[]) => any) | null | undefined;
+        }>;
         onSubmit: PropTypes.Validator<(...args: any[]) => any>;
         title: PropTypes.Requireable<NonNullable<string | boolean | null | undefined>>;
         tree: PropTypes.Validator<Tree>;
