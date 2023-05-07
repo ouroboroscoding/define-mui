@@ -11,6 +11,10 @@
 // Ouroboros modules
 import Subscribe from '@ouroboros/subscribe';
 
+// Types
+export type HashData = Record<string, string[][]>;
+export type HashFunc = () => Promise<HashData>;
+
 /**
  * Hash
  *
@@ -24,7 +28,7 @@ import Subscribe from '@ouroboros/subscribe';
 export default class Hash extends Subscribe {
 
 	// Instance variables
-	_hash: Record<string, string[][]>;
+	_hash: HashData;
 	_key: string;
 
 	/**
@@ -34,29 +38,67 @@ export default class Hash extends Subscribe {
 	 *
 	 * @name Hash
 	 * @access public
-	 * @param hash The key to key/value pairs
+	 * @param hash The key to key/value pairs, or a function that returns a
+	 * 				promise
 	 * @param initialKey Optional, the initial key to use,
 	 * 						defaults to the first key in the hash
 	 * @returns a new instance
 	 */
-	constructor(hash: Record<string, string[][]>, initialKey: string | null = null) {
+	constructor(hash: HashData | HashFunc, initialKey: string | null = null) {
 
 		// Call base class constructor
 		super([]);
 
-		// Store the hash
-		this._hash = hash;
+		// Store or fetch the hash data
+		if(typeof hash === 'function') {
+			hash().then(
+				data => { this.hash(data) },
+				error => { throw new Error(error) }
+			);
+		} else {
+			this._hash = hash;
+		}
+
+		// Store the key
 		this._key = initialKey || '';
+	}
+
+	/**
+	 * Hash
+	 *
+	 * Sets/Gets the hash data
+	 *
+	 * @name hash
+	 * @access public
+	 * @param hash Optional, used to set value, else get
+	 * @returns the current hash, or void on setting new hash
+	 */
+	hash(hash: HashData): void | HashData {
+
+		// If we got a hash
+		if(hash !== undefined) {
+
+			// Store the new hash
+			this._hash = hash;
+
+			// Set the data and notify subscribers
+			this.set(this._key in this._hash ? this._hash[this._key] : []);
+		}
+
+		// Else, return the current hash
+		else {
+			return this._hash;
+		}
 	}
 
 	/**
 	 * Key
 	 *
-	 * Sets/Gets the new key
+	 * Sets/Gets the key
 	 *
 	 * @name key
 	 * @access public
-	 * @param key Optional, Use to set value, else get
+	 * @param key Optional, used to set value, else get
 	 * @returns the current key, or void on setting new key
 	 */
 	key(key?: string): void | string {
