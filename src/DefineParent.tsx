@@ -9,7 +9,7 @@
  */
 
 // Ouroboros
-import { empty } from '@ouroboros/tools';
+import { compare, empty } from '@ouroboros/tools';
 import { Parent } from '@ouroboros/define';
 
 // NPM modules
@@ -22,6 +22,7 @@ import Typography from '@mui/material/Typography';
 
 // Components
 import DefineBase from './DefineBase';
+import { DefineNodeBase } from './DefineNode';
 import { Hash as OptionsHash } from './Options';
 
 // Modules
@@ -35,6 +36,7 @@ import {
 	onEnterPressedCallback,
 	typeOptions,
 	variantOptions } from './DefineNode';
+import { DefineNodeBaseProps } from './DefineNode/Base';
 export type dynamicOptionStruct = {
 	node: string,
 	trigger: string,
@@ -46,7 +48,7 @@ export type gridSizesStruct = Record<string, {
 	md?: number,
 	lg?: number,
 	xl?: number
-}>;
+} | Record<string, any>>;
 export type onNodeChangeCallback = (event: ParentChangeEvent) => void | Record<string, any>;
 export type ParentChangeEvent = {
 	data: Record<string, any>,
@@ -65,16 +67,24 @@ export type DefineParentProps = {
 	nodeVariant: variantOptions
 	onEnterPressed?: onEnterPressedCallback,
 	onNodeChange?: Record<string, onNodeChangeCallback>
+	placeholder?: string,
 	returnAll?: boolean,
 	type: typeOptions,
 	value: Record<string, any>,
-	validation?: boolean
+	validation?: boolean,
+	variant: variantOptions
 };
 type DefineParentState = {
-	elements: JSX.Element[],
-	order: string[],
+	display: Record<string, any>,
+	elements?: JSX.Element[],
+	order?: string[],
+	plugin: typeof DefineNodeBase | null,
 	title: string | false
 }
+type pluginsType = Record<string, typeof DefineNodeBase>;
+
+// Registered components
+const _plugins: pluginsType = {};
 
 /**
  * Parent
@@ -87,6 +97,11 @@ type DefineParentState = {
  */
 export default class DefineParent extends DefineBase {
 
+	// Called to add an external Component to the list available
+	static pluginAdd(type: string, classConstructor: typeof DefineNodeBase) {
+		_plugins[type] = classConstructor;
+	}
+
 	// Props Types
 	static propTypes = {
 		dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
@@ -97,13 +112,16 @@ export default class DefineParent extends DefineBase {
 		error: PropTypes.object,
 		fields: PropTypes.arrayOf(PropTypes.string),
 		gridSizes: PropTypes.objectOf(
-			PropTypes.exact({
-				xs: PropTypes.number,
-				sm: PropTypes.number,
-				md: PropTypes.number,
-				lg: PropTypes.number,
-				xl: PropTypes.number
-			})
+			PropTypes.oneOfType([
+				PropTypes.exact({
+					xs: PropTypes.number,
+					sm: PropTypes.number,
+					md: PropTypes.number,
+					lg: PropTypes.number,
+					xl: PropTypes.number
+				}),
+				PropTypes.object
+			])
 		),
 		gridSpacing: PropTypes.number,
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
@@ -112,29 +130,28 @@ export default class DefineParent extends DefineBase {
 		nodeVariant: PropTypes.oneOf(['filled', 'outlined', 'standard']),
 		onNodeChange: PropTypes.objectOf(PropTypes.func),
 		onEnterPressed: PropTypes.func,
+		placeholder: PropTypes.string,
 		returnAll: PropTypes.bool,
 		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
 		value: PropTypes.object,
-		validation: PropTypes.bool
+		validation: PropTypes.bool,
+		variant: PropTypes.oneOf(['filled', 'outlined', 'standard'])
 	}
 	static defaultProps = {
 		dynamicOptions: [],
-		gridSizes: {__default__: {xs: 12, sm: 6, lg: 3}},
+		gridSizes: {__default__: {xs: 12}},
 		gridSpacing: 2,
 		label: 'placeholder',
 		nodeVariant: 'outlined',
 		returnAll: false,
 		value: {},
-		validation: true
+		validation: true,
+		variant: 'outlined'
 	}
-
-	// Props type
+	// Instance variables
+	node: DefineBase | null;
 	declare props: DefineParentProps;
-
-	// State type
 	state: DefineParentState;
-
-	// Fields
 	fields: Record<string, DefineBase>;
 
 	/**
@@ -151,6 +168,9 @@ export default class DefineParent extends DefineBase {
 
 		// Call parent
 		super(props);
+
+		// Init node ref
+		this.node = null;
 
 		// Init state
 		this.state = this.generateState();
@@ -223,158 +243,175 @@ export default class DefineParent extends DefineBase {
 	 * @access public
 	 * @returns the new state to set
 	 */
-	generateState() {
-
-		// Init the list elements
-		const lElements: JSX.Element[] = [];
+	generateState(): DefineParentState {
 
 		// Get the React special section if there is one
-		const oReact = this.props.node.special('ui') || {};
+		const oUI = this.props.node.special('ui') || {};
 
-		// Init the order
-		let lOrder: string[] = [];
-
-		// If we were passed specific fields
-		if(this.props.fields) {
-			lOrder = this.props.fields;
-		}
-
-		// Else, if we have the specific type in the react section
-		else if(this.props.type in oReact) {
-			lOrder = oReact[this.props.type];
-		}
-
-		// Else, if we have the generic 'order' in the react section
-		else if('order' in oReact) {
-			lOrder = oReact.order;
-		}
-
-		// Else, just use the keys of the node
-		else {
-			lOrder = this.props.node.keys();
-		}
-
-		// If we have any dynamic options
-		let oDynamicOptions: Record<string, (key?: string) => void> | null = null;
-		if(this.props.dynamicOptions && this.props.dynamicOptions.length) {
-
-			// Set the var to an object
-			oDynamicOptions = {};
-
-			// Go through each one
-			for(const o of this.props.dynamicOptions) {
-
-				// If the node doesn't exist
-				if(!this.props.node.get(o.node)) {
-					throw new Error(`Node "${o.node}" used as a node in "dynamicOptions" attribute does not exist in the Parent`);
-				}
-
-				// If the trigger doesn't exist
-				if(!this.props.node.get(o.trigger)) {
-					throw new Error(`Node "${o.trigger}" used as a trigger in "dynamicOptions" attribute does not exist in the Parent`);
-				}
-
-				// Get the react section of the node
-				const oUI = this.props.node.get(o.node).special('ui') || {};
-
-				// Create a OptionsHash using the options and the current value
-				//	of the node, and store it under the node's options
-				oUI.options = new OptionsHash(
-					o.options,
-					(this.props.value && this.props.value[o.trigger]) || null
-				);
-
-				// Overwrite the react special
-				this.props.node.get(o.node).special('ui', oUI);
-
-				// Store the callback for the trigger
-				oDynamicOptions[o.trigger] = oUI.options.key.bind(oReact.options);
-			}
-		}
-
-		// Go through each node
-		for(const sField of lOrder) {
-
-			// Get the node
-			const oChild = this.props.node.get(sField);
-
-			// Get the class
-			const sClass = oChild.class();
-
-			// Get the value
-			const mValue = (sField in this.props.value) ?
-				this.props.value[sField] :
-				null;
-
-			// Grid sizes
-			const gridSizes = (this.props.gridSizes as gridSizesStruct)[sField] ||
-							(this.props.gridSizes as gridSizesStruct).__default__ ||
-							{xs: 12, sm: 6, lg: 3}
-
-			// Check what kind of node it is
-			switch(sClass) {
-				case 'ArrayNode':
-				case 'HashNode':
-				case 'Parent':
-					lElements.push(
-						<Grid key={sField} item {...gridSizes}>
-							{DefineBase.create(sClass, {
-								label: this.props.label,
-								nodeVariant: this.props.nodeVariant,
-								ref: (el: DefineBase) => this.fields[sField] = el,
-								name: sField,
-								node: oChild,
-								onEnterPressed: this.props.onEnterPressed,
-								returnAll: this.props.returnAll,
-								type: this.props.type,
-								value: mValue,
-								validation: this.props.validation
-							})}
-						</Grid>
-					);
-					break;
-				case 'Node':
-					const oProps: DefineNodeProps = {
-						error: false,
-						label: this.props.label,
-						ref: (el: DefineBase) => this.fields[sField] = el,
-						name: sField,
-						node: oChild as Node,
-						onEnterPressed: this.props.onEnterPressed,
-						type: this.props.type,
-						value: mValue,
-						validation: this.props.validation,
-						variant: this.props.nodeVariant
-					}
-
-					// If we have a trigger
-					if(oDynamicOptions && sField in oDynamicOptions) {
-						oProps.onChange = oDynamicOptions[sField];
-					}
-
-					// If we have a callback
-					if(this.props.onNodeChange && sField in this.props.onNodeChange) {
-						oProps.onChange = (value: any, oldValue: any) => { this._nodeChanged(sField, value, oldValue) }
-					}
-
-					// Create the new element and push it to the list
-					lElements.push(
-						<Grid key={sField} item {...gridSizes}>
-							{DefineBase.create(sClass, oProps)}
-						</Grid>
-					);
-					break;
-				default:
-					throw new Error('Invalid Node type in parent of child: ' + sField);
-			}
-		}
-
-		// Return the list of elements we generated
-		return {
-			elements: lElements,
-			order: lOrder,
-			title: oReact.title || false
+		// Init the state
+		const oState: DefineParentState = {
+			display: oUI,
+			plugin: null,
+			title: oUI.title || false
 		};
+
+		// If we have a type
+		if(oUI.type && oUI.type in _plugins) {
+
+			// Set the plugin
+			oState.plugin = _plugins[oUI.type];
+
+		} else {
+
+			// Init the list elements
+			const lElements: JSX.Element[] = [];
+
+			// Init the order
+			let lOrder: string[] = [];
+
+			// If we were passed specific fields
+			if(this.props.fields) {
+				lOrder = this.props.fields;
+			}
+
+			// Else, if we have the specific type in the react section
+			else if(this.props.type in oUI) {
+				lOrder = oUI[this.props.type];
+			}
+
+			// Else, if we have the generic 'order' in the react section
+			else if('order' in oUI) {
+				lOrder = oUI.order;
+			}
+
+			// Else, just use the keys of the node
+			else {
+				lOrder = this.props.node.keys();
+			}
+
+			// If we have any dynamic options
+			let oDynamicOptions: Record<string, (key?: string) => void> | null = null;
+			if(this.props.dynamicOptions && this.props.dynamicOptions.length) {
+
+				// Set the var to an object
+				oDynamicOptions = {};
+
+				// Go through each one
+				for(const o of this.props.dynamicOptions) {
+
+					// If the node doesn't exist
+					if(!this.props.node.get(o.node)) {
+						throw new Error(`Node "${o.node}" used as a node in "dynamicOptions" attribute does not exist in the Parent`);
+					}
+
+					// If the trigger doesn't exist
+					if(!this.props.node.get(o.trigger)) {
+						throw new Error(`Node "${o.trigger}" used as a trigger in "dynamicOptions" attribute does not exist in the Parent`);
+					}
+
+					// Get the react section of the node
+					const oNodeUI = this.props.node.get(o.node).special('ui') || {};
+
+					// Create a OptionsHash using the options and the current value
+					//	of the node, and store it under the node's options
+					oNodeUI.options = new OptionsHash(
+						o.options,
+						(this.props.value && this.props.value[o.trigger]) || null
+					);
+
+					// Overwrite the react special
+					this.props.node.get(o.node).special('ui', oNodeUI);
+
+					// Store the callback for the trigger
+					oDynamicOptions[o.trigger] = oNodeUI.options.key.bind(oNodeUI.options);
+				}
+			}
+
+			// Go through each node
+			for(const sField of lOrder) {
+
+				// Get the node
+				const oChild = this.props.node.get(sField);
+
+				// Get the class
+				const sClass = oChild.class();
+
+				// Get the value
+				const mValue = (sField in this.props.value) ?
+					this.props.value[sField] :
+					null;
+
+				// Grid sizes
+				const gridSizes = (this.props.gridSizes as gridSizesStruct)[sField] ||
+								(this.props.gridSizes as gridSizesStruct).__default__ ||
+								{xs: 12}
+
+				// Check what kind of node it is
+				switch(sClass) {
+					case 'ArrayNode':
+					case 'HashNode':
+					case 'Parent':
+						lElements.push(
+							<Grid key={sField} item {...gridSizes}>
+								{DefineBase.create(sClass, {
+									gridSizes,
+									label: this.props.label,
+									nodeVariant: this.props.nodeVariant,
+									ref: (el: DefineBase) => this.fields[sField] = el,
+									name: sField,
+									node: oChild,
+									onEnterPressed: this.props.onEnterPressed,
+									returnAll: this.props.returnAll,
+									type: this.props.type,
+									value: mValue,
+									validation: this.props.validation
+								})}
+							</Grid>
+						);
+						break;
+					case 'Node':
+						const oProps: DefineNodeProps = {
+							error: false,
+							label: this.props.label,
+							ref: (el: DefineBase) => this.fields[sField] = el,
+							name: sField,
+							node: oChild as Node,
+							onEnterPressed: this.props.onEnterPressed,
+							type: this.props.type,
+							value: mValue,
+							validation: this.props.validation,
+							variant: this.props.nodeVariant
+						}
+
+						// If we have a trigger
+						if(oDynamicOptions && sField in oDynamicOptions) {
+							oProps.onChange = oDynamicOptions[sField];
+						}
+
+						// If we have a callback
+						if(this.props.onNodeChange && sField in this.props.onNodeChange) {
+							oProps.onChange = (value: any, oldValue: any) => { this._nodeChanged(sField, value, oldValue) }
+						}
+
+						// Create the new element and push it to the list
+						lElements.push(
+							<Grid key={sField} item {...gridSizes}>
+								{DefineBase.create(sClass, oProps)}
+							</Grid>
+						);
+						break;
+					default:
+						throw new Error('Invalid Node type in parent of child: ' + sField);
+				}
+			}
+
+			// Set the elements and order
+			oState.elements = lElements;
+			oState.order = lOrder;
+		}
+
+		// Return the new state
+		return oState;
 	}
 
 	/**
@@ -429,6 +466,36 @@ export default class DefineParent extends DefineBase {
 	 * @access public
 	 */
 	render() {
+
+		// If we have a plugin component
+		if(this.state.plugin) {
+
+			// Store the name
+			const ElName = this.state.plugin;
+
+			// Combine the regular node props with any plugin props
+			const oProps: DefineNodeBaseProps = {
+				display: this.state.display,
+				error: this.props.error,
+				label: this.props.label,
+				ref: (el: DefineBase) => this.node = el,
+				name: this.props.name,
+				node: this.props.node,
+				onEnterPressed: this.props.onEnterPressed,
+				placeholder: (this.props as DefineParentProps).placeholder,
+				type: this.props.type,
+				value: this.props.value,
+				validation: this.props.validation,
+				variant: this.props.variant
+			};
+
+			// Render plugin type
+			return (
+				<ElName {...oProps} />
+			);
+		}
+
+		// Regular Parent
 		return (
 			<React.Fragment>
 				{this.state.title &&
@@ -450,6 +517,13 @@ export default class DefineParent extends DefineBase {
 	 * @access public
 	 */
 	reset(): void {
+
+		// If we have a plugin component
+		if(this.state.plugin) {
+			return (this.node as DefineBase).reset();
+		}
+
+		// Reset each child
 		for(const k of Object.keys(this.fields)) {
 			this.fields[k].reset();
 		}
@@ -469,8 +543,17 @@ export default class DefineParent extends DefineBase {
 		// Valid?
 		let bValid = true;
 
+		// If we have a plugin component
+		if(this.state.plugin) {
+			bValid = (this.props as DefineParentProps).node.valid((this.node as DefineBase).value);
+			if(!bValid) {
+				(this.node as DefineBase).error((this.props as DefineParentProps).node.validationFailures);
+			}
+			return bValid;
+		}
+
 		// Go through each item and validate it
-		for(const k of this.state.order) {
+		for(const k of this.state.order as string[]) {
 
 			// Get the node
 			const oNode = this.props.node.get(k);
@@ -510,6 +593,11 @@ export default class DefineParent extends DefineBase {
 	 */
 	get value(): Record<string, any> {
 
+		// If we have a plugin component
+		if(this.state.plugin) {
+			return (this.node as DefineBase).value;
+		}
+
 		// Init the return value
 		const oRet: Record<string, any> = {};
 
@@ -523,7 +611,7 @@ export default class DefineParent extends DefineBase {
 			if(this.props.type === 'update' && !this.props.returnAll) {
 
 				// If the value is different
-				if(this.props.value[k] !== newVal) {
+				if(!compare(this.props.value[k], newVal)) {
 					oRet[k] = newVal;
 				}
 			}
@@ -551,6 +639,14 @@ export default class DefineParent extends DefineBase {
 	 * @property
 	 */
 	set value(val: Record<string, any>) {
+
+		// If we have a plugin component
+		if(this.state.plugin) {
+			(this.node as DefineBase).value = val;
+			return;
+		}
+
+		// Set the values
 		for(const k of Object.keys(val)) {
 			this.fields[k].value = val[k];
 		}

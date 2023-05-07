@@ -11,6 +11,7 @@
 import { Parent } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import DefineBase from './DefineBase';
+import { DefineNodeBase } from './DefineNode';
 import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 export type dynamicOptionStruct = {
     node: string;
@@ -23,7 +24,7 @@ export type gridSizesStruct = Record<string, {
     md?: number;
     lg?: number;
     xl?: number;
-}>;
+} | Record<string, any>>;
 export type onNodeChangeCallback = (event: ParentChangeEvent) => void | Record<string, any>;
 export type ParentChangeEvent = {
     data: Record<string, any>;
@@ -42,14 +43,18 @@ export type DefineParentProps = {
     nodeVariant: variantOptions;
     onEnterPressed?: onEnterPressedCallback;
     onNodeChange?: Record<string, onNodeChangeCallback>;
+    placeholder?: string;
     returnAll?: boolean;
     type: typeOptions;
     value: Record<string, any>;
     validation?: boolean;
+    variant: variantOptions;
 };
 type DefineParentState = {
-    elements: JSX.Element[];
-    order: string[];
+    display: Record<string, any>;
+    elements?: JSX.Element[];
+    order?: string[];
+    plugin: typeof DefineNodeBase | null;
     title: string | false;
 };
 /**
@@ -62,6 +67,7 @@ type DefineParentState = {
  * @extends DefineBase
  */
 export default class DefineParent extends DefineBase {
+    static pluginAdd(type: string, classConstructor: typeof DefineNodeBase): void;
     static propTypes: {
         dynamicOptions: PropTypes.Requireable<(Required<PropTypes.InferProps<{
             node: PropTypes.Validator<string>;
@@ -71,13 +77,7 @@ export default class DefineParent extends DefineBase {
         error: PropTypes.Requireable<object>;
         fields: PropTypes.Requireable<(string | null | undefined)[]>;
         gridSizes: PropTypes.Requireable<{
-            [x: string]: Required<PropTypes.InferProps<{
-                xs: PropTypes.Requireable<number>;
-                sm: PropTypes.Requireable<number>;
-                md: PropTypes.Requireable<number>;
-                lg: PropTypes.Requireable<number>;
-                xl: PropTypes.Requireable<number>;
-            }>> | null | undefined;
+            [x: string]: object | null | undefined;
         }>;
         gridSpacing: PropTypes.Requireable<number>;
         label: PropTypes.Requireable<string>;
@@ -88,18 +88,18 @@ export default class DefineParent extends DefineBase {
             [x: string]: ((...args: any[]) => any) | null | undefined;
         }>;
         onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
+        placeholder: PropTypes.Requireable<string>;
         returnAll: PropTypes.Requireable<boolean>;
         type: PropTypes.Validator<string>;
         value: PropTypes.Requireable<object>;
         validation: PropTypes.Requireable<boolean>;
+        variant: PropTypes.Requireable<string>;
     };
     static defaultProps: {
         dynamicOptions: never[];
         gridSizes: {
             __default__: {
                 xs: number;
-                sm: number;
-                lg: number;
             };
         };
         gridSpacing: number;
@@ -108,7 +108,9 @@ export default class DefineParent extends DefineBase {
         returnAll: boolean;
         value: {};
         validation: boolean;
+        variant: string;
     };
+    node: DefineBase | null;
     props: DefineParentProps;
     state: DefineParentState;
     fields: Record<string, DefineBase>;
@@ -152,11 +154,7 @@ export default class DefineParent extends DefineBase {
      * @access public
      * @returns the new state to set
      */
-    generateState(): {
-        elements: JSX.Element[];
-        order: string[];
-        title: any;
-    };
+    generateState(): DefineParentState;
     /**
      * Node Changed
      *
