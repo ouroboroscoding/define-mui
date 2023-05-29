@@ -201,6 +201,21 @@ export default class DefineParent extends DefineBase {
 		if(prevProps.node !== this.props.node) {
 			this.setState(this.generateState());
 		}
+
+		// If the value changed
+		if(prevProps.value !== this.props.value) {
+
+			// If we have a plugin component
+			if(this.state.plugin) {
+				(this.node as DefineBase).value = this.props.value;
+				return;
+			}
+
+			// Set the values
+			for(const k of Object.keys(this.props.value)) {
+				this.fields[k].value = this.props.value[k];
+			}
+		}
 	}
 
 	/**
