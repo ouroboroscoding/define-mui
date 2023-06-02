@@ -213,7 +213,12 @@ export default class DefineParent extends DefineBase {
 
 			// Set the values
 			for(const k of Object.keys(this.props.value)) {
-				this.fields[k].value = this.props.value[k];
+				if(k in this.fields) {
+					this.fields[k].value = this.props.value[k];
+				} else {
+					// tslint:disable-next-line:no-console
+					console.warn(`Field (${k}) not found`)
+				}
 			}
 		}
 	}
