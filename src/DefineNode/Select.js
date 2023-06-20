@@ -139,7 +139,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
         let error = false;
         if (this.props.validation &&
             !this.props.node.valid(event.target.value === '' ? null : event.target.value)) {
-            error = 'Invalid Selection';
+            error = this.props.node.validationFailures[0][1];
         }
         // If there's a callback
         if (this.props.onChange) {
@@ -160,6 +160,14 @@ export default class DefineNodeSelect extends DefineNodeBase {
      * @access public
      */
     render() {
+        // If there's an error, and we have custom error messages, and the error
+        //	is in the list, use it instead of the default string
+        let sError = this.state.error;
+        if (typeof this.state.error === 'string') {
+            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
+                this.props.display.errors[this.state.error] :
+                this.state.error;
+        }
         // Init the option elements
         const lOpts = [React.createElement("option", { key: 0, value: '' })];
         // Add the other options
@@ -176,7 +184,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
                     React.createElement(InputLabel, { id: this.props.name }, this.props.display.title),
                 React.createElement(Select, { label: this.props.display.title, labelId: this.props.name, native: true, onChange: this.change, value: this.state.value === null ? '' : this.state.value }, lOpts),
                 this.state.error &&
-                    React.createElement(FormHelperText, null, this.state.error))));
+                    React.createElement(FormHelperText, null, sError))));
     }
     /**
      * Options (set)

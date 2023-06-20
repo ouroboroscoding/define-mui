@@ -49,5 +49,5 @@ export default class DefineNodeText extends DefineNodeBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }

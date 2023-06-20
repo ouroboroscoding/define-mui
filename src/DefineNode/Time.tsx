@@ -62,7 +62,7 @@ export default class DefineNodeTime extends DefineNodeBase {
 		const newTime = event.target.value + ':00';
 		let error: string | false = false;
 		if(this.props.validation && !this.props.node.valid(newTime)) {
-			error = 'Invalid Time';
+			error = this.props.node.validationFailures[0][1];
 		}
 
 		// If there's a callback
@@ -87,11 +87,20 @@ export default class DefineNodeTime extends DefineNodeBase {
 	 */
 	render() {
 
+		// If there's an error, and we have custom error messages, and the error
+		//	is in the list, use it instead of the default string
+		let sError = this.state.error;
+		if(typeof this.state.error === 'string') {
+			sError = this.props.display.errors && this.state.error in this.props.display.errors ?
+						this.props.display.errors[this.state.error] :
+						this.state.error;
+		}
+
 		// Initial props
 		const props: TextFieldProps = {
 			className: `field_${this.props.name} node_time`,
 			error: this.state.error !== false,
-			helperText: this.state.error,
+			helperText: sError,
 			onKeyPress: this.keyPressed,
 			onChange: this.change,
 			type: 'time',

@@ -48,5 +48,5 @@ export default class DefineNodeBool extends DefineNodeBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }

@@ -49,5 +49,5 @@ export default class DefineNodePrice extends DefineNodeBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }

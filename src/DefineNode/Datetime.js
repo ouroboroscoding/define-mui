@@ -62,7 +62,7 @@ export default class DefineNodeDatetime extends DefineNodeBase {
         // Check if it's valid
         let error = false;
         if (this.props.validation && !this.props.node.valid(newDatetime)) {
-            error = 'Invalid Date/Time';
+            error = this.props.node.validationFailures[0][1];
         }
         // If there's a callback
         if (this.props.onChange) {
@@ -83,12 +83,20 @@ export default class DefineNodeDatetime extends DefineNodeBase {
      * @access public
      */
     render() {
+        // If there's an error, and we have custom error messages, and the error
+        //	is in the list, use it instead of the default string
+        let sError = this.state.error;
+        if (typeof this.state.error === 'string') {
+            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
+                this.props.display.errors[this.state.error] :
+                this.state.error;
+        }
         // Render
         return (React.createElement(Box, { className: `field_${this.props.name} node_datetime` },
             this.props.label === 'above' &&
                 React.createElement(Typography, null, this.props.display.title),
             React.createElement(Box, { className: "flexColumns" },
-                React.createElement(TextField, { error: this.state.error !== false, helperText: this.state.error, label: this.props.label === 'placeholder' ? this.props.display.title : '', onChange: ev => this.change('date', ev.target.value), onKeyPress: this.keyPressed, type: "date", value: this.state.value.substring(0, 10), variant: this.props.variant }),
+                React.createElement(TextField, { error: this.state.error !== false, helperText: sError, label: this.props.label === 'placeholder' ? this.props.display.title : '', onChange: ev => this.change('date', ev.target.value), onKeyPress: this.keyPressed, type: "date", value: this.state.value.substring(0, 10), variant: this.props.variant }),
                 "\u00A0\u00A0",
                 React.createElement(TextField, { error: this.state.error !== false, onChange: ev => this.change('time', ev.target.value), onKeyPress: this.keyPressed, type: "time", value: this.state.value.substring(11, 19), variant: this.props.variant }))));
     }

@@ -55,7 +55,7 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
         // Check the new value is valid
         let error = false;
         if (this.props.validation && !this.props.node.valid(value)) {
-            error = 'Invalid Value';
+            error = this.props.node.validationFailures[0][1];
         }
         // If there's a callback
         if (this.props.onChange) {
@@ -73,6 +73,14 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
      * @access public
      */
     render() {
+        // If there's an error, and we have custom error messages, and the error
+        //	is in the list, use it instead of the default string
+        let sError = this.state.error;
+        if (typeof this.state.error === 'string') {
+            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
+                this.props.display.errors[this.state.error] :
+                this.state.error;
+        }
         // Render
         return (React.createElement(React.Fragment, null,
             this.props.label === 'above' &&
@@ -84,7 +92,7 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
                         variant: this.props.variant
                     }, onChange: this.change, value: this.state.value === null ? '' : this.state.value }),
                 this.state.error &&
-                    React.createElement(FormHelperText, null, this.state.error))));
+                    React.createElement(FormHelperText, null, sError))));
     }
 }
 // Register with Node

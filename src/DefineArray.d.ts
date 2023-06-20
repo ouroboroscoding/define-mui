@@ -7,9 +7,9 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-14
  */
-/// <reference types="react" />
 import { Base, ArrayNode } from '@ouroboros/define';
 import PropTypes from 'prop-types';
+import React from 'react';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
 import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
@@ -117,7 +117,7 @@ export default class DefineArray extends DefineBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
     /**
      * Reset
      *

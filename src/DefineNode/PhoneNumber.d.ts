@@ -7,7 +7,7 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-17
  */
-/// <reference types="react" />
+import React from 'react';
 import DefineNodeBase from './Base';
 import { DefineNodeBaseProps } from './Base';
 /**
@@ -49,5 +49,5 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }

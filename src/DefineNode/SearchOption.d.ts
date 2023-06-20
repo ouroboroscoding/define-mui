@@ -60,7 +60,7 @@ export default class DefineNodeSearchOption extends React.Component {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
     /**
      * Value (get)
      *

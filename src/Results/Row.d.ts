@@ -62,7 +62,7 @@ export type ResultsRowProps = {
  * @param Object props Properties passed to the component
  * @return React.Component
  */
-declare function ResultsRow(props: ResultsRowProps): JSX.Element;
+declare function ResultsRow(props: ResultsRowProps): React.JSX.Element;
 declare namespace ResultsRow {
     var propTypes: {
         actions: PropTypes.Validator<NonNullable<NonNullable<boolean | any[] | null | undefined>>>;
