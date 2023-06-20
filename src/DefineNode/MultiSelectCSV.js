@@ -172,7 +172,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         // Check the new value is valid
         let error = false;
         if (this.props.validation && !this.props.node.valid(sValue)) {
-            error = 'Invalid Value';
+            error = this.props.node.validationFailures[0][1];
         }
         // If there's a callback
         if (this.props.onChange) {
@@ -196,11 +196,19 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
     render() {
         // Clear refs
         this.checks = [];
+        // If there's an error, and we have custom error messages, and the error
+        //	is in the list, use it instead of the default string
+        let sError = this.state.error;
+        if (typeof this.state.error === 'string') {
+            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
+                this.props.display.errors[this.state.error] :
+                this.state.error;
+        }
         // Initial props
         const props = {
             className: `field_${this.props.name} node_multiselectcsv`,
             error: this.state.error !== false,
-            helperText: this.state.error,
+            helperText: sError,
             type: 'text',
             value: this.state.value === null ? '' : this.state.value,
             variant: this.props.variant,

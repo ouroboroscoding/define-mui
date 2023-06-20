@@ -7,9 +7,9 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-18
  */
-/// <reference types="react" />
 import { Hash } from '@ouroboros/define';
 import PropTypes from 'prop-types';
+import React from 'react';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
 import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
@@ -90,7 +90,7 @@ export default class DefineHash extends DefineBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
     /**
      * Reset
      *

@@ -8,8 +8,8 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-17
  */
-/// <reference types="react" />
 import { SubscribeCallback, SubscribeReturn } from '@ouroboros/subscribe';
+import React from 'react';
 import DefineNodeBase from './Base';
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 type DefineNodeMultiSelectCSVState = {
@@ -105,7 +105,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
     /**
      * Options (set)
      *

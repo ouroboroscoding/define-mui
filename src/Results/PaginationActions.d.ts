@@ -7,7 +7,7 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-18
  */
-/// <reference types="react" />
+import React from 'react';
 import { TablePaginationActionsProps } from '@mui/material/TablePagination/TablePaginationActions';
 /**
  * Pagination Actions
@@ -19,4 +19,4 @@ import { TablePaginationActionsProps } from '@mui/material/TablePagination/Table
  * @param Object props Properties passed to the component
  * @return React.Component
  */
-export default function PaginationActions(props: TablePaginationActionsProps): JSX.Element;
+export default function PaginationActions(props: TablePaginationActionsProps): React.JSX.Element;

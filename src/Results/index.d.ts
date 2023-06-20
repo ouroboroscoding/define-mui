@@ -254,5 +254,5 @@ export default class Results extends React.PureComponent {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }
