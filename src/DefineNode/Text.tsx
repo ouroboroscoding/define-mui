@@ -75,7 +75,7 @@ export default class DefineNodeText extends DefineNodeBase {
 		let error: string | false = false;
 		if(this.props.validation &&
 			!this.props.node.valid(event.target.value === '' ? null : event.target.value)) {
-			error = 'Invalid Value';
+			error = this.props.node.validationFailures[0][1];
 		}
 
 		// If there's a callback
@@ -100,6 +100,15 @@ export default class DefineNodeText extends DefineNodeBase {
 	 */
 	render() {
 
+		// If there's an error, and we have custom error messages, and the error
+		//	is in the list, use it instead of the default string
+		let sError = this.state.error;
+		if(typeof this.state.error === 'string') {
+			sError = this.props.display.errors && this.state.error in this.props.display.errors ?
+						this.props.display.errors[this.state.error] :
+						this.state.error;
+		}
+
 		// Initial inputProps
 		const inputProps: Record<string, any> = {};
 		const iDisplayMax = this.props.display.maximum;
@@ -116,7 +125,7 @@ export default class DefineNodeText extends DefineNodeBase {
 		const props: TextFieldProps = {
 			className: `field_${this.props.name} node_text`,
 			error: this.state.error !== false,
-			helperText: this.state.error,
+			helperText: sError,
 			onKeyPress: this.keyPressed,
 			onChange: this.change,
 			type: 'text',

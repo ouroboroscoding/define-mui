@@ -7,9 +7,9 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-15
  */
-/// <reference types="react" />
 import { Node } from '@ouroboros/define';
 import PropTypes from 'prop-types';
+import React from 'react';
 import DefineBase from '../DefineBase';
 import DefineNodeBase from './Base';
 import DefineNodeSearchOption from './SearchOption';
@@ -148,7 +148,7 @@ export default class DefineNode extends DefineBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
     /**
      * Reset
      *

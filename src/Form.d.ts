@@ -148,7 +148,7 @@ export default class Form extends React.Component {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
     /**
      * Reset
      *

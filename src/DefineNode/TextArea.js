@@ -58,7 +58,7 @@ export default class DefineNodeTextArea extends DefineNodeBase {
         let error = false;
         if (this.props.validation &&
             !this.props.node.valid(event.target.value === '' ? null : event.target.value)) {
-            error = 'Invalid Value';
+            error = this.props.node.validationFailures[0][1];
         }
         // If there's a callback
         if (this.props.onChange) {
@@ -79,11 +79,19 @@ export default class DefineNodeTextArea extends DefineNodeBase {
      * @access public
      */
     render() {
+        // If there's an error, and we have custom error messages, and the error
+        //	is in the list, use it instead of the default string
+        let sError = this.state.error;
+        if (typeof this.state.error === 'string') {
+            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
+                this.props.display.errors[this.state.error] :
+                this.state.error;
+        }
         // Initial props
         const props = {
             className: `field_${this.props.name} node_textarea`,
             error: this.state.error !== false,
-            helperText: this.state.error,
+            helperText: sError,
             multiline: true,
             onChange: this.change,
             type: 'text',

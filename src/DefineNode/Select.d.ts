@@ -86,7 +86,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
      * @name render
      * @access public
      */
-    render(): JSX.Element;
+    render(): React.JSX.Element;
     /**
      * Options (set)
      *
