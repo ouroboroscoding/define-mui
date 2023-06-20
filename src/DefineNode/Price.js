@@ -82,6 +82,11 @@ export default class DefineNodePrice extends DefineNodeBase {
                 this.props.display.errors[this.state.error] :
                 this.state.error;
         }
+        // If we have an adornment override
+        let sAdornment = '$';
+        if (this.props.display.adornment) {
+            sAdornment = this.props.display.adornment;
+        }
         // Initial input props
         const inputProps = {};
         const minmax = this.props.node.minmax();
@@ -103,7 +108,7 @@ export default class DefineNodePrice extends DefineNodeBase {
             variant: this.props.variant,
             inputProps,
             InputProps: {
-                startAdornment: React.createElement(InputAdornment, { position: "start" }, "$"),
+                startAdornment: React.createElement(InputAdornment, { position: "start" }, sAdornment)
             }
         };
         // If the label is a placeholder

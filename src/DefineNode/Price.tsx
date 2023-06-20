@@ -101,6 +101,12 @@ export default class DefineNodePrice extends DefineNodeBase {
 						this.state.error;
 		}
 
+		// If we have an adornment override
+		let sAdornment = '$';
+		if(this.props.display.adornment) {
+			sAdornment = this.props.display.adornment;
+		}
+
 		// Initial input props
 		const inputProps: Record<string, any> = {};
 		const minmax = (this.props.node as Node).minmax() as Types.MinMax;
@@ -123,7 +129,7 @@ export default class DefineNodePrice extends DefineNodeBase {
 			variant: this.props.variant,
 			inputProps,
 			InputProps: {
-				startAdornment: <InputAdornment position="start">$</InputAdornment>,
+				startAdornment: <InputAdornment position="start">{sAdornment}</InputAdornment>
 			}
 		}
 
