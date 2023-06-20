@@ -10,6 +10,7 @@
 // NPM modules
 import React from 'react';
 // Material UI
+import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 // Local components
@@ -118,6 +119,12 @@ export default class DefineNodeText extends DefineNodeBase {
         }
         else if (this.props.placeholder) {
             props.placeholder = this.props.placeholder;
+        }
+        // If there's an adornment
+        if (this.props.display.adornment) {
+            props.InputProps = {
+                startAdornment: React.createElement(InputAdornment, { position: "start" }, this.props.display.adornment)
+            };
         }
         // Render
         return (React.createElement(React.Fragment, null,

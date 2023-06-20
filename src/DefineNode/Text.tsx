@@ -15,6 +15,7 @@ import { Node } from '@ouroboros/define';
 import React from 'react';
 
 // Material UI
+import InputAdornment from '@mui/material/InputAdornment';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
@@ -140,6 +141,13 @@ export default class DefineNodeText extends DefineNodeBase {
 			props.placeholder = this.props.placeholder || this.props.display.title;
 		} else if(this.props.placeholder) {
 			props.placeholder = this.props.placeholder;
+		}
+
+		// If there's an adornment
+		if(this.props.display.adornment) {
+			props.InputProps = {
+				startAdornment: <InputAdornment position="start">{this.props.display.adornment}</InputAdornment>
+			}
 		}
 
 		// Render
