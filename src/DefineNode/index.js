@@ -8,7 +8,7 @@
  * @created 2023-02-15
  */
 // Ouroboros
-import { empty, isObject, ucfirst } from '@ouroboros/tools';
+import { empty, isObject, merge, ucfirst } from '@ouroboros/tools';
 import { Node } from '@ouroboros/define';
 // NPM modules
 import PropTypes from 'prop-types';
@@ -46,6 +46,7 @@ export { DefineNodeBase, DefineNodeBool, DefineNodeDate, DefineNodeDatetime, Def
 export default class DefineNode extends DefineBase {
     // PropTypes data
     static propTypes = {
+        display: PropTypes.object,
         error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
         label: PropTypes.oneOf(['above', 'none', 'placeholder']),
         name: PropTypes.string.isRequired,
@@ -89,7 +90,7 @@ export default class DefineNode extends DefineBase {
         // Set initial state
         this.state = this.generateState();
         // Add the value
-        this.state.value = props.value !== null ? props.value : this.state.display.default;
+        this.state.value = props.value !== null ? props.value : this.state.display.__default__;
         // Child elements
         this._el = null;
         this._search = null;
@@ -106,11 +107,13 @@ export default class DefineNode extends DefineBase {
     componentDidUpdate(prevProps) {
         // Init the new state from the old
         let oState = {};
-        // If the Node changed, overwrite the entire state
-        if (prevProps.node !== this.props.node) {
+        // If the Node changed, or the display overrides changed
+        if (prevProps.node !== this.props.node ||
+            prevProps.display !== this.props.display) {
+            // Overwrite the entire state
             oState = this.generateState();
         }
-        // If the value change
+        // If the value changed, update it in the state
         if (prevProps.value !== this.props.value) {
             oState.value = this.props.value;
         }
@@ -165,7 +168,7 @@ export default class DefineNode extends DefineBase {
             case 'time':
                 return sType;
             default:
-                throw new Error('invalid type in format/Node: ' + sType);
+                throw new Error(`Invalid type in format/Node: ${sType}`);
         }
     }
     /**
@@ -194,20 +197,24 @@ export default class DefineNode extends DefineBase {
      */
     generateState() {
         // Get the react display properties
-        const oReact = this.props.node.special('ui') || {};
+        const oUI = this.props.node.special('ui') || {};
+        // If we have overrides
+        if (this.props.display) {
+            merge(oUI, this.props.display);
+        }
         // If the title is not set
-        if (!('title' in oReact)) {
-            oReact.title = ucfirst(this.props.name);
+        if (!('__title__' in oUI)) {
+            oUI.__title__ = ucfirst(this.props.name);
         }
         // If there's no default
-        if (!('default' in oReact)) {
-            oReact.default = null;
+        if (!('__default__' in oUI)) {
+            oUI.__default__ = null;
         }
         // Return the new state
         return {
-            display: oReact,
-            type: 'type' in oReact ?
-                oReact.type :
+            display: oUI,
+            type: '__type__' in oUI ?
+                oUI.__type__ :
                 this.defaultType(this.props.node),
         };
     }

@@ -34,6 +34,7 @@ export type ResultsProps = {
     actions: actionStruct[] | false;
     custom: Record<string, any>;
     data: Record<string, any>[];
+    display?: Record<string, Record<string, any>>;
     errors: Record<string, any>;
     fields: string[];
     gridSizes: gridSizesStruct;
@@ -72,6 +73,7 @@ export default class Results extends React.PureComponent {
         actions: PropTypes.Requireable<NonNullable<boolean | any[] | null | undefined>>;
         custom: PropTypes.Requireable<object>;
         data: PropTypes.Validator<any[]>;
+        display: PropTypes.Requireable<object>;
         errors: PropTypes.Requireable<object>;
         fields: PropTypes.Requireable<any[]>;
         gridSizes: PropTypes.Requireable<{

@@ -32,6 +32,7 @@ export type ParentChangeEvent = {
     oldValue: any;
 };
 export type DefineParentProps = {
+    display?: Record<string, any>;
     dynamicOptions?: dynamicOptionStruct[];
     error?: Record<string, any>;
     fields?: string[];
@@ -69,6 +70,7 @@ type DefineParentState = {
 export default class DefineParent extends DefineBase {
     static pluginAdd(type: string, classConstructor: typeof DefineNodeBase): void;
     static propTypes: {
+        display: PropTypes.Requireable<object>;
         dynamicOptions: PropTypes.Requireable<(Required<PropTypes.InferProps<{
             node: PropTypes.Validator<string>;
             trigger: PropTypes.Validator<string>;

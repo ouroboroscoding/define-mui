@@ -88,7 +88,7 @@ export default class DefineNodeBool extends DefineNodeBase {
 								checked={this.state.value ? true : false}
 								onChange={this.change}
 							/>}
-					label={<span className={this.state.error !== false ? 'nodeBoolError' : 'false'}>{this.props.display.title}</span>}
+					label={<span className={this.state.error !== false ? 'nodeBoolError' : 'false'}>{this.props.display.__title__}</span>}
 				/>
 			</Box>
 		);

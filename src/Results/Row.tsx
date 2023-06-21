@@ -63,6 +63,7 @@ export type ResultsRowProps = {
 	actions: actionStruct[] | false,
 	custom: Record<string, any>,
 	data: Record<string, any>,
+	display?: Record<string, any>,
 	errors?: Record<string, any>,
 	fields: string[],
 	gridSizes?: gridSizesStruct,
@@ -406,6 +407,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 				<TableRow>
 					<TableCell colSpan={props.fields.length + 1}>
 						<Form
+							display={props.display}
 							gridSizes={props.gridSizes}
 							gridSpacing={props.gridSpacing}
 							onCancel={() => updateSet(false)}
@@ -442,6 +444,7 @@ ResultsRow.propTypes = {
 	actions: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]).isRequired,
 	custom: PropTypes.object.isRequired,
 	data: PropTypes.object.isRequired,
+	display: PropTypes.object,
 	errors: PropTypes.object.isRequired,
 	fields: PropTypes.array.isRequired,
 	gridSizes: PropTypes.objectOf(

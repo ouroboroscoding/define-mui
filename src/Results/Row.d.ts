@@ -40,6 +40,7 @@ export type ResultsRowProps = {
     actions: actionStruct[] | false;
     custom: Record<string, any>;
     data: Record<string, any>;
+    display?: Record<string, any>;
     errors?: Record<string, any>;
     fields: string[];
     gridSizes?: gridSizesStruct;
@@ -68,6 +69,7 @@ declare namespace ResultsRow {
         actions: PropTypes.Validator<NonNullable<NonNullable<boolean | any[] | null | undefined>>>;
         custom: PropTypes.Validator<object>;
         data: PropTypes.Validator<object>;
+        display: PropTypes.Requireable<object>;
         errors: PropTypes.Validator<object>;
         fields: PropTypes.Validator<any[]>;
         gridSizes: PropTypes.Requireable<{

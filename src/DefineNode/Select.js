@@ -47,7 +47,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
         // Call parent
         super(props);
         // If we have display options
-        let lDisplayOptions = props.display.options;
+        let lDisplayOptions = props.display.__options__;
         // If we got data
         if (lDisplayOptions) {
             // If the options are a dynamic Subscribe
@@ -86,7 +86,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
         // If there's a callback for dynamic options
         if (this.callback) {
             // Subscribe to the changes in options
-            this.subscribe = this.props.display.options.subscribe(this.callback);
+            this.subscribe = this.props.display.__options__.subscribe(this.callback);
             // Store the current options
             this.setState({ options: this.subscribe.data });
         }
@@ -164,8 +164,8 @@ export default class DefineNodeSelect extends DefineNodeBase {
         //	is in the list, use it instead of the default string
         let sError = this.state.error;
         if (typeof this.state.error === 'string') {
-            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-                this.props.display.errors[this.state.error] :
+            sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+                this.props.display.__errors__[this.state.error] :
                 this.state.error;
         }
         // Init the option elements
@@ -178,11 +178,11 @@ export default class DefineNodeSelect extends DefineNodeBase {
         }
         return (React.createElement(React.Fragment, null,
             this.props.label === 'above' &&
-                React.createElement(Typography, null, this.props.display.title),
+                React.createElement(Typography, null, this.props.display.__title__),
             React.createElement(FormControl, { className: `field_${this.props.name} node_select`, error: this.state.error !== false, variant: this.props.variant },
                 this.props.label === 'placeholder' &&
-                    React.createElement(InputLabel, { id: this.props.name }, this.props.display.title),
-                React.createElement(Select, { label: this.props.display.title, labelId: this.props.name, native: true, onChange: this.change, value: this.state.value === null ? '' : this.state.value }, lOpts),
+                    React.createElement(InputLabel, { id: this.props.name }, this.props.display.__title__),
+                React.createElement(Select, { label: this.props.display.__title__, labelId: this.props.name, native: true, onChange: this.change, value: this.state.value === null ? '' : this.state.value }, lOpts),
                 this.state.error &&
                     React.createElement(FormHelperText, null, sError))));
     }

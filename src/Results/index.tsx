@@ -12,7 +12,7 @@
 import clone from '@ouroboros/clone';
 import { Decimal, Node, Tree } from '@ouroboros/define';
 import Subscribe, { SubscribeCallback } from '@ouroboros/subscribe';
-import { ucfirst } from '@ouroboros/tools';
+import { merge, ucfirst } from '@ouroboros/tools';
 
 // NPM modules
 import { createObjectCsvStringifier } from 'csv-writer-browser';
@@ -61,6 +61,7 @@ export type ResultsProps = {
 	actions: actionStruct[] | false,
 	custom: Record<string, any>,
 	data: Record<string, any>[],
+	display?: Record<string, Record<string, any>>,
 	errors: Record<string, any>,
 	fields: string[],
 	gridSizes: gridSizesStruct,
@@ -102,6 +103,7 @@ export default class Results extends React.PureComponent {
 		actions: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 		custom: PropTypes.object,
 		data: PropTypes.array.isRequired,
+		display: PropTypes.object,
 		errors: PropTypes.object,
 		fields: PropTypes.array,
 		gridSizes: PropTypes.objectOf(
@@ -185,13 +187,18 @@ export default class Results extends React.PureComponent {
 		// Get the display options
 		const oUI = props.tree.special('ui') || {};
 
+		// If there's overrides
+		if(props.display) {
+			merge(oUI, props.display);
+		}
+
 		// If there's no primary, assume '_id'
-		if(!('primary' in oUI)) {
-			oUI.primary = '_id';
+		if(!('__primary__' in oUI)) {
+			oUI.__primary__ = '_id';
 		}
 
 		// If there's no copyPrimary field, assume true
-		if(!('copyPrimary' in oUI)) {
+		if(!('__copyPrimary__' in oUI)) {
 			oUI.copyPrimary = true;
 		}
 
@@ -199,10 +206,10 @@ export default class Results extends React.PureComponent {
 		//	in the tree
 		if(props.fields.length !== 0) {
 			this.fields = props.fields;
-		} else if('results' in oUI) {
-			this.fields = oUI.results;
-		} else if('order' in oUI) {
-			this.fields = oUI.order;
+		} else if('__results__' in oUI) {
+			this.fields = oUI.__results__;
+		} else if('__order__' in oUI) {
+			this.fields = oUI.__order__;
 		} else {
 			this.fields = this.props.tree.keys();
 		}
@@ -217,16 +224,25 @@ export default class Results extends React.PureComponent {
 			// Get the react section
 			const oNode = props.tree.get(k).special('ui') || {};
 
+			// If there are overrides
+			if(this.props.display) {
+
+				// And the field exists, merge it with the node's ui data
+				if(this.props.display[k]) {
+					merge(oNode, this.props.display[k]);
+				}
+			}
+
 			// Set the title
 			this.titles.push({
 				key: k,
-				text: ('title' in oNode) ? oNode.title : ucfirst(k.replace(/_/g, ' '))
+				text: ('__title__' in oNode) ? oNode.__title__ : ucfirst(k.replace(/_/g, ' '))
 			});
 
 			// Set the type
 			//	If we have a specifically passed type
-			if(oNode.type) {
-				oTypes[k] = oNode.type
+			if(oNode.__type__) {
+				oTypes[k] = oNode.__type__
 			}
 
 			//	If it's a node
@@ -240,17 +256,17 @@ export default class Results extends React.PureComponent {
 			}
 
 			// If there's options
-			if(oNode.options) {
+			if(oNode.__options__) {
 
 				// If the options are a dynamic Subscribe
-				if(oNode.options instanceof Subscribe) {
+				if(oNode.__options__ instanceof Subscribe) {
 					oOptions[k] = true;
 					this.dynCallbacks[k] = {
-						optionsInstance: oNode.options,
+						optionsInstance: oNode.__options__,
 						callback: this._optionCallback.bind(this, k)
 					}
 				} else {
-					oOptions[k] = oNode.options.reduce((o: Record<string, string>, l: string[]) => Object.assign(o, {[l[0]]: l[1]}), {});
+					oOptions[k] = oNode.__options__.reduce((o: Record<string, string>, l: string[]) => Object.assign(o, {[l[0]]: l[1]}), {});
 				}
 			}
 		}
@@ -258,7 +274,7 @@ export default class Results extends React.PureComponent {
 		// Store rest info
 		this.info = {
 			copyPrimary: oUI.copyPrimary,
-			primary: oUI.primary,
+			primary: oUI.__primary__,
 			tree: props.tree,
 			types: oTypes
 		}
@@ -605,6 +621,7 @@ export default class Results extends React.PureComponent {
 								actions={this.props.actions}
 								custom={this.props.custom}
 								data={row}
+								display={this.props.display}
 								errors={this.props.errors}
 								fields={this.fields}
 								gridSizes={this.props.gridSizes}

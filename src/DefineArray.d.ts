@@ -14,6 +14,7 @@ import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
 import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 type DefineArrayProps = {
+    display?: Record<string, any>;
     error?: any;
     label?: labelOptions;
     name: string;
@@ -52,6 +53,7 @@ export default class DefineArray extends DefineBase {
     props: DefineArrayProps;
     state: DefineArrayState;
     static propTypes: {
+        display: PropTypes.Requireable<object>;
         error: PropTypes.Requireable<object>;
         label: PropTypes.Requireable<string>;
         name: PropTypes.Validator<string>;

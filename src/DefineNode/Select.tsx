@@ -74,7 +74,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		super(props);
 
 		// If we have display options
-		let lDisplayOptions = props.display.options;
+		let lDisplayOptions = props.display.__options__;
 
 		// If we got data
 		if(lDisplayOptions) {
@@ -123,7 +123,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		if(this.callback) {
 
 			// Subscribe to the changes in options
-			this.subscribe = this.props.display.options.subscribe(this.callback);
+			this.subscribe = this.props.display.__options__.subscribe(this.callback);
 
 			// Store the current options
 			this.setState({ options: this.subscribe.data });
@@ -215,8 +215,8 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		//	is in the list, use it instead of the default string
 		let sError = this.state.error;
 		if(typeof this.state.error === 'string') {
-			sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-						this.props.display.errors[this.state.error] :
+			sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+						this.props.display.__errors__[this.state.error] :
 						this.state.error;
 		}
 
@@ -233,14 +233,14 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		return (
 			<React.Fragment>
 				{this.props.label === 'above' &&
-					<Typography>{this.props.display.title}</Typography>
+					<Typography>{this.props.display.__title__}</Typography>
 				}
 				<FormControl className={`field_${this.props.name} node_select`} error={this.state.error !== false} variant={this.props.variant}>
 					{this.props.label === 'placeholder' &&
-						<InputLabel id={this.props.name}>{this.props.display.title}</InputLabel>
+						<InputLabel id={this.props.name}>{this.props.display.__title__}</InputLabel>
 					}
 					<Select
-						label={this.props.display.title}
+						label={this.props.display.__title__}
 						labelId={this.props.name}
 						native
 						onChange={this.change}

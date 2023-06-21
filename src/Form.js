@@ -9,7 +9,7 @@
  */
 // Ouroboros modules
 import { Tree } from '@ouroboros/define';
-import { empty } from '@ouroboros/tools';
+import { empty, merge } from '@ouroboros/tools';
 // NPM modules
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -31,6 +31,7 @@ import DefineParent from './DefineParent';
 export default class Form extends React.Component {
     // Prop Types
     static propTypes = {
+        display: PropTypes.object,
         dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
             node: PropTypes.string.isRequired,
             trigger: PropTypes.string.isRequired,
@@ -82,13 +83,17 @@ export default class Form extends React.Component {
         super(props);
         // Get the display options
         const oUI = props.tree.special('ui') || {};
+        // If there's overrides
+        if (props.display) {
+            merge(oUI, props.display);
+        }
         // If there's no primary, assume '_id'
-        if (!('primary' in oUI)) {
-            oUI.primary = '_id';
+        if (!('__primary__' in oUI)) {
+            oUI.__primary__ = '_id';
         }
         // Set the initial state
         this.state = {
-            primary: oUI.primary
+            primary: oUI.__primary__
         };
         // Bind methods
         this._cancel = this._cancel.bind(this);
@@ -211,7 +216,7 @@ export default class Form extends React.Component {
         return (React.createElement(Box, { className: "form _" + this.props.tree._name },
             title &&
                 React.createElement(Typography, { className: "form_title" }, title),
-            React.createElement(DefineParent, { dynamicOptions: this.props.dynamicOptions, fields: this.props.fields, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.props.tree._name, node: this.props.tree, onEnterPressed: this._submit, onNodeChange: this.props.onNodeChange, type: this.props.type, value: this.props.value }),
+            React.createElement(DefineParent, { display: this.props.display, dynamicOptions: this.props.dynamicOptions, fields: this.props.fields, gridSizes: this.props.gridSizes, label: this.props.label, ref: (el) => this.parent = el, name: this.props.tree._name, node: this.props.tree, onEnterPressed: this._submit, onNodeChange: this.props.onNodeChange, type: this.props.type, value: this.props.value }),
             React.createElement(Box, { className: "actions" },
                 this.props.onCancel &&
                     React.createElement(Button, { variant: "contained", color: "secondary", onClick: this._cancel }, "Cancel"),

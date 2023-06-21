@@ -16,6 +16,7 @@ import { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './De
 export type onCancelCallback = () => void;
 export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
+    display?: Record<string, any>;
     dynamicOptions?: dynamicOptionStruct[];
     fields?: string[];
     gridSizes?: gridSizesStruct;
@@ -44,6 +45,7 @@ export type FormState = {
  */
 export default class Form extends React.Component {
     static propTypes: {
+        display: PropTypes.Requireable<object>;
         dynamicOptions: PropTypes.Requireable<(Required<PropTypes.InferProps<{
             node: PropTypes.Validator<string>;
             trigger: PropTypes.Validator<string>;

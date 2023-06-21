@@ -10,7 +10,7 @@
 // Ouroboros
 import clone from '@ouroboros/clone';
 import { ArrayNode } from '@ouroboros/define';
-import { afindi, ucfirst } from '@ouroboros/tools';
+import { afindi, merge, ucfirst } from '@ouroboros/tools';
 // NPM modules
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -48,6 +48,7 @@ export default class DefineArray extends DefineBase {
     state;
     // PropTypes variables
     static propTypes = {
+        display: PropTypes.object,
         error: PropTypes.object,
         label: PropTypes.oneOf(['above', 'none', 'placeholder']),
         name: PropTypes.string.isRequired,
@@ -85,12 +86,16 @@ export default class DefineArray extends DefineBase {
         this.nodes = {};
         // Get the react display properties
         const oUI = props.node.special('ui') || {};
+        // If we have overrides
+        if (props.display) {
+            merge(oUI, props.display);
+        }
         // If the title is not set
-        if (!('title' in oUI)) {
-            oUI.title = ucfirst(props.name || '');
+        if (!('__title__' in oUI)) {
+            oUI.__title__ = ucfirst(props.name || '');
         }
         // The type
-        const mType = 'type' in oUI ? oUI.type : null;
+        const mType = '__type__' in oUI ? oUI.__type__ : null;
         // Init state
         this.state = {
             plugin: null,
@@ -215,10 +220,11 @@ export default class DefineArray extends DefineBase {
         }
         // Render
         return (React.createElement(Box, { className: "nodeArray" },
-            this.state.display.title &&
-                React.createElement(Typography, { className: "legend" }, this.state.display.title),
+            this.state.display.__title__ &&
+                React.createElement(Typography, { className: "legend" }, this.state.display.__title__),
             this.state.elements.map(o => React.createElement(Box, { key: o.key, className: "element flexColumns" },
                 React.createElement(Box, { className: "data flexGrow" }, DefineBase.create(this.state.nodeClass, {
+                    display: this.props.display,
                     ref: (el) => this.nodes[o.key] = el,
                     name: this.props.name,
                     node: this.child,
