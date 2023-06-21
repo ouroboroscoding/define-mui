@@ -10,7 +10,7 @@
 
 // Ouroboros modules
 import{ Tree } from '@ouroboros/define';
-import { empty, isObject } from '@ouroboros/tools';
+import { empty, merge } from '@ouroboros/tools';
 
 // NPM modules
 import PropTypes from 'prop-types';
@@ -30,6 +30,7 @@ import { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './De
 export type onCancelCallback = () => void;
 export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
+	display?: Record<string, any>,
 	dynamicOptions?: dynamicOptionStruct[],
 	fields?: string[],
 	gridSizes?: gridSizesStruct,
@@ -61,6 +62,7 @@ export default class Form extends React.Component {
 
 	// Prop Types
 	static propTypes = {
+		display: PropTypes.object,
 		dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
 			node: PropTypes.string.isRequired,
 			trigger: PropTypes.string.isRequired,
@@ -123,14 +125,19 @@ export default class Form extends React.Component {
 		// Get the display options
 		const oUI = props.tree.special('ui') || {};
 
+		// If there's overrides
+		if(props.display) {
+			merge(oUI, props.display);
+		}
+
 		// If there's no primary, assume '_id'
-		if(!('primary' in oUI)) {
-			oUI.primary = '_id';
+		if(!('__primary__' in oUI)) {
+			oUI.__primary__ = '_id';
 		}
 
 		// Set the initial state
 		this.state = {
-			primary: oUI.primary
+			primary: oUI.__primary__
 		}
 
 		// Bind methods
@@ -277,6 +284,7 @@ export default class Form extends React.Component {
 					<Typography className="form_title">{title}</Typography>
 				}
 				<DefineParent
+					display={this.props.display}
 					dynamicOptions={this.props.dynamicOptions}
 					fields={this.props.fields}
 					gridSizes={this.props.gridSizes}

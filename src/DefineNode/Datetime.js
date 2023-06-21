@@ -87,16 +87,16 @@ export default class DefineNodeDatetime extends DefineNodeBase {
         //	is in the list, use it instead of the default string
         let sError = this.state.error;
         if (typeof this.state.error === 'string') {
-            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-                this.props.display.errors[this.state.error] :
+            sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+                this.props.display.__errors__[this.state.error] :
                 this.state.error;
         }
         // Render
         return (React.createElement(Box, { className: `field_${this.props.name} node_datetime` },
             this.props.label === 'above' &&
-                React.createElement(Typography, null, this.props.display.title),
+                React.createElement(Typography, null, this.props.display.__title__),
             React.createElement(Box, { className: "flexColumns" },
-                React.createElement(TextField, { error: this.state.error !== false, helperText: sError, label: this.props.label === 'placeholder' ? this.props.display.title : '', onChange: ev => this.change('date', ev.target.value), onKeyPress: this.keyPressed, type: "date", value: this.state.value.substring(0, 10), variant: this.props.variant }),
+                React.createElement(TextField, { error: this.state.error !== false, helperText: sError, label: this.props.label === 'placeholder' ? this.props.display.__title__ : '', onChange: ev => this.change('date', ev.target.value), onKeyPress: this.keyPressed, type: "date", value: this.state.value.substring(0, 10), variant: this.props.variant }),
                 "\u00A0\u00A0",
                 React.createElement(TextField, { error: this.state.error !== false, onChange: ev => this.change('time', ev.target.value), onKeyPress: this.keyPressed, type: "time", value: this.state.value.substring(11, 19), variant: this.props.variant }))));
     }

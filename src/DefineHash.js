@@ -8,7 +8,7 @@
  * @created 2023-02-18
  */
 // Ouroboros
-import { ucfirst } from '@ouroboros/tools';
+import { merge, ucfirst } from '@ouroboros/tools';
 import { Hash } from '@ouroboros/define';
 // NPM modules
 import PropTypes from 'prop-types';
@@ -38,6 +38,7 @@ export default class DefineHash extends DefineBase {
     }
     // Props Types
     static propTypes = {
+        display: PropTypes.object,
         label: PropTypes.oneOf(['above', 'none', 'placeholder']),
         name: PropTypes.string,
         node: PropTypes.instanceOf(Hash).isRequired,
@@ -72,23 +73,27 @@ export default class DefineHash extends DefineBase {
     constructor(props) {
         // Call parent
         super(props);
-        // Get the react display properties
+        // Get the UI display properties off the node
         const oUI = this.props.node.special('ui') || {};
+        // If we have overrides
+        if (this.props.display) {
+            merge(oUI, this.props.display);
+        }
         // If the title is not set
-        if (!('title' in oUI)) {
-            oUI.title = ucfirst(props.name);
+        if (!('__title__' in oUI)) {
+            oUI.__title__ = ucfirst(props.name);
         }
         // If the type is not set
-        if (!('type' in oUI)) {
-            throw new Error('Custom "type" must be set for Hash nodes as there is no standard implementation for them.');
+        if (!('__type__' in oUI)) {
+            throw new Error('Custom "__type__" must be set for Hash nodes as there is no standard implementation for them.');
         }
         // If there is no registered Component for the type
-        if (!(oUI.type in _plugins)) {
-            throw new Error('No registered Component found for type: ' + oUI.type + '.');
+        if (!(oUI.__type__ in _plugins)) {
+            throw new Error('No registered Component found for type: ' + oUI.__type__ + '.');
         }
         // Init state
         this.state = {
-            plugin: _plugins[oUI.type],
+            plugin: _plugins[oUI.__type__],
             display: oUI
         };
     }
@@ -141,8 +146,8 @@ export default class DefineHash extends DefineBase {
         };
         // Render custom type
         return (React.createElement(Box, { className: "nodeHash" },
-            this.state.display.title &&
-                React.createElement(Typography, { className: "legend" }, this.state.display.title),
+            this.state.display.__title__ &&
+                React.createElement(Typography, { className: "legend" }, this.state.display.__title__),
             React.createElement(ElName, { ...oProps })));
     }
     /**

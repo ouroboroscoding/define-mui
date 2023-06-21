@@ -54,7 +54,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         // Call parent
         super(props);
         // If we have display options
-        let lDisplayOptions = props.display.options;
+        let lDisplayOptions = props.display.__options__;
         // If we got data
         if (lDisplayOptions) {
             // If the options are a dynamic Subscribe instance
@@ -94,7 +94,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         // If there's a callback for dynamic options
         if (this.callback) {
             // Subscribe to the changes in options
-            this.subscribe = this.props.display.options.subscribe(this.callback);
+            this.subscribe = this.props.display.__options__.subscribe(this.callback);
             // Store the current options
             this.setState({ options: this.subscribe.data });
         }
@@ -200,8 +200,8 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         //	is in the list, use it instead of the default string
         let sError = this.state.error;
         if (typeof this.state.error === 'string') {
-            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-                this.props.display.errors[this.state.error] :
+            sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+                this.props.display.__errors__[this.state.error] :
                 this.state.error;
         }
         // Initial props
@@ -220,19 +220,19 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
         };
         // If the label is a placeholder, add additional props
         if (this.props.label === 'placeholder') {
-            props.label = this.props.display.title;
-            props.placeholder = this.props.placeholder || this.props.display.title;
+            props.label = this.props.display.__title__;
+            props.placeholder = this.props.placeholder || this.props.display.__title__;
         }
         else if (this.props.placeholder) {
             props.placeholder = this.props.placeholder;
         }
         return (React.createElement(React.Fragment, null,
             this.props.label === 'above' &&
-                React.createElement(Typography, null, this.props.display.title),
+                React.createElement(Typography, null, this.props.display.__title__),
             React.createElement(TextField, { ...props }),
             this.state.defaultValues !== null &&
                 React.createElement(Dialog, { maxWidth: "lg", onClose: this.cancel, open: true },
-                    React.createElement(DialogTitle, null, this.props.display.title),
+                    React.createElement(DialogTitle, null, this.props.display.__title__),
                     React.createElement(DialogContent, { dividers: true },
                         React.createElement(Grid, { container: true, spacing: 2 }, this.state.options.map(o => React.createElement(Grid, { item: true, xs: 12, md: 4, lg: 2, key: o[0] },
                             React.createElement(FormControlLabel, { control: React.createElement(Checkbox, { color: "primary", defaultChecked: this.state.defaultValues.includes(o[0]) ? true : false, inputRef: ref => this.checks.push(ref), inputProps: {

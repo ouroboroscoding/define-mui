@@ -14,6 +14,7 @@ import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
 import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 export type DefineHashProps = {
+    display?: Record<string, any>;
     error?: any;
     label?: labelOptions;
     name: string;
@@ -41,6 +42,7 @@ type DefineHashState = {
 export default class DefineHash extends DefineBase {
     static pluginAdd(type: string, classConstructor: typeof DefineNodeBase): void;
     static propTypes: {
+        display: PropTypes.Requireable<object>;
         label: PropTypes.Requireable<string>;
         name: PropTypes.Requireable<string>;
         node: PropTypes.Validator<Hash>;

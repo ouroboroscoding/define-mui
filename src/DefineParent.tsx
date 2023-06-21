@@ -9,7 +9,7 @@
  */
 
 // Ouroboros
-import { compare, empty } from '@ouroboros/tools';
+import { compare, empty, merge } from '@ouroboros/tools';
 import { Parent } from '@ouroboros/define';
 
 // NPM modules
@@ -56,6 +56,7 @@ export type ParentChangeEvent = {
 	oldValue: any
 };
 export type DefineParentProps = {
+	display?: Record<string, any>,
 	dynamicOptions?: dynamicOptionStruct[],
 	error?: Record<string, any>,
 	fields?: string[],
@@ -104,6 +105,7 @@ export default class DefineParent extends DefineBase {
 
 	// Props Types
 	static propTypes = {
+		display: PropTypes.object,
 		dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
 			node: PropTypes.string.isRequired,
 			trigger: PropTypes.string.isRequired,
@@ -197,8 +199,9 @@ export default class DefineParent extends DefineBase {
 			}
 		}
 
-		// If the Node changed
-		if(prevProps.node !== this.props.node) {
+		// If the Node changed, or the overrides changed
+		if(prevProps.node !== this.props.node ||
+			prevProps.display !== this.props.display) {
 			this.setState(this.generateState());
 		}
 
@@ -268,18 +271,23 @@ export default class DefineParent extends DefineBase {
 		// Get the React special section if there is one
 		const oUI = this.props.node.special('ui') || {};
 
+		// If there's overrides
+		if(this.props.display) {
+			merge(oUI, this.props.display);
+		}
+
 		// Init the state
 		const oState: DefineParentState = {
 			display: oUI,
 			plugin: null,
-			title: oUI.title || false
+			title: oUI.__title__ || false
 		};
 
 		// If we have a type
-		if(oUI.type && oUI.type in _plugins) {
+		if(oUI.__type__ && oUI.__type__ in _plugins) {
 
 			// Set the plugin
-			oState.plugin = _plugins[oUI.type];
+			oState.plugin = _plugins[oUI.__type__];
 
 		} else {
 
@@ -295,13 +303,13 @@ export default class DefineParent extends DefineBase {
 			}
 
 			// Else, if we have the specific type in the react section
-			else if(this.props.type in oUI) {
-				lOrder = oUI[this.props.type];
+			else if(`__${this.props.type}__` in oUI) {
+				lOrder = oUI[`__${this.props.type}__`];
 			}
 
 			// Else, if we have the generic 'order' in the react section
-			else if('order' in oUI) {
-				lOrder = oUI.order;
+			else if('__order__' in oUI) {
+				lOrder = oUI.__order__;
 			}
 
 			// Else, just use the keys of the node
@@ -366,6 +374,11 @@ export default class DefineParent extends DefineBase {
 								(this.props.gridSizes as gridSizesStruct).__default__ ||
 								{xs: 12}
 
+				// Display override
+				const mDisplay = (this.props.display &&
+									this.props.display[sField]) ||
+									undefined;
+
 				// Check what kind of node it is
 				switch(sClass) {
 					case 'ArrayNode':
@@ -374,6 +387,7 @@ export default class DefineParent extends DefineBase {
 						lElements.push(
 							<Grid key={sField} item {...gridSizes}>
 								{DefineBase.create(sClass, {
+									display: mDisplay,
 									gridSizes,
 									label: this.props.label,
 									nodeVariant: this.props.nodeVariant,
@@ -391,6 +405,7 @@ export default class DefineParent extends DefineBase {
 						break;
 					case 'Node':
 						const oProps: DefineNodeProps = {
+							display: mDisplay,
 							error: false,
 							label: this.props.label,
 							ref: (el: DefineBase) => this.fields[sField] = el,

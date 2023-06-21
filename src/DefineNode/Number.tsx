@@ -105,8 +105,8 @@ export default class DefineNodeNumber extends DefineNodeBase {
 		//	is in the list, use it instead of the default string
 		let sError = this.state.error;
 		if(typeof this.state.error === 'string') {
-			sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-						this.props.display.errors[this.state.error] :
+			sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+						this.props.display.__errors__[this.state.error] :
 						this.state.error;
 		}
 
@@ -125,8 +125,8 @@ export default class DefineNodeNumber extends DefineNodeBase {
 
 		// If the label is a placeholder
 		if(this.props.label === 'placeholder') {
-			props.label = this.props.display.title;
-			props.placeholder = this.props.placeholder || this.props.display.title;
+			props.label = this.props.display.__title__;
+			props.placeholder = this.props.placeholder || this.props.display.__title__;
 		} else if(this.props.placeholder) {
 			props.placeholder = this.props.placeholder;
 		}
@@ -135,7 +135,7 @@ export default class DefineNodeNumber extends DefineNodeBase {
 		return (
 			<React.Fragment>
 				{this.props.label === 'above' &&
-					<Typography>{this.props.display.title}</Typography>
+					<Typography>{this.props.display.__title__}</Typography>
 				}
 				<TextField {...props} />
 			</React.Fragment>

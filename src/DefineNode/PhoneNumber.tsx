@@ -92,8 +92,8 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
 		//	is in the list, use it instead of the default string
 		let sError = this.state.error;
 		if(typeof this.state.error === 'string') {
-			sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-						this.props.display.errors[this.state.error] :
+			sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+						this.props.display.__errors__[this.state.error] :
 						this.state.error;
 		}
 
@@ -101,13 +101,13 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
 		return (
 			<React.Fragment>
 				{this.props.label === 'above' &&
-					<Typography>{this.props.display.title}</Typography>
+					<Typography>{this.props.display.__title__}</Typography>
 				}
 				<FormControl className={`field_${this.props.name} node_phone_number`} error={this.state.error !== false}>
 					<PhoneInput
 						component={TextField}
 						inputProps={{
-							label: this.props.display.title,
+							label: this.props.display.__title__,
 							onKeyPress: this.keyPressed,
 							variant: this.props.variant
 						}}
