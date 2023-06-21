@@ -82,7 +82,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 		super(props);
 
 		// If we have display options
-		let lDisplayOptions = props.display.options;
+		let lDisplayOptions = props.display.__options__;
 
 		// If we got data
 		if(lDisplayOptions) {
@@ -132,7 +132,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 		if(this.callback) {
 
 			// Subscribe to the changes in options
-			this.subscribe = this.props.display.options.subscribe(this.callback);
+			this.subscribe = this.props.display.__options__.subscribe(this.callback);
 
 			// Store the current options
 			this.setState({ options: this.subscribe.data });
@@ -259,8 +259,8 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 		//	is in the list, use it instead of the default string
 		let sError = this.state.error;
 		if(typeof this.state.error === 'string') {
-			sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-						this.props.display.errors[this.state.error] :
+			sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+						this.props.display.__errors__[this.state.error] :
 						this.state.error;
 		}
 
@@ -281,8 +281,8 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 
 		// If the label is a placeholder, add additional props
 		if(this.props.label === 'placeholder') {
-			props.label = this.props.display.title;
-			props.placeholder = this.props.placeholder || this.props.display.title;
+			props.label = this.props.display.__title__;
+			props.placeholder = this.props.placeholder || this.props.display.__title__;
 		} else if(this.props.placeholder) {
 			props.placeholder = this.props.placeholder;
 		}
@@ -290,7 +290,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 		return (
 			<React.Fragment>
 				{this.props.label === 'above' &&
-					<Typography>{this.props.display.title}</Typography>
+					<Typography>{this.props.display.__title__}</Typography>
 				}
 				<TextField {...props} />
 				{this.state.defaultValues !== null &&
@@ -299,7 +299,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 						onClose={this.cancel}
 						open={true}
 					>
-					<DialogTitle>{this.props.display.title}</DialogTitle>
+					<DialogTitle>{this.props.display.__title__}</DialogTitle>
 					<DialogContent dividers>
 						<Grid container spacing={2}>
 							{this.state.options.map(o =>

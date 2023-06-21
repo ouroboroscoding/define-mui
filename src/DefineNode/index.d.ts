@@ -34,6 +34,7 @@ export type variantOptions = 'filled' | 'outlined' | 'standard';
 export type onChangeCallback = (value: any, oldValue: any) => void;
 export type onEnterPressedCallback = () => void;
 export type DefineNodeProps = {
+    display?: Record<string, any>;
     error: string | false;
     label?: labelOptions;
     name: string;
@@ -63,6 +64,7 @@ type DefineNodeState = {
  */
 export default class DefineNode extends DefineBase {
     static propTypes: {
+        display: PropTypes.Requireable<object>;
         error: PropTypes.Requireable<NonNullable<string | boolean | null | undefined>>;
         label: PropTypes.Requireable<string>;
         name: PropTypes.Validator<string>;

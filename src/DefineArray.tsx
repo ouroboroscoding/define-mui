@@ -11,7 +11,7 @@
 // Ouroboros
 import clone from '@ouroboros/clone';
 import { Base, ArrayNode } from '@ouroboros/define';
-import { afindi, ucfirst } from '@ouroboros/tools';
+import { afindi, merge, ucfirst } from '@ouroboros/tools';
 
 // NPM modules
 import PropTypes from 'prop-types';
@@ -43,6 +43,7 @@ import {
 } from './DefineNode';
 import { DefineNodeBaseProps } from './DefineNode/Base';
 type DefineArrayProps = {
+	display?: Record<string, any>,
 	error?: any,
 	label?: labelOptions,
 	name: string,
@@ -94,6 +95,7 @@ export default class DefineArray extends DefineBase {
 
 	// PropTypes variables
 	static propTypes = {
+		display: PropTypes.object,
 		error: PropTypes.object,
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
 		name: PropTypes.string.isRequired,
@@ -137,13 +139,18 @@ export default class DefineArray extends DefineBase {
 		// Get the react display properties
 		const oUI = props.node.special('ui') || {}
 
+		// If we have overrides
+		if(props.display) {
+			merge(oUI, props.display);
+		}
+
 		// If the title is not set
-		if(!('title' in oUI) ) {
-			oUI.title = ucfirst(props.name || '') ;
+		if(!('__title__' in oUI) ) {
+			oUI.__title__ = ucfirst(props.name || '') ;
 		}
 
 		// The type
-		const mType = 'type' in oUI ? oUI.type : null;
+		const mType = '__type__' in oUI ? oUI.__type__ : null;
 
 		// Init state
 		this.state = {
@@ -294,13 +301,14 @@ export default class DefineArray extends DefineBase {
 		// Render
 		return (
 			<Box className="nodeArray">
-				{this.state.display.title &&
-					<Typography className="legend">{this.state.display.title}</Typography>
+				{this.state.display.__title__ &&
+					<Typography className="legend">{this.state.display.__title__}</Typography>
 				}
 				{this.state.elements.map(o =>
 					<Box key={o.key} className="element flexColumns">
 						<Box className="data flexGrow">
 							{DefineBase.create(this.state.nodeClass, {
+								display: this.props.display,
 								ref: (el: DefineBase) => (this.nodes as Record<string, DefineBase>)[o.key] = el,
 								name: (this.props as DefineArrayProps).name,
 								node: this.child,

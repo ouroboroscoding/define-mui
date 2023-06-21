@@ -11,7 +11,7 @@
 import clone from '@ouroboros/clone';
 import { Decimal, Tree } from '@ouroboros/define';
 import Subscribe from '@ouroboros/subscribe';
-import { ucfirst } from '@ouroboros/tools';
+import { merge, ucfirst } from '@ouroboros/tools';
 // NPM modules
 import { createObjectCsvStringifier } from 'csv-writer-browser';
 import PropTypes from 'prop-types';
@@ -48,6 +48,7 @@ export default class Results extends React.PureComponent {
         actions: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
         custom: PropTypes.object,
         data: PropTypes.array.isRequired,
+        display: PropTypes.object,
         errors: PropTypes.object,
         fields: PropTypes.array,
         gridSizes: PropTypes.objectOf(PropTypes.exact({
@@ -118,12 +119,16 @@ export default class Results extends React.PureComponent {
         super(props);
         // Get the display options
         const oUI = props.tree.special('ui') || {};
+        // If there's overrides
+        if (props.display) {
+            merge(oUI, props.display);
+        }
         // If there's no primary, assume '_id'
-        if (!('primary' in oUI)) {
-            oUI.primary = '_id';
+        if (!('__primary__' in oUI)) {
+            oUI.__primary__ = '_id';
         }
         // If there's no copyPrimary field, assume true
-        if (!('copyPrimary' in oUI)) {
+        if (!('__copyPrimary__' in oUI)) {
             oUI.copyPrimary = true;
         }
         // Set fields from either props, the react section, or from all nodes
@@ -131,11 +136,11 @@ export default class Results extends React.PureComponent {
         if (props.fields.length !== 0) {
             this.fields = props.fields;
         }
-        else if ('results' in oUI) {
-            this.fields = oUI.results;
+        else if ('__results__' in oUI) {
+            this.fields = oUI.__results__;
         }
-        else if ('order' in oUI) {
-            this.fields = oUI.order;
+        else if ('__order__' in oUI) {
+            this.fields = oUI.__order__;
         }
         else {
             this.fields = this.props.tree.keys();
@@ -148,15 +153,22 @@ export default class Results extends React.PureComponent {
         for (const k of this.fields) {
             // Get the react section
             const oNode = props.tree.get(k).special('ui') || {};
+            // If there are overrides
+            if (this.props.display) {
+                // And the field exists, merge it with the node's ui data
+                if (this.props.display[k]) {
+                    merge(oNode, this.props.display[k]);
+                }
+            }
             // Set the title
             this.titles.push({
                 key: k,
-                text: ('title' in oNode) ? oNode.title : ucfirst(k.replace(/_/g, ' '))
+                text: ('__title__' in oNode) ? oNode.__title__ : ucfirst(k.replace(/_/g, ' '))
             });
             // Set the type
             //	If we have a specifically passed type
-            if (oNode.type) {
-                oTypes[k] = oNode.type;
+            if (oNode.__type__) {
+                oTypes[k] = oNode.__type__;
             }
             //	If it's a node
             else if (props.tree.get(k).class() === 'Node') {
@@ -167,24 +179,24 @@ export default class Results extends React.PureComponent {
                 oTypes[k] = null;
             }
             // If there's options
-            if (oNode.options) {
+            if (oNode.__options__) {
                 // If the options are a dynamic Subscribe
-                if (oNode.options instanceof Subscribe) {
+                if (oNode.__options__ instanceof Subscribe) {
                     oOptions[k] = true;
                     this.dynCallbacks[k] = {
-                        optionsInstance: oNode.options,
+                        optionsInstance: oNode.__options__,
                         callback: this._optionCallback.bind(this, k)
                     };
                 }
                 else {
-                    oOptions[k] = oNode.options.reduce((o, l) => Object.assign(o, { [l[0]]: l[1] }), {});
+                    oOptions[k] = oNode.__options__.reduce((o, l) => Object.assign(o, { [l[0]]: l[1] }), {});
                 }
             }
         }
         // Store rest info
         this.info = {
             copyPrimary: oUI.copyPrimary,
-            primary: oUI.primary,
+            primary: oUI.__primary__,
             tree: props.tree,
             types: oTypes
         };
@@ -467,7 +479,7 @@ export default class Results extends React.PureComponent {
                                     React.createElement(IconButton, { onClick: this._exportCsv },
                                         React.createElement("i", { className: "fa-solid fa-file-csv" })))))),
                 React.createElement(TableBody, null, (this.state.rowsPerPage > 0 ?
-                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy || Results.defaultOnCopyKey, onNodeChange: this.props.onNodeChange, onUpdate: this.props.onUpdate }))),
+                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, display: this.props.display, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy || Results.defaultOnCopyKey, onNodeChange: this.props.onNodeChange, onUpdate: this.props.onUpdate }))),
                 React.createElement(TableFooter, null,
                     this.props.totals &&
                         React.createElement(TotalsRow, { actions: this.props.actions ? true : false, fields: this.fields, info: this.info, totals: this.state.totals || {} }),

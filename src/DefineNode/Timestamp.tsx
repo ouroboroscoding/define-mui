@@ -109,8 +109,8 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
 		//	is in the list, use it instead of the default string
 		let sError = this.state.error;
 		if(typeof this.state.error === 'string') {
-			sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-						this.props.display.errors[this.state.error] :
+			sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+						this.props.display.__errors__[this.state.error] :
 						this.state.error;
 		}
 
@@ -123,14 +123,14 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
 		return (
 			<Box className={`field_${this.props.name} node_timestamp`}>
 				{this.props.label === 'above' &&
-					<Typography>{this.props.display.title}</Typography>
+					<Typography>{this.props.display.__title__}</Typography>
 				}
 				<Box className="flexColumns">
 					<TextField
 						className="date"
 						error={this.state.error !== false}
 						helperText={sError}
-						label={this.props.label === 'placeholder' ? this.props.display.title : ''}
+						label={this.props.label === 'placeholder' ? this.props.display.__title__ : ''}
 						onChange={ev => this.change('date', ev.target.value)}
 						onKeyPress={this.keyPressed}
 						type="date"

@@ -39,8 +39,8 @@ export default class DefineNodeText extends DefineNodeBase {
         // Call the base
         super(props);
         // If there's a regex, override the node
-        if ('regex' in props.display) {
-            props.node.regex(props.display.regex);
+        if ('__regex__' in props.display) {
+            props.node.regex(props.display.__regex__);
         }
         // Bind methods
         this.change = this.change.bind(this);
@@ -84,13 +84,13 @@ export default class DefineNodeText extends DefineNodeBase {
         //	is in the list, use it instead of the default string
         let sError = this.state.error;
         if (typeof this.state.error === 'string') {
-            sError = this.props.display.errors && this.state.error in this.props.display.errors ?
-                this.props.display.errors[this.state.error] :
+            sError = this.props.display.__errors__ && this.state.error in this.props.display.__errors__ ?
+                this.props.display.__errors__[this.state.error] :
                 this.state.error;
         }
         // Initial inputProps
         const inputProps = {};
-        const iDisplayMax = this.props.display.maximum;
+        const iDisplayMax = this.props.display.__maximum__;
         if (iDisplayMax) {
             inputProps.maxLength = iDisplayMax;
         }
@@ -114,22 +114,22 @@ export default class DefineNodeText extends DefineNodeBase {
         };
         // If the label is a placeholder, add additional props
         if (this.props.label === 'placeholder') {
-            props.label = this.props.display.title;
-            props.placeholder = this.props.placeholder || this.props.display.title;
+            props.label = this.props.display.__title__;
+            props.placeholder = this.props.placeholder || this.props.display.__title__;
         }
         else if (this.props.placeholder) {
             props.placeholder = this.props.placeholder;
         }
         // If there's an adornment
-        if (this.props.display.adornment) {
+        if (this.props.display.__adornment__) {
             props.InputProps = {
-                startAdornment: React.createElement(InputAdornment, { position: "start" }, this.props.display.adornment)
+                startAdornment: React.createElement(InputAdornment, { position: "start" }, this.props.display.__adornment__)
             };
         }
         // Render
         return (React.createElement(React.Fragment, null,
             this.props.label === 'above' &&
-                React.createElement(Typography, null, this.props.display.title),
+                React.createElement(Typography, null, this.props.display.__title__),
             React.createElement(TextField, { ...props })));
     }
 }
