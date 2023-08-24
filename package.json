@@ -1,6 +1,6 @@
 {
 	"name": "@ouroboros/define-mui",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"description": "Components for use on @ouroboros/define types",
 	"main": "src/index.js",
 	"types": "src/index.d.ts",
@@ -38,7 +38,7 @@
 		"@ouroboros/clone": "^1.0.1",
 		"@ouroboros/dates": "^1.0.0",
 		"@ouroboros/subscribe": "^1.2.0",
-		"@ouroboros/tools": "^0.5.0",
+		"@ouroboros/tools": "^0.5.1",
 		"csv-writer-browser": "^1.0.0",
 		"prop-types": "^15.8.1",
 		"react-phone-input-material-ui": "^2.17.4",
@@ -49,7 +49,7 @@
 		"@emotion/react": "^11.8.2",
 		"@emotion/styled": "^11.8.1",
 		"@mui/material": "^5.5.1",
-		"@ouroboros/define": "^1.0.2",
+		"@ouroboros/define": "^1.0.3",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"
 	}
