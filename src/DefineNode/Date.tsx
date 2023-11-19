@@ -122,4 +122,4 @@ export default class DefineNodeDate extends DefineNodeBase {
 }
 
 // Register with Node
-DefineNodeBase.pluginAdd('data', DefineNodeDate);
+DefineNodeBase.pluginAdd('date', DefineNodeDate);
