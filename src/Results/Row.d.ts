@@ -21,6 +21,7 @@ export type actionStruct = {
     props?: Record<string, any>;
     tooltip?: string;
     url?: string;
+    url_pop?: boolean;
 };
 export type menuStruct = {
     callback: actionCallback;

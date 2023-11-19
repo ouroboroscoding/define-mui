@@ -222,7 +222,11 @@ export default function ResultsRow(props) {
                 }
                 // If there's a url
                 if (a.url) {
-                    return (React.createElement(Link, { key: i, to: a.url },
+                    const oProps = { to: a.url };
+                    if (a.url_pop) {
+                        oProps.target = '_blank';
+                    }
+                    return (React.createElement(Link, { key: i, ...oProps },
                         React.createElement(Tooltip, { key: i, title: a.tooltip },
                             React.createElement(IconButton, { "data-index": i, className: "icon" },
                                 React.createElement("i", { className: a.icon + ' ' + (actions[i.toString()] ? 'open' : 'closed') })))));
