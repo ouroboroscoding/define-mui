@@ -17,7 +17,7 @@ import { omap } from '@ouroboros/tools';
 // NPM modules
 import PropTypes from 'prop-types';
 import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, LinkProps } from 'react-router-dom';
 
 // Material UI
 import Button from '@mui/material/Button';
@@ -49,7 +49,8 @@ export type actionStruct = {
 	icon?: string,
 	props?: Record<string, any>,
 	tooltip?: string,
-	url?: string
+	url?: string,
+	url_pop?: boolean
 };
 export type menuStruct = {
 	callback: actionCallback,
@@ -314,8 +315,13 @@ export default function ResultsRow(props: ResultsRowProps) {
 
 					// If there's a url
 					if(a.url) {
+						const oProps: LinkProps = { to: a.url };
+						if(a.url_pop) {
+							oProps.target = '_blank';
+						}
+
 						return (
-							<Link key={i} to={a.url}>
+							<Link key={i} {...oProps}>
 								<Tooltip key={i} title={a.tooltip}>
 									<IconButton data-index={i} className="icon">
 										<i className={a.icon + ' ' + (actions[i.toString()] ? 'open' : 'closed')} />
