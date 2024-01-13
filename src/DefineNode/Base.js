@@ -154,10 +154,6 @@ export default class DefineNodeBase extends React.Component {
      */
     set value(val) {
         const oState = { value: val };
-        // Let anyone interested know
-        if (this.props.onChange) {
-            this.props.onChange(val, this.state.value);
-        }
         // Make sure it's valid
         if (this.props.node.valid(val)) {
             oState.error = false;
@@ -165,7 +161,20 @@ export default class DefineNodeBase extends React.Component {
         else {
             oState.error = this.props.node.validationFailures[0][1];
         }
-        // Set the state
-        this.setState(oState);
+        // If anyone is interested
+        if (this.props.onChange) {
+            // Store the old value
+            const mOld = this.state.value;
+            const fCallback = this.props.onChange;
+            // Set the state and track when it's done
+            this.setState(oState, () => {
+                // Let whoever is interested in the change know
+                fCallback(val, mOld);
+            });
+        }
+        // Else, just set the state
+        else {
+            this.setState(oState);
+        }
     }
 }

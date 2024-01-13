@@ -48,20 +48,25 @@ export default class DefineNodeNumber extends DefineNodeBase {
      * @param event The event triggered by the change
      */
     change(event) {
+        // Store the value
+        let iValue = event.target.value;
+        // If there's a callback
+        if (this.props.onChange) {
+            const mResult = this.props.onChange(iValue, this.state.value);
+            if (mResult !== undefined) {
+                iValue = mResult;
+            }
+        }
         // Check the new value is valid
         let error = false;
         if (this.props.validation &&
-            !this.props.node.valid(event.target.value === '' ? null : event.target.value)) {
+            !this.props.node.valid(iValue === '' ? null : iValue)) {
             error = this.props.node.validationFailures[0][1];
-        }
-        // If there's a callback
-        if (this.props.onChange) {
-            this.props.onChange(event.target.value, this.state.value);
         }
         // Update the state
         this.setState({
             error,
-            value: event.target.value
+            value: iValue
         });
     }
     /**

@@ -67,31 +67,34 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
 		const sCurrent = iso(this.state.value, true);
 
 		// If we got the date part
-		let newDatetime: string;
+		let sDatetime: string;
 		if(part === 'date') {
-			newDatetime = value + ' ' + sCurrent.substring(11, 19);
+			sDatetime = value + ' ' + sCurrent.substring(11, 19);
 		} else {
-			newDatetime = sCurrent.substring(0, 10) + ' ' + value;
+			sDatetime = sCurrent.substring(0, 10) + ' ' + value;
 		}
 
 		// Convert it to a timestamp
-		const newTimestamp = timestamp(newDatetime, false);
-
-		// Check if it's valid
-		let error: string | false = false;
-		if(this.props.validation && !this.props.node.valid(newTimestamp)) {
-			error = this.props.node.validationFailures[0][1];
-		}
+		let iValue = timestamp(sDatetime, false);
 
 		// If there's a callback
 		if(this.props.onChange) {
-			this.props.onChange(newTimestamp, this.state.value);
+			const mResult = this.props.onChange(iValue, this.state.value);
+			if(mResult !== undefined) {
+				iValue = mResult;
+			}
+		}
+
+		// Check if it's valid
+		let error: string | false = false;
+		if(this.props.validation && !this.props.node.valid(iValue)) {
+			error = this.props.node.validationFailures[0][1];
 		}
 
 		// Update the state
 		this.setState({
 			error,
-			value: newTimestamp
+			value: iValue
 		});
 	}
 
