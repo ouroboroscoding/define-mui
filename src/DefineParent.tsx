@@ -425,7 +425,7 @@ export default class DefineParent extends DefineBase {
 
 						// If we have a callback
 						if(this.props.onNodeChange && sField in this.props.onNodeChange) {
-							oProps.onChange = (value: any, oldValue: any) => { this._nodeChanged(sField, value, oldValue) }
+							oProps.onChange = (value: any, oldValue: any) => { return this._nodeChanged(sField, value, oldValue) }
 						}
 
 						// Create the new element and push it to the list
@@ -482,12 +482,22 @@ export default class DefineParent extends DefineBase {
 			// If we got anything back
 			if(o) {
 
+				// Init possible return
+				let mReturn;
+
 				// Go through each field and update the value
 				for(const k in o) {
 					if(k in this.fields) {
-						this.fields[k].value = o[k];
+						if(k === name) {
+							mReturn = o[k];
+						} else {
+							this.fields[k].value = o[k];
+						}
 					}
 				}
+
+				// Return
+				return mReturn;
 			}
 		}
 	}

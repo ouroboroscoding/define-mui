@@ -10,7 +10,7 @@
 
 // Ouroboros
 import { Base } from '@ouroboros/define';
-import { empty } from '@ouroboros/tools';
+import { compare, empty } from '@ouroboros/tools';
 
 // NPM modules
 import PropTypes from 'prop-types';
@@ -206,11 +206,6 @@ export default class DefineNodeBase extends React.Component {
 
 		const oState: DefineNodeBaseState = {value: val};
 
-		// Let anyone interested know
-		if(this.props.onChange) {
-			this.props.onChange(val, this.state.value);
-		}
-
 		// Make sure it's valid
 		if(this.props.node.valid(val)) {
 			oState.error = false;
@@ -218,7 +213,24 @@ export default class DefineNodeBase extends React.Component {
 			oState.error = this.props.node.validationFailures[0][1]
 		}
 
-		// Set the state
-		this.setState(oState);
+		// If anyone is interested
+		if(this.props.onChange) {
+
+			// Store the old value
+			const mOld = this.state.value;
+			const fCallback = this.props.onChange;
+
+			// Set the state and track when it's done
+			this.setState(oState, () => {
+
+				// Let whoever is interested in the change know
+				fCallback(val, mOld);
+			});
+		}
+
+		// Else, just set the state
+		else {
+			this.setState(oState);
+		}
 	}
 }

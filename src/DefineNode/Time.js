@@ -49,19 +49,23 @@ export default class DefineNodeTime extends DefineNodeBase {
      */
     change(event) {
         // Check the new value is valid
-        const newTime = event.target.value + ':00';
-        let error = false;
-        if (this.props.validation && !this.props.node.valid(newTime)) {
-            error = this.props.node.validationFailures[0][1];
-        }
+        let sValue = event.target.value + ':00';
         // If there's a callback
         if (this.props.onChange) {
-            this.props.onChange(newTime, this.state.value);
+            const mResult = this.props.onChange(sValue, this.state.value);
+            if (mResult !== undefined) {
+                sValue = mResult;
+            }
+        }
+        // Check the new value is valid
+        let error = false;
+        if (this.props.validation && !this.props.node.valid(sValue)) {
+            error = this.props.node.validationFailures[0][1];
         }
         // Update the state
         this.setState({
             error,
-            value: newTime
+            value: sValue
         });
     }
     /**
