@@ -173,7 +173,7 @@ export default class DefineNodeSearchOption extends React.Component {
 	 * @param val The new value to set
 	 */
 	set value(val: string | null) {
-		if(this.state.options) {
+		if(this.state.options && val !== this.state.value) {
 			this.setState({value: val});
 		}
 	}

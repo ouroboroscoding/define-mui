@@ -52,17 +52,25 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
      * @param value The new phone number
      */
     change(value) {
-        // Check the new value is valid
-        let error = false;
-        if (this.props.validation && !this.props.node.valid(value)) {
-            error = this.props.node.validationFailures[0][1];
-        }
+        // Store the value
+        let sValue = value;
         // If there's a callback
         if (this.props.onChange) {
-            this.props.onChange(value, this.state.value);
+            const mResult = this.props.onChange(sValue, this.state.value);
+            if (mResult !== undefined) {
+                sValue = mResult;
+            }
+        }
+        // Check the new value is valid
+        let error = false;
+        if (this.props.validation && !this.props.node.valid(sValue)) {
+            error = this.props.node.validationFailures[0][1];
         }
         // Update the state
-        this.setState({ error, value });
+        this.setState({
+            error,
+            value: sValue
+        });
     }
     /**
      * Render

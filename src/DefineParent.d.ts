@@ -168,7 +168,7 @@ export default class DefineParent extends DefineBase {
      * @param value The new value of the node
      * @param oldValue The old value of the node
      */
-    _nodeChanged(name: string, value: any, oldValue: any): void;
+    _nodeChanged(name: string, value: any, oldValue: any): any;
     /**
      * Render
      *

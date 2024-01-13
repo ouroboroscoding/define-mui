@@ -219,19 +219,22 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 		}
 
 		// Combine the values
-		const sValue = lValues.join(
+		let sValue = lValues.join(
 			this.props.display.extra_space ? ', ' : ','
 		);
+
+		// If there's a callback
+		if(this.props.onChange) {
+			const mResult = this.props.onChange(sValue, this.state.value);
+			if(mResult !== undefined) {
+				sValue = mResult;
+			}
+		}
 
 		// Check the new value is valid
 		let error: string | false = false;
 		if(this.props.validation && !this.props.node.valid(sValue)) {
 			error = this.props.node.validationFailures[0][1];
-		}
-
-		// If there's a callback
-		if(this.props.onChange) {
-			this.props.onChange(sValue, this.state.value);
 		}
 
 		// Update the state

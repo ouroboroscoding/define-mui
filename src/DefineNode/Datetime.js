@@ -51,27 +51,30 @@ export default class DefineNodeDatetime extends DefineNodeBase {
      */
     change(part, value) {
         // Init the new value
-        let newDatetime;
+        let sValue;
         // If we got the date part
         if (part === 'date') {
-            newDatetime = value + ' ' + this.state.value.substring(11, 19);
+            sValue = value + ' ' + this.state.value.substring(11, 19);
         }
         else {
-            newDatetime = this.state.value.substring(0, 10) + ' ' + value;
-        }
-        // Check if it's valid
-        let error = false;
-        if (this.props.validation && !this.props.node.valid(newDatetime)) {
-            error = this.props.node.validationFailures[0][1];
+            sValue = this.state.value.substring(0, 10) + ' ' + value;
         }
         // If there's a callback
         if (this.props.onChange) {
-            this.props.onChange(newDatetime, this.state.value);
+            const mResult = this.props.onChange(sValue, this.state.value);
+            if (mResult !== undefined) {
+                sValue = mResult;
+            }
+        }
+        // Check if it's valid
+        let error = false;
+        if (this.props.validation && !this.props.node.valid(sValue)) {
+            error = this.props.node.validationFailures[0][1];
         }
         // Update the state
         this.setState({
             error,
-            value: newDatetime
+            value: sValue
         });
     }
     /**
