@@ -144,9 +144,9 @@ export default class DefineArray extends DefineBase {
 			merge(oUI, props.display);
 		}
 
-		// If the title is not set
-		if(!('__title__' in oUI) ) {
-			oUI.__title__ = ucfirst(props.name || '') ;
+		// If the header title is not set
+		if(!('__header__' in oUI) ) {
+			oUI.__header__ = ucfirst(props.name || '') ;
 		}
 
 		// The type
@@ -301,14 +301,14 @@ export default class DefineArray extends DefineBase {
 		// Render
 		return (
 			<Box className="nodeArray">
-				{this.state.display.__title__ &&
-					<Typography className="legend">{this.state.display.__title__}</Typography>
+				{this.state.display.__header__ &&
+					<Typography className="legend">{this.state.display.__header__}</Typography>
 				}
 				{this.state.elements.map(o =>
-					<Box key={o.key} className="element flexColumns">
-						<Box className="data flexGrow">
+					<Box key={o.key} className="element">
+						<Box className="data">
 							{DefineBase.create(this.state.nodeClass, {
-								display: this.props.display,
+								display: this.state.nodeClass === 'Node' ? this.state.display : this.props.display,
 								ref: (el: DefineBase) => (this.nodes as Record<string, DefineBase>)[o.key] = el,
 								name: (this.props as DefineArrayProps).name,
 								node: this.child,
@@ -319,7 +319,7 @@ export default class DefineArray extends DefineBase {
 								validation: (this.props as DefineArrayProps).validation
 							})}
 						</Box>
-						<Box className="actions flexStatic">
+						<Box className="actions">
 							<Tooltip title="Remove">
 								<IconButton onClick={ev => this.remove(o.key)}>
 									<i className="fas fa-minus-circle" style={{color: red[500]}} />

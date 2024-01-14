@@ -38,8 +38,8 @@ import Typography from '@mui/material/Typography';
 import Form from '../Form';
 
 // Types
-import { gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
-import { onSubmitCallback } from '../Form';
+import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
+import type { onSubmitCallback } from '../Form';
 export type actionCallback = (data: Record<string, any>) => void;
 export type actionDynamicCallback = (data: Record<string, any>) => Record<string, any>;
 export type actionStruct = {
@@ -65,6 +65,7 @@ export type ResultsRowProps = {
 	custom: Record<string, any>,
 	data: Record<string, any>,
 	display?: Record<string, any>,
+	dynamicOptions?: dynamicOptionStruct[],
 	errors?: Record<string, any>,
 	fields: string[],
 	gridSizes?: gridSizesStruct,
@@ -414,6 +415,7 @@ export default function ResultsRow(props: ResultsRowProps) {
 					<TableCell colSpan={props.fields.length + 1}>
 						<Form
 							display={props.display}
+							dynamicOptions={props.dynamicOptions}
 							gridSizes={props.gridSizes}
 							gridSpacing={props.gridSpacing}
 							onCancel={() => updateSet(false)}
@@ -451,6 +453,13 @@ ResultsRow.propTypes = {
 	custom: PropTypes.object.isRequired,
 	data: PropTypes.object.isRequired,
 	display: PropTypes.object,
+	dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
+		node: PropTypes.string.isRequired,
+		trigger: PropTypes.string.isRequired,
+		options: PropTypes.oneOfType(
+			[ PropTypes.object, PropTypes.func ]
+		).isRequired
+	})),
 	errors: PropTypes.object.isRequired,
 	fields: PropTypes.array.isRequired,
 	gridSizes: PropTypes.objectOf(

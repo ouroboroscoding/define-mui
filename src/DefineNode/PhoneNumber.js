@@ -93,7 +93,7 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
         return (React.createElement(React.Fragment, null,
             this.props.label === 'above' &&
                 React.createElement(Typography, null, this.props.display.__title__),
-            React.createElement(FormControl, { className: `field_${this.props.name} node_phone_number`, error: this.state.error !== false },
+            React.createElement(FormControl, { className: `field_${this.props.name} nodePhoneNumber`, error: this.state.error !== false },
                 React.createElement(PhoneInput, { component: TextField, inputProps: {
                         label: this.props.display.__title__,
                         onKeyPress: this.keyPressed,

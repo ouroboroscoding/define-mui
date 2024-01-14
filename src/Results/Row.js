@@ -274,7 +274,7 @@ export default function ResultsRow(props) {
         update &&
             React.createElement(TableRow, null,
                 React.createElement(TableCell, { colSpan: props.fields.length + 1 },
-                    React.createElement(Form, { display: props.display, gridSizes: props.gridSizes, gridSpacing: props.gridSpacing, onCancel: () => updateSet(false), onNodeChange: props.onNodeChange, onSubmit: submit, ref: refUpdateForm, tree: props.info.tree, type: "update", value: props.data }))),
+                    React.createElement(Form, { display: props.display, dynamicOptions: props.dynamicOptions, gridSizes: props.gridSizes, gridSpacing: props.gridSpacing, onCancel: () => updateSet(false), onNodeChange: props.onNodeChange, onSubmit: submit, ref: refUpdateForm, tree: props.info.tree, type: "update", value: props.data }))),
         omap(actions, (m, i) => React.createElement(TableRow, { key: i, className: "action_row" },
             React.createElement(TableCell, { colSpan: props.fields.length + 1 }, m === true ? React.createElement(props.actions[parseInt(i, 10)].component, {
                 onClose: () => action(i),
@@ -291,6 +291,11 @@ ResultsRow.propTypes = {
     custom: PropTypes.object.isRequired,
     data: PropTypes.object.isRequired,
     display: PropTypes.object,
+    dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
+        node: PropTypes.string.isRequired,
+        trigger: PropTypes.string.isRequired,
+        options: PropTypes.oneOfType([PropTypes.object, PropTypes.func]).isRequired
+    })),
     errors: PropTypes.object.isRequired,
     fields: PropTypes.array.isRequired,
     gridSizes: PropTypes.objectOf(PropTypes.exact({

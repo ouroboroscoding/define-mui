@@ -87,7 +87,7 @@ export default class DefineNodeDate extends DefineNodeBase {
         }
         // Initial props
         const props = {
-            className: `field_${this.props.name} node_date`,
+            className: `field_${this.props.name} nodeDate`,
             error: this.state.error !== false,
             helperText: sError,
             onKeyPress: this.keyPressed,

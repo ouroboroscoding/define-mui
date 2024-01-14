@@ -25,8 +25,8 @@ import Typography from '@mui/material/Typography';
 import DefineParent from './DefineParent';
 
 // Types
-import { labelOptions, variantOptions } from './DefineNode';
-import { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './DefineParent';
+import type { labelOptions, variantOptions } from './DefineNode';
+import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './DefineParent';
 export type onCancelCallback = () => void;
 export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
@@ -66,7 +66,9 @@ export default class Form extends React.Component {
 		dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
 			node: PropTypes.string.isRequired,
 			trigger: PropTypes.string.isRequired,
-			options: PropTypes.object.isRequired
+			options: PropTypes.oneOfType(
+				[ PropTypes.object, PropTypes.func ]
+			).isRequired
 		})),
 		fields: PropTypes.arrayOf(PropTypes.string),
 		gridSizes: PropTypes.objectOf(

@@ -87,7 +87,7 @@ export default class DefineNodeTime extends DefineNodeBase {
         }
         // Initial props
         const props = {
-            className: `field_${this.props.name} node_time`,
+            className: `field_${this.props.name} nodeTime`,
             error: this.state.error !== false,
             helperText: sError,
             onKeyPress: this.keyPressed,

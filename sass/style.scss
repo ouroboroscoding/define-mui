@@ -96,10 +96,35 @@
 		z-index: 1;
 	}
 
-	.data {
-		.MuiInputBase-root {
-			width: 100%;
+	.element {
+		display: flex;
+		flex-direction: row;
+
+		.data {
+			flex: 1 1 0;
+
+			.MuiInputBase-root {
+				width: 100%;
+			}
 		}
+
+		.actions {
+			flex: 0 0 auto;
+		}
+	}
+}
+
+.nodeDatetime {
+	.nodeDatetimeFields {
+		display: flex;
+		flex-direction: row;
+	}
+}
+
+.nodeTimestamp {
+	.nodeTimestampFields {
+		display: flex;
+		flex-direction: row;
 	}
 }
 

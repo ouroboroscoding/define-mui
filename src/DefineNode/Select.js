@@ -184,7 +184,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
         return (React.createElement(React.Fragment, null,
             this.props.label === 'above' &&
                 React.createElement(Typography, null, this.props.display.__title__),
-            React.createElement(FormControl, { className: `field_${this.props.name} node_select`, error: this.state.error !== false, variant: this.props.variant },
+            React.createElement(FormControl, { className: `field_${this.props.name} nodeSelect`, error: this.state.error !== false, variant: this.props.variant },
                 this.props.label === 'placeholder' &&
                     React.createElement(InputLabel, { id: this.props.name }, this.props.display.__title__),
                 React.createElement(Select, { label: this.props.display.__title__, labelId: this.props.name, native: true, onChange: this.change, value: this.state.value === null ? '' : this.state.value }, lOpts),

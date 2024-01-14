@@ -10,6 +10,7 @@
 import Subscribe from '@ouroboros/subscribe';
 export type HashData = Record<string, string[][]>;
 export type HashFunc = () => Promise<HashData>;
+export type HashArg = HashData | HashFunc;
 /**
  * Hash
  *
@@ -36,7 +37,7 @@ export default class Hash extends Subscribe {
      * 						defaults to the first key in the hash
      * @returns a new instance
      */
-    constructor(hash: HashData | HashFunc, initialKey?: string | null);
+    constructor(hash: HashArg, initialKey?: string | null);
     /**
      * Hash
      *

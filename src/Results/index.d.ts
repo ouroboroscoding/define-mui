@@ -11,9 +11,9 @@ import { Tree } from '@ouroboros/define';
 import Subscribe, { SubscribeCallback } from '@ouroboros/subscribe';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { onSubmitCallback } from '../Form';
-import { gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
-import { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
+import type { onSubmitCallback } from '../Form';
+import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
+import type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
 export type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct };
 export type dynCallbacksStruct = {
     optionsInstance: Subscribe;
@@ -35,6 +35,7 @@ export type ResultsProps = {
     custom: Record<string, any>;
     data: Record<string, any>[];
     display?: Record<string, Record<string, any>>;
+    dynamicOptions?: dynamicOptionStruct[];
     errors: Record<string, any>;
     fields: string[];
     gridSizes: gridSizesStruct;
@@ -74,6 +75,11 @@ export default class Results extends React.PureComponent {
         custom: PropTypes.Requireable<object>;
         data: PropTypes.Validator<any[]>;
         display: PropTypes.Requireable<object>;
+        dynamicOptions: PropTypes.Requireable<(Required<PropTypes.InferProps<{
+            node: PropTypes.Validator<string>;
+            trigger: PropTypes.Validator<string>;
+            options: PropTypes.Validator<object>;
+        }>> | null | undefined)[]>;
         errors: PropTypes.Requireable<object>;
         fields: PropTypes.Requireable<any[]>;
         gridSizes: PropTypes.Requireable<{

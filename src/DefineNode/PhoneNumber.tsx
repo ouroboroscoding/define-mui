@@ -112,7 +112,7 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
 				{this.props.label === 'above' &&
 					<Typography>{this.props.display.__title__}</Typography>
 				}
-				<FormControl className={`field_${this.props.name} node_phone_number`} error={this.state.error !== false}>
+				<FormControl className={`field_${this.props.name} nodePhoneNumber`} error={this.state.error !== false}>
 					<PhoneInput
 						component={TextField}
 						inputProps={{

@@ -90,9 +90,9 @@ export default class DefineArray extends DefineBase {
         if (props.display) {
             merge(oUI, props.display);
         }
-        // If the title is not set
-        if (!('__title__' in oUI)) {
-            oUI.__title__ = ucfirst(props.name || '');
+        // If the header title is not set
+        if (!('__header__' in oUI)) {
+            oUI.__header__ = ucfirst(props.name || '');
         }
         // The type
         const mType = '__type__' in oUI ? oUI.__type__ : null;
@@ -220,11 +220,11 @@ export default class DefineArray extends DefineBase {
         }
         // Render
         return (React.createElement(Box, { className: "nodeArray" },
-            this.state.display.__title__ &&
-                React.createElement(Typography, { className: "legend" }, this.state.display.__title__),
-            this.state.elements.map(o => React.createElement(Box, { key: o.key, className: "element flexColumns" },
-                React.createElement(Box, { className: "data flexGrow" }, DefineBase.create(this.state.nodeClass, {
-                    display: this.props.display,
+            this.state.display.__header__ &&
+                React.createElement(Typography, { className: "legend" }, this.state.display.__header__),
+            this.state.elements.map(o => React.createElement(Box, { key: o.key, className: "element" },
+                React.createElement(Box, { className: "data" }, DefineBase.create(this.state.nodeClass, {
+                    display: this.state.nodeClass === 'Node' ? this.state.display : this.props.display,
                     ref: (el) => this.nodes[o.key] = el,
                     name: this.props.name,
                     node: this.child,
@@ -234,7 +234,7 @@ export default class DefineArray extends DefineBase {
                     value: o.value,
                     validation: this.props.validation
                 })),
-                React.createElement(Box, { className: "actions flexStatic" },
+                React.createElement(Box, { className: "actions" },
                     React.createElement(Tooltip, { title: "Remove" },
                         React.createElement(IconButton, { onClick: ev => this.remove(o.key) },
                             React.createElement("i", { className: "fas fa-minus-circle", style: { color: red[500] } })))))),

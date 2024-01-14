@@ -35,7 +35,7 @@ export default class Form extends React.Component {
         dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
             node: PropTypes.string.isRequired,
             trigger: PropTypes.string.isRequired,
-            options: PropTypes.object.isRequired
+            options: PropTypes.oneOfType([PropTypes.object, PropTypes.func]).isRequired
         })),
         fields: PropTypes.arrayOf(PropTypes.string),
         gridSizes: PropTypes.objectOf(PropTypes.exact({

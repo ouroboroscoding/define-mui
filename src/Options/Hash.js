@@ -41,7 +41,11 @@ export default class Hash extends Subscribe {
         super([]);
         // Store or fetch the hash data
         if (typeof hash === 'function') {
-            hash().then(data => { this.hash(data); }, error => { throw new Error(error); });
+            hash().then(data => {
+                this.hash(data);
+            }, error => {
+                throw new Error(error);
+            });
         }
         else {
             this._hash = hash;

@@ -9,8 +9,8 @@
  */
 import PropTypes from 'prop-types';
 import React from 'react';
-import { gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
-import { onSubmitCallback } from '../Form';
+import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
+import type { onSubmitCallback } from '../Form';
 export type actionCallback = (data: Record<string, any>) => void;
 export type actionDynamicCallback = (data: Record<string, any>) => Record<string, any>;
 export type actionStruct = {
@@ -42,6 +42,7 @@ export type ResultsRowProps = {
     custom: Record<string, any>;
     data: Record<string, any>;
     display?: Record<string, any>;
+    dynamicOptions?: dynamicOptionStruct[];
     errors?: Record<string, any>;
     fields: string[];
     gridSizes?: gridSizesStruct;
@@ -71,6 +72,11 @@ declare namespace ResultsRow {
         custom: PropTypes.Validator<object>;
         data: PropTypes.Validator<object>;
         display: PropTypes.Requireable<object>;
+        dynamicOptions: PropTypes.Requireable<(Required<PropTypes.InferProps<{
+            node: PropTypes.Validator<string>;
+            trigger: PropTypes.Validator<string>;
+            options: PropTypes.Validator<object>;
+        }>> | null | undefined)[]>;
         errors: PropTypes.Validator<object>;
         fields: PropTypes.Validator<any[]>;
         gridSizes: PropTypes.Requireable<{

@@ -241,7 +241,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 				{this.props.label === 'above' &&
 					<Typography>{this.props.display.__title__}</Typography>
 				}
-				<FormControl className={`field_${this.props.name} node_select`} error={this.state.error !== false} variant={this.props.variant}>
+				<FormControl className={`field_${this.props.name} nodeSelect`} error={this.state.error !== false} variant={this.props.variant}>
 					{this.props.label === 'placeholder' &&
 						<InputLabel id={this.props.name}>{this.props.display.__title__}</InputLabel>
 					}
