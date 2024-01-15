@@ -309,7 +309,7 @@ export default class DefineArray extends DefineBase {
 						<Box className="data">
 							{DefineBase.create(this.state.nodeClass, {
 								display: this.state.nodeClass === 'Node' ? this.state.display : this.props.display,
-								ref: (el: DefineBase) => (this.nodes as Record<string, DefineBase>)[o.key] = el,
+								ref: (el: DefineBase) => { if(el) (this.nodes as Record<string, DefineBase>)[o.key] = el; },
 								name: (this.props as DefineArrayProps).name,
 								node: this.child,
 								onEnterPressed: (this.props as DefineArrayProps).onEnterPressed,
@@ -385,6 +385,9 @@ export default class DefineArray extends DefineBase {
 			return bValid;
 		}
 
+		// Keep track of duplicates
+		const aItems: any[] = [];
+
 		// Go through each item and validate it
 		for(const o of Object.values(this.nodes)) {
 
@@ -392,6 +395,24 @@ export default class DefineArray extends DefineBase {
 			if(!this.child.valid(o.value)) {
 				o.error(this.child.validationFailures[0][1]);
 				bValid = false;
+			}
+
+			// If we need to check for duplicates
+			if(this.props.node._type === 'unique') {
+
+				// Look for the value in the existing list
+				const iIndex = aItems.indexOf(o.value);
+
+				// If it's found, we have a duplicate
+				if(iIndex > -1) {
+
+					// Set the error
+					o.error(`duplicate of [${iIndex}]`);
+					bValid = false;
+				}
+
+				// Else, we can add the value
+				aItems.push(o.value);
 			}
 		}
 

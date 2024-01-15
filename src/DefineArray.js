@@ -178,7 +178,7 @@ export default class DefineArray extends DefineBase {
         if (iIndex > -1) {
             // Clone the current elements
             const lElements = clone(this.state.elements);
-            // Remove the deleted index
+            // Remove the deleted index from the nodes and elements
             delete this.nodes[lElements[iIndex].key];
             lElements.splice(iIndex, 1);
             // Set the new state
@@ -225,7 +225,8 @@ export default class DefineArray extends DefineBase {
             this.state.elements.map(o => React.createElement(Box, { key: o.key, className: "element" },
                 React.createElement(Box, { className: "data" }, DefineBase.create(this.state.nodeClass, {
                     display: this.state.nodeClass === 'Node' ? this.state.display : this.props.display,
-                    ref: (el) => this.nodes[o.key] = el,
+                    ref: (el) => { if (el)
+                        this.nodes[o.key] = el; },
                     name: this.props.name,
                     node: this.child,
                     onEnterPressed: this.props.onEnterPressed,
@@ -282,12 +283,27 @@ export default class DefineArray extends DefineBase {
             }
             return bValid;
         }
+        // Keep track of duplicates
+        const aItems = [];
         // Go through each item and validate it
         for (const o of Object.values(this.nodes)) {
             // Check if the current value is valid
             if (!this.child.valid(o.value)) {
                 o.error(this.child.validationFailures[0][1]);
                 bValid = false;
+            }
+            // If we need to check for duplicates
+            if (this.props.node._type === 'unique') {
+                // Look for the value in the existing list
+                const iIndex = aItems.indexOf(o.value);
+                // If it's found, we have a duplicate
+                if (iIndex > -1) {
+                    // Set the error
+                    o.error(`duplicate of [${iIndex}]`);
+                    bValid = false;
+                }
+                // Else, we can add the value
+                aItems.push(o.value);
             }
         }
         // Return valid state

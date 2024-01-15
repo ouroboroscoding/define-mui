@@ -162,9 +162,22 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		// Init the new state
 		const oState: Record<string, any> = { options: data };
 
-		// If the current value doesn't match the list
-		if(afindi(data, 0, this.state.value) === -1) {
-			oState.value = '';
+		// If we have an existing value
+		if(this.state.value !== '' && this.state.value !== null) {
+
+			// If the current value doesn't match the list
+			if(afindi(data, 0, this.state.value) === -1) {
+				oState.value = '';
+			}
+		}
+
+		// Else, if we have a prop value
+		else if(this.props.value !== '' && this.props.value !== null) {
+
+			// If the current value doesn't match the list
+			if(afindi(data, 0, this.props.value) > -1) {
+				oState.value = this.props.value;
+			}
 		}
 
 		// Set the new state

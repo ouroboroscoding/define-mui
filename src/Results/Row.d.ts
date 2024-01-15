@@ -35,11 +35,12 @@ export type componentConstructor = string | React.FunctionComponent<{
     onClose: () => void;
     value: Record<string, any>;
 }, any>;
+export type customCallback = (row: Record<string, any>) => string;
 export type onDeleteCallback = (key: any) => void;
 export type onKeyCopyCallback = (key: any) => void;
 export type ResultsRowProps = {
     actions: actionStruct[] | false;
-    custom: Record<string, any>;
+    custom: Record<string, customCallback>;
     data: Record<string, any>;
     display?: Record<string, any>;
     dynamicOptions?: dynamicOptionStruct[];

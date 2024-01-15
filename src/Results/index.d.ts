@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import type { onSubmitCallback } from '../Form';
 import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
-import type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
+import type { actionStruct, customCallback, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
 export type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct };
 export type dynCallbacksStruct = {
     optionsInstance: Subscribe;
@@ -32,7 +32,7 @@ export type titleStruct = {
 };
 export type ResultsProps = {
     actions: actionStruct[] | false;
-    custom: Record<string, any>;
+    custom: Record<string, customCallback>;
     data: Record<string, any>[];
     display?: Record<string, Record<string, any>>;
     dynamicOptions?: dynamicOptionStruct[];
