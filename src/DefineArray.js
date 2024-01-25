@@ -178,7 +178,7 @@ export default class DefineArray extends DefineBase {
         if (iIndex > -1) {
             // Clone the current elements
             const lElements = clone(this.state.elements);
-            // Remove the deleted index from the nodes and elements
+            // Remove the deleted index
             delete this.nodes[lElements[iIndex].key];
             lElements.splice(iIndex, 1);
             // Set the new state

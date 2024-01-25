@@ -87,6 +87,7 @@ export default class DefineNodeTime extends DefineNodeBase {
         }
         // Initial props
         const props = {
+            InputLabelProps: { shrink: true },
             className: `field_${this.props.name} nodeTime`,
             error: this.state.error !== false,
             helperText: sError,
