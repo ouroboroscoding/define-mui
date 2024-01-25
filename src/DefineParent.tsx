@@ -30,17 +30,18 @@ import { errorTree } from './Shared';
 
 // Types
 import type { Node } from '@ouroboros/define'
+import type { HashArg } from 'Options/Hash';
+import type { DefineNodeBaseProps } from './DefineNode/Base';
 import {
 	DefineNodeProps,
 	labelOptions,
 	onEnterPressedCallback,
 	typeOptions,
 	variantOptions } from './DefineNode';
-import { DefineNodeBaseProps } from './DefineNode/Base';
 export type dynamicOptionStruct = {
 	node: string,
 	trigger: string,
-	options: Record<string, any>
+	options: HashArg
 }
 export type gridSizesStruct = Record<string, {
 	xs?: number,
@@ -109,7 +110,9 @@ export default class DefineParent extends DefineBase {
 		dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
 			node: PropTypes.string.isRequired,
 			trigger: PropTypes.string.isRequired,
-			options: PropTypes.object.isRequired
+			options: PropTypes.oneOfType(
+				[ PropTypes.object, PropTypes.func ]
+			).isRequired
 		})),
 		error: PropTypes.object,
 		fields: PropTypes.arrayOf(PropTypes.string),
@@ -342,7 +345,7 @@ export default class DefineParent extends DefineBase {
 
 					// Create a OptionsHash using the options and the current value
 					//	of the node, and store it under the node's options
-					oNodeUI.options = new OptionsHash(
+					oNodeUI.__options__ = new OptionsHash(
 						o.options,
 						(this.props.value && this.props.value[o.trigger]) || null
 					);
@@ -351,7 +354,7 @@ export default class DefineParent extends DefineBase {
 					this.props.node.get(o.node).special('ui', oNodeUI);
 
 					// Store the callback for the trigger
-					oDynamicOptions[o.trigger] = oNodeUI.options.key.bind(oNodeUI.options);
+					oDynamicOptions[o.trigger] = oNodeUI.__options__.key.bind(oNodeUI.__options__);
 				}
 			}
 

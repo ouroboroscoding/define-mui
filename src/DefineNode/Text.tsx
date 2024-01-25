@@ -130,7 +130,7 @@ export default class DefineNodeText extends DefineNodeBase {
 
 		// Initial props
 		const props: TextFieldProps = {
-			className: `field_${this.props.name} node_text`,
+			className: `field_${this.props.name} nodeText`,
 			error: this.state.error !== false,
 			helperText: sError,
 			onKeyPress: this.keyPressed,

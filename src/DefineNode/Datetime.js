@@ -95,10 +95,10 @@ export default class DefineNodeDatetime extends DefineNodeBase {
                 this.state.error;
         }
         // Render
-        return (React.createElement(Box, { className: `field_${this.props.name} node_datetime` },
+        return (React.createElement(Box, { className: `field_${this.props.name} nodeDatetime` },
             this.props.label === 'above' &&
                 React.createElement(Typography, null, this.props.display.__title__),
-            React.createElement(Box, { className: "flexColumns" },
+            React.createElement(Box, { className: "nodeDatetimeFields" },
                 React.createElement(TextField, { error: this.state.error !== false, helperText: sError, label: this.props.label === 'placeholder' ? this.props.display.__title__ : '', onChange: ev => this.change('date', ev.target.value), onKeyPress: this.keyPressed, type: "date", value: this.state.value.substring(0, 10), variant: this.props.variant }),
                 "\u00A0\u00A0",
                 React.createElement(TextField, { error: this.state.error !== false, onChange: ev => this.change('time', ev.target.value), onKeyPress: this.keyPressed, type: "time", value: this.state.value.substring(11, 19), variant: this.props.variant }))));

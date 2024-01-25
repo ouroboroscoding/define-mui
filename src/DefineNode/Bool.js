@@ -73,7 +73,7 @@ export default class DefineNodeBool extends DefineNodeBase {
      */
     render() {
         return (React.createElement(Box, null,
-            React.createElement(FormControlLabel, { className: `field_${this.props.name} node_bool`, control: React.createElement(Checkbox, { color: "primary", checked: this.state.value ? true : false, onChange: this.change }), label: React.createElement("span", { className: this.state.error !== false ? 'nodeBoolError' : 'false' }, this.props.display.__title__) })));
+            React.createElement(FormControlLabel, { className: `field_${this.props.name} nodeBool`, control: React.createElement(Checkbox, { color: "primary", checked: this.state.value ? true : false, onChange: this.change }), label: React.createElement("span", { className: this.state.error !== false ? 'nodeBoolError' : 'false' }, this.props.display.__title__) })));
     }
 }
 // Register with Node

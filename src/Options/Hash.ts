@@ -14,6 +14,7 @@ import Subscribe from '@ouroboros/subscribe';
 // Types
 export type HashData = Record<string, string[][]>;
 export type HashFunc = () => Promise<HashData>;
+export type HashArg = HashData | HashFunc
 
 /**
  * Hash
@@ -44,17 +45,18 @@ export default class Hash extends Subscribe {
 	 * 						defaults to the first key in the hash
 	 * @returns a new instance
 	 */
-	constructor(hash: HashData | HashFunc, initialKey: string | null = null) {
+	constructor(hash: HashArg, initialKey: string | null = null) {
 
 		// Call base class constructor
 		super([]);
 
 		// Store or fetch the hash data
 		if(typeof hash === 'function') {
-			hash().then(
-				data => { this.hash(data) },
-				error => { throw new Error(error) }
-			);
+			hash().then(data => {
+				this.hash(data)
+			}, error => {
+				throw new Error(error)
+			});
 		} else {
 			this._hash = hash;
 		}

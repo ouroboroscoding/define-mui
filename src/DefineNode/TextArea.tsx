@@ -117,7 +117,7 @@ export default class DefineNodeTextArea extends DefineNodeBase {
 
 		// Initial props
 		const props: TextFieldProps = {
-			className: `field_${this.props.name} node_textarea`,
+			className: `field_${this.props.name} nodeTextarea`,
 			error: this.state.error !== false,
 			helperText: sError,
 			multiline: true,

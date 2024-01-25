@@ -124,11 +124,11 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
 
 		// Render
 		return (
-			<Box className={`field_${this.props.name} node_timestamp`}>
+			<Box className={`field_${this.props.name} nodeTimestamp`}>
 				{this.props.label === 'above' &&
 					<Typography>{this.props.display.__title__}</Typography>
 				}
-				<Box className="flexColumns">
+				<Box className="nodeTimeStampFields">
 					<TextField
 						className="date"
 						error={this.state.error !== false}

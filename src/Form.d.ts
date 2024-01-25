@@ -11,8 +11,8 @@ import { Tree } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DefineParent from './DefineParent';
-import { labelOptions, variantOptions } from './DefineNode';
-import { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './DefineParent';
+import type { labelOptions, variantOptions } from './DefineNode';
+import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './DefineParent';
 export type onCancelCallback = () => void;
 export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {

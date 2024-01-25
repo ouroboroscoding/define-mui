@@ -43,7 +43,7 @@ export default class DefineParent extends DefineBase {
         dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
             node: PropTypes.string.isRequired,
             trigger: PropTypes.string.isRequired,
-            options: PropTypes.object.isRequired
+            options: PropTypes.oneOfType([PropTypes.object, PropTypes.func]).isRequired
         })),
         error: PropTypes.object,
         fields: PropTypes.arrayOf(PropTypes.string),
@@ -242,11 +242,11 @@ export default class DefineParent extends DefineBase {
                     const oNodeUI = this.props.node.get(o.node).special('ui') || {};
                     // Create a OptionsHash using the options and the current value
                     //	of the node, and store it under the node's options
-                    oNodeUI.options = new OptionsHash(o.options, (this.props.value && this.props.value[o.trigger]) || null);
+                    oNodeUI.__options__ = new OptionsHash(o.options, (this.props.value && this.props.value[o.trigger]) || null);
                     // Overwrite the react special
                     this.props.node.get(o.node).special('ui', oNodeUI);
                     // Store the callback for the trigger
-                    oDynamicOptions[o.trigger] = oNodeUI.options.key.bind(oNodeUI.options);
+                    oDynamicOptions[o.trigger] = oNodeUI.__options__.key.bind(oNodeUI.__options__);
                 }
             }
             // Go through each node
