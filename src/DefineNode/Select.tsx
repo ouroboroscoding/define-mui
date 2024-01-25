@@ -162,9 +162,22 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		// Init the new state
 		const oState: Record<string, any> = { options: data };
 
-		// If the current value doesn't match the list
-		if(afindi(data, 0, this.state.value) === -1) {
-			oState.value = '';
+		// If we have an existing value
+		if(this.state.value !== '' && this.state.value !== null) {
+
+			// If the current value doesn't match the list
+			if(afindi(data, 0, this.state.value) === -1) {
+				oState.value = '';
+			}
+		}
+
+		// Else, if we have a prop value
+		else if(this.props.value !== '' && this.props.value !== null) {
+
+			// If the current value doesn't match the list
+			if(afindi(data, 0, this.props.value) > -1) {
+				oState.value = this.props.value;
+			}
 		}
 
 		// Set the new state
@@ -241,7 +254,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 				{this.props.label === 'above' &&
 					<Typography>{this.props.display.__title__}</Typography>
 				}
-				<FormControl className={`field_${this.props.name} node_select`} error={this.state.error !== false} variant={this.props.variant}>
+				<FormControl className={`field_${this.props.name} nodeSelect`} error={this.state.error !== false} variant={this.props.variant}>
 					{this.props.label === 'placeholder' &&
 						<InputLabel id={this.props.name}>{this.props.display.__title__}</InputLabel>
 					}

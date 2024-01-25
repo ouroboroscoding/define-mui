@@ -118,9 +118,19 @@ export default class DefineNodeSelect extends DefineNodeBase {
     dynamicData(data) {
         // Init the new state
         const oState = { options: data };
-        // If the current value doesn't match the list
-        if (afindi(data, 0, this.state.value) === -1) {
-            oState.value = '';
+        // If we have an existing value
+        if (this.state.value !== '' && this.state.value !== null) {
+            // If the current value doesn't match the list
+            if (afindi(data, 0, this.state.value) === -1) {
+                oState.value = '';
+            }
+        }
+        // Else, if we have a prop value
+        else if (this.props.value !== '' && this.props.value !== null) {
+            // If the current value doesn't match the list
+            if (afindi(data, 0, this.props.value) > -1) {
+                oState.value = this.props.value;
+            }
         }
         // Set the new state
         this.setState(oState);
@@ -184,7 +194,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
         return (React.createElement(React.Fragment, null,
             this.props.label === 'above' &&
                 React.createElement(Typography, null, this.props.display.__title__),
-            React.createElement(FormControl, { className: `field_${this.props.name} node_select`, error: this.state.error !== false, variant: this.props.variant },
+            React.createElement(FormControl, { className: `field_${this.props.name} nodeSelect`, error: this.state.error !== false, variant: this.props.variant },
                 this.props.label === 'placeholder' &&
                     React.createElement(InputLabel, { id: this.props.name }, this.props.display.__title__),
                 React.createElement(Select, { label: this.props.display.__title__, labelId: this.props.name, native: true, onChange: this.change, value: this.state.value === null ? '' : this.state.value }, lOpts),

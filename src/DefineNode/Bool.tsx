@@ -88,7 +88,7 @@ export default class DefineNodeBool extends DefineNodeBase {
 		return (
 			<Box>
 				<FormControlLabel
-					className={`field_${this.props.name} node_bool`}
+					className={`field_${this.props.name} nodeBool`}
 					control={<Checkbox
 								color="primary"
 								checked={this.state.value ? true : false}

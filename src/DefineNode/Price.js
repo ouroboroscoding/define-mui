@@ -103,7 +103,7 @@ export default class DefineNodePrice extends DefineNodeBase {
         }
         // Initial props
         const props = {
-            className: `field_${this.props.name} node_price`,
+            className: `field_${this.props.name} nodePrice`,
             error: this.state.error !== false,
             helperText: sError,
             onKeyPress: this.keyPressed,

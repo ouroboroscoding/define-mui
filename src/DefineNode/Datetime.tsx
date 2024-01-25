@@ -112,11 +112,11 @@ export default class DefineNodeDatetime extends DefineNodeBase {
 
 		// Render
 		return (
-			<Box className={`field_${this.props.name} node_datetime`}>
+			<Box className={`field_${this.props.name} nodeDatetime`}>
 				{this.props.label === 'above' &&
 					<Typography>{this.props.display.__title__}</Typography>
 				}
-				<Box className="flexColumns">
+				<Box className="nodeDatetimeFields">
 					<TextField
 						error={this.state.error !== false}
 						helperText={sError}

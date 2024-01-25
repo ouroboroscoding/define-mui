@@ -104,10 +104,10 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
             iso(this.state.value) :
             '0000-00-00 00:00:00';
         // Render
-        return (React.createElement(Box, { className: `field_${this.props.name} node_timestamp` },
+        return (React.createElement(Box, { className: `field_${this.props.name} nodeTimestamp` },
             this.props.label === 'above' &&
                 React.createElement(Typography, null, this.props.display.__title__),
-            React.createElement(Box, { className: "flexColumns" },
+            React.createElement(Box, { className: "nodeTimeStampFields" },
                 React.createElement(TextField, { className: "date", error: this.state.error !== false, helperText: sError, label: this.props.label === 'placeholder' ? this.props.display.__title__ : '', onChange: ev => this.change('date', ev.target.value), onKeyPress: this.keyPressed, type: "date", value: sDatetime.substring(0, 10), variant: this.props.variant }),
                 "\u00A0\u00A0",
                 React.createElement(TextField, { className: "time", error: this.state.error !== false, onChange: ev => this.change('time', ev.target.value), onKeyPress: this.keyPressed, type: "time", value: sDatetime.substring(11, 19), variant: this.props.variant }))));

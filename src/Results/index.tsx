@@ -38,9 +38,9 @@ import Row from './Row';
 import TotalsRow from './TotalsRow';
 
 // Types
-import { onSubmitCallback } from '../Form';
-import { gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
-import { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
+import type { onSubmitCallback } from '../Form';
+import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
+import type { actionStruct, customCallback, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
 export type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct };
 export type dynCallbacksStruct = {
 	optionsInstance: Subscribe,
@@ -59,9 +59,10 @@ export type titleStruct = {
 };
 export type ResultsProps = {
 	actions: actionStruct[] | false,
-	custom: Record<string, any>,
+	custom: Record<string, customCallback>,
 	data: Record<string, any>[],
 	display?: Record<string, Record<string, any>>,
+	dynamicOptions?: dynamicOptionStruct[],
 	errors: Record<string, any>,
 	fields: string[],
 	gridSizes: gridSizesStruct,
@@ -104,6 +105,13 @@ export default class Results extends React.PureComponent {
 		custom: PropTypes.object,
 		data: PropTypes.array.isRequired,
 		display: PropTypes.object,
+		dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
+			node: PropTypes.string.isRequired,
+			trigger: PropTypes.string.isRequired,
+			options: PropTypes.oneOfType(
+				[ PropTypes.object, PropTypes.func ]
+			).isRequired
+		})),
 		errors: PropTypes.object,
 		fields: PropTypes.array,
 		gridSizes: PropTypes.objectOf(
@@ -622,6 +630,7 @@ export default class Results extends React.PureComponent {
 								custom={this.props.custom}
 								data={row}
 								display={this.props.display}
+								dynamicOptions={this.props.dynamicOptions}
 								errors={this.props.errors}
 								fields={this.fields}
 								gridSizes={this.props.gridSizes}

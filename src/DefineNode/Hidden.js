@@ -30,7 +30,7 @@ export default class DefineNodeHidden extends DefineNodeBase {
      * @access public
      */
     render() {
-        return (React.createElement("input", { className: `field_${this.props.name} node_hidden`, type: "hidden", value: this.state.value === null ? '' : this.state.value }));
+        return (React.createElement("input", { className: `field_${this.props.name} nodeHidden`, type: "hidden", value: this.state.value === null ? '' : this.state.value }));
     }
 }
 // Register with Node
