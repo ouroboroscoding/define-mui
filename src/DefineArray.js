@@ -50,6 +50,16 @@ export default class DefineArray extends DefineBase {
     static propTypes = {
         display: PropTypes.object,
         error: PropTypes.object,
+        gridSizes: PropTypes.objectOf(PropTypes.oneOfType([
+            PropTypes.exact({
+                xs: PropTypes.number,
+                sm: PropTypes.number,
+                md: PropTypes.number,
+                lg: PropTypes.number,
+                xl: PropTypes.number
+            }),
+            PropTypes.object
+        ])),
         label: PropTypes.oneOf(['above', 'none', 'placeholder']),
         name: PropTypes.string.isRequired,
         node: PropTypes.instanceOf(ArrayNode).isRequired,
@@ -225,6 +235,7 @@ export default class DefineArray extends DefineBase {
             this.state.elements.map(o => React.createElement(Box, { key: o.key, className: "element" },
                 React.createElement(Box, { className: "data" }, DefineBase.create(this.state.nodeClass, {
                     display: this.state.nodeClass === 'Node' ? this.state.display : this.props.display,
+                    gridSizes: this.props.gridSizes,
                     ref: (el) => { if (el)
                         this.nodes[o.key] = el; },
                     name: this.props.name,

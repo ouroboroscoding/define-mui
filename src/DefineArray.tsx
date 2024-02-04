@@ -42,9 +42,11 @@ import {
 	variantOptions
 } from './DefineNode';
 import { DefineNodeBaseProps } from './DefineNode/Base';
+import type { gridSizesStruct } from './DefineParent';
 type DefineArrayProps = {
 	display?: Record<string, any>,
 	error?: any,
+	gridSizes?: gridSizesStruct,
 	label?: labelOptions,
 	name: string,
 	node: ArrayNode,
@@ -97,6 +99,18 @@ export default class DefineArray extends DefineBase {
 	static propTypes = {
 		display: PropTypes.object,
 		error: PropTypes.object,
+		gridSizes: PropTypes.objectOf(
+			PropTypes.oneOfType([
+				PropTypes.exact({
+					xs: PropTypes.number,
+					sm: PropTypes.number,
+					md: PropTypes.number,
+					lg: PropTypes.number,
+					xl: PropTypes.number
+				}),
+				PropTypes.object
+			])
+		),
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
 		name: PropTypes.string.isRequired,
 		node: PropTypes.instanceOf(ArrayNode).isRequired,
@@ -309,6 +323,7 @@ export default class DefineArray extends DefineBase {
 						<Box className="data">
 							{DefineBase.create(this.state.nodeClass, {
 								display: this.state.nodeClass === 'Node' ? this.state.display : this.props.display,
+								gridSizes: this.props.gridSizes,
 								ref: (el: DefineBase) => { if(el) (this.nodes as Record<string, DefineBase>)[o.key] = el; },
 								name: (this.props as DefineArrayProps).name,
 								node: this.child,
