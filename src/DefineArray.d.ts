@@ -13,9 +13,11 @@ import React from 'react';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
 import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
+import type { gridSizesStruct } from './DefineParent';
 type DefineArrayProps = {
     display?: Record<string, any>;
     error?: any;
+    gridSizes?: gridSizesStruct;
     label?: labelOptions;
     name: string;
     node: ArrayNode;
@@ -55,6 +57,9 @@ export default class DefineArray extends DefineBase {
     static propTypes: {
         display: PropTypes.Requireable<object>;
         error: PropTypes.Requireable<object>;
+        gridSizes: PropTypes.Requireable<{
+            [x: string]: object | null | undefined;
+        }>;
         label: PropTypes.Requireable<string>;
         name: PropTypes.Validator<string>;
         node: PropTypes.Validator<ArrayNode>;
