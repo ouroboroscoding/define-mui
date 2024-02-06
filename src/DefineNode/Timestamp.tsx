@@ -128,7 +128,7 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
 				{this.props.label === 'above' &&
 					<Typography>{this.props.display.__title__}</Typography>
 				}
-				<Box className="nodeTimeStampFields">
+				<Box className="nodeTimestampFields">
 					<TextField
 						className="date"
 						error={this.state.error !== false}
@@ -140,7 +140,6 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
 						value={sDatetime.substring(0,10)}
 						variant={this.props.variant}
 					/>
-					&nbsp;&nbsp;
 					<TextField
 						className="time"
 						error={this.state.error !== false}
