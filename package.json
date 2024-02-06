@@ -1,13 +1,13 @@
 {
 	"name": "@ouroboros/define-mui",
-	"version": "1.4.7",
+	"version": "1.4.8",
 	"description": "Components for use on @ouroboros/define types",
 	"main": "src/index.js",
 	"types": "src/index.d.ts",
 	"scripts": {
 		"build": "tslint -p tsconfig.json && tsc",
 		"clean": "cd src; find . -type f -name \"*.js\" -delete; find . -type f -name \"*.d.ts\" -delete",
-		"for_local": "npm install; tslint -p tsconfig.json && tsc; rm -Rf node_modules/react node_modules/react-dom node_modules/@ouroboros/define",
+		"for_local": "npm install; tslint -p tsconfig.json && tsc; rm -Rf node_modules/@emotion/react node_modules/@emotion/styled node_modules/@mui/material node_modules/@ouroboros/define node_modules/react node_modules/react-dom",
 		"test": "echo \"Error: no test specified.\" && exit 1"
 	},
 	"repository": {

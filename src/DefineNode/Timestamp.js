@@ -52,14 +52,18 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
      * @param value The new value
      */
     change(part, value) {
-        // Convert the current timestamp into a date/time
-        const sCurrent = iso(this.state.value, true);
+        // Convert the current timestamp into a date/time, if we have no current
+        //	timestamp, assume now
+        const sCurrent = iso(this.state.value || timestamp(), true, false);
         // If we got the date part
         let sDatetime;
         if (part === 'date') {
             sDatetime = value + ' ' + sCurrent.substring(11, 19);
         }
         else {
+            if (value.length === 5) {
+                value += ':00';
+            }
             sDatetime = sCurrent.substring(0, 10) + ' ' + value;
         }
         // Convert it to a timestamp
@@ -101,7 +105,7 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
         }
         // Generate the date/time from the current timestamp
         const sDatetime = this.state.value ?
-            iso(this.state.value) :
+            iso(this.state.value, true, false) :
             '0000-00-00 00:00:00';
         // Render
         return (React.createElement(Box, { className: `field_${this.props.name} nodeTimestamp` },
