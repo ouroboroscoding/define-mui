@@ -34,6 +34,7 @@ export type ResultsProps = {
     actions: actionStruct[] | false;
     custom: Record<string, customCallback>;
     data: Record<string, any>[];
+    disableCSV?: boolean;
     display?: Record<string, Record<string, any>>;
     dynamicOptions?: dynamicOptionStruct[];
     errors: Record<string, any>;
@@ -74,6 +75,7 @@ export default class Results extends React.PureComponent {
         actions: PropTypes.Requireable<NonNullable<boolean | any[] | null | undefined>>;
         custom: PropTypes.Requireable<object>;
         data: PropTypes.Validator<any[]>;
+        disableCSV: PropTypes.Requireable<boolean>;
         display: PropTypes.Requireable<object>;
         dynamicOptions: PropTypes.Requireable<(Required<PropTypes.InferProps<{
             node: PropTypes.Validator<string>;
@@ -107,6 +109,7 @@ export default class Results extends React.PureComponent {
     static defaultProps: {
         actions: never[];
         custom: {};
+        disableCSV: boolean;
         errors: {};
         fields: never[];
         gridSizes: {
