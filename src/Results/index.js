@@ -48,6 +48,7 @@ export default class Results extends React.PureComponent {
         actions: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
         custom: PropTypes.object,
         data: PropTypes.array.isRequired,
+        disableCSV: PropTypes.bool,
         display: PropTypes.object,
         dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
             node: PropTypes.string.isRequired,
@@ -77,6 +78,7 @@ export default class Results extends React.PureComponent {
     static defaultProps = {
         actions: [],
         custom: {},
+        disableCSV: false,
         errors: {},
         fields: [],
         gridSizes: { __default__: { xs: 12, sm: 6, lg: 3 } },
@@ -168,7 +170,9 @@ export default class Results extends React.PureComponent {
             // Set the title
             this.titles.push({
                 key: k,
-                text: ('__title__' in oNode) ? oNode.__title__ : ucfirst(k.replace(/_/g, ' '))
+                text: ('__title__' in oNode) ?
+                    oNode.__title__ :
+                    ucfirst(k.replace(/_/g, ' '))
             });
             // Set the type
             //	If we have a specifically passed type
@@ -214,7 +218,9 @@ export default class Results extends React.PureComponent {
             orderBy: props.orderBy,
             page: 0,
             rowsPerPage: rowsPerPage ? parseInt(rowsPerPage, 10) : 10,
-            totals: props.totals ? this._calculateTotals(oTypes, props.data) : {}
+            totals: props.totals ?
+                this._calculateTotals(oTypes, props.data) :
+                {}
         };
         // Bind methods
         this._exportCsv = this._exportCsv.bind(this);
@@ -287,7 +293,8 @@ export default class Results extends React.PureComponent {
                 // If there's a type
                 if (types[f]) {
                     // If the field is numeric
-                    if (['int', 'uint', 'float', 'time_elapsed', 'time_average'].includes(types[f])) {
+                    if (['int', 'uint', 'float',
+                        'time_elapsed', 'time_average'].includes(types[f])) {
                         oTotals[f] = 0;
                         oTypes[f] = 'numeric';
                     }
@@ -476,15 +483,21 @@ export default class Results extends React.PureComponent {
             React.createElement(Table, { stickyHeader: true, "aria-label": "sticky table" },
                 React.createElement(TableHead, null,
                     React.createElement(TableRow, null,
-                        this.titles.map(title => (React.createElement(TableCell, { key: title.key, sortDirection: this.state.orderBy === title.key ? this.state.order : false, className: 'field_' + title.key },
-                            React.createElement(TableSortLabel, { active: this.state.orderBy === title.key, direction: this.state.orderBy === title.key ? this.state.order : 'asc', "data-key": title.key, onClick: this._orderChange }, title.text)))),
+                        this.titles.map(title => (React.createElement(TableCell, { key: title.key, sortDirection: this.state.orderBy === title.key ?
+                                this.state.order :
+                                false, className: 'field_' + title.key },
+                            React.createElement(TableSortLabel, { active: this.state.orderBy === title.key, direction: this.state.orderBy === title.key ?
+                                    this.state.order :
+                                    'asc', "data-key": title.key, onClick: this._orderChange }, title.text)))),
                         this.props.actions &&
-                            React.createElement(TableCell, { align: "right", className: "actions" },
+                            React.createElement(TableCell, { align: "right", className: "actions" }, !this.props.disableCSV &&
                                 React.createElement(Tooltip, { title: "Export CSV" },
                                     React.createElement(IconButton, { onClick: this._exportCsv },
                                         React.createElement("i", { className: "fa-solid fa-file-csv" })))))),
                 React.createElement(TableBody, null, (this.state.rowsPerPage > 0 ?
-                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, display: this.props.display, dynamicOptions: this.props.dynamicOptions, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy || Results.defaultOnCopyKey, onNodeChange: this.props.onNodeChange, onUpdate: this.props.onUpdate }))),
+                    this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage +
+                        this.state.rowsPerPage) : this.state.data).map(row => React.createElement(Row, { actions: this.props.actions, custom: this.props.custom, data: row, display: this.props.display, dynamicOptions: this.props.dynamicOptions, errors: this.props.errors, fields: this.fields, gridSizes: this.props.gridSizes, gridSpacing: this.props.gridSpacing, info: this.info, key: row[this.info.primary], menu: this.props.menu, options: this.state.options, onDelete: this.props.onDelete, onKeyCopy: this.props.onKeyCopy ||
+                        Results.defaultOnCopyKey, onNodeChange: this.props.onNodeChange, onUpdate: this.props.onUpdate }))),
                 React.createElement(TableFooter, null,
                     this.props.totals &&
                         React.createElement(TotalsRow, { actions: this.props.actions ? true : false, fields: this.fields, info: this.info, totals: this.state.totals || {} }),

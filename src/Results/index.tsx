@@ -39,8 +39,13 @@ import TotalsRow from './TotalsRow';
 
 // Types
 import type { onSubmitCallback } from '../Form';
-import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
-import type { actionStruct, customCallback, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
+import type {
+	dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback }
+from '../DefineParent';
+import type {
+	actionStruct, customCallback, onDeleteCallback, onKeyCopyCallback,
+	menuStruct
+} from './Row';
 export type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct };
 export type dynCallbacksStruct = {
 	optionsInstance: Subscribe,
@@ -61,6 +66,7 @@ export type ResultsProps = {
 	actions: actionStruct[] | false,
 	custom: Record<string, customCallback>,
 	data: Record<string, any>[],
+	disableCSV?: boolean,
 	display?: Record<string, Record<string, any>>,
 	dynamicOptions?: dynamicOptionStruct[],
 	errors: Record<string, any>,
@@ -104,6 +110,7 @@ export default class Results extends React.PureComponent {
 		actions: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
 		custom: PropTypes.object,
 		data: PropTypes.array.isRequired,
+		disableCSV: PropTypes.bool,
 		display: PropTypes.object,
 		dynamicOptions: PropTypes.arrayOf(PropTypes.exact({
 			node: PropTypes.string.isRequired,
@@ -137,6 +144,7 @@ export default class Results extends React.PureComponent {
 	static defaultProps = {
 		actions: [],
 		custom: {},
+		disableCSV: false,
 		errors: {},
 		fields: [],
 		gridSizes: {__default__: {xs: 12, sm: 6, lg: 3}},
@@ -244,7 +252,9 @@ export default class Results extends React.PureComponent {
 			// Set the title
 			this.titles.push({
 				key: k,
-				text: ('__title__' in oNode) ? oNode.__title__ : ucfirst(k.replace(/_/g, ' '))
+				text: ('__title__' in oNode) ?
+						oNode.__title__ :
+						ucfirst(k.replace(/_/g, ' '))
 			});
 
 			// Set the type
@@ -274,7 +284,10 @@ export default class Results extends React.PureComponent {
 						callback: this._optionCallback.bind(this, k)
 					}
 				} else {
-					oOptions[k] = oNode.__options__.reduce((o: Record<string, string>, l: string[]) => Object.assign(o, {[l[0]]: l[1]}), {});
+					oOptions[k] = oNode.__options__.reduce((
+						o: Record<string, string>,
+						l: string[]
+					) => Object.assign(o, {[l[0]]: l[1]}), {});
 				}
 			}
 		}
@@ -296,7 +309,9 @@ export default class Results extends React.PureComponent {
 			orderBy: props.orderBy,
 			page: 0,
 			rowsPerPage: rowsPerPage ? parseInt(rowsPerPage, 10) : 10,
-			totals: props.totals ? this._calculateTotals(oTypes, props.data) : {}
+			totals: props.totals ?
+				this._calculateTotals(oTypes, props.data) :
+				{}
 		}
 
 		// Bind methods
@@ -316,7 +331,9 @@ export default class Results extends React.PureComponent {
 	 */
 	componentDidMount() {
 		for(const f of Object.keys(this.dynCallbacks)) {
-			this.dynCallbacks[f].optionsInstance.subscribe(this.dynCallbacks[f].callback)
+			this.dynCallbacks[f].optionsInstance.subscribe(
+				this.dynCallbacks[f].callback
+			)
 		}
 	}
 
@@ -330,7 +347,9 @@ export default class Results extends React.PureComponent {
 	 */
 	componentWillUnmount() {
 		for(const f of Object.keys(this.dynCallbacks)) {
-			this.dynCallbacks[f].optionsInstance.unsubscribe(this.dynCallbacks[f].callback);
+			this.dynCallbacks[f].optionsInstance.unsubscribe(
+				this.dynCallbacks[f].callback
+			);
 			delete this.dynCallbacks[f];
 		}
 	}
@@ -348,7 +367,9 @@ export default class Results extends React.PureComponent {
 		if(prevProps.data !== this.props.data) {
 			const oState: Record<string, any> = {data: this.props.data};
 			if(this.props.totals) {
-				oState.totals = this._calculateTotals(this.info.types, this.props.data);
+				oState.totals = this._calculateTotals(
+					this.info.types, this.props.data
+				);
 			}
 			this.setState(oState);
 		}
@@ -363,7 +384,10 @@ export default class Results extends React.PureComponent {
 	 * @param data The array of data
 	 * @returns an object of totals per field
 	 */
-	_calculateTotals(types: Record<string, string | null>, data: Record<string, any>[]) {
+	_calculateTotals(
+		types: Record<string, string | null>,
+		data: Record<string, any>[]
+	) {
 
 		// Init the totals, types, and count
 		const oTotals: Record<string, any> = {};
@@ -379,7 +403,11 @@ export default class Results extends React.PureComponent {
 				if(types[f]) {
 
 					// If the field is numeric
-					if(['int', 'uint', 'float', 'time_elapsed', 'time_average'].includes(types[f] as string)) {
+					if(['int', 'uint', 'float',
+						'time_elapsed', 'time_average'].includes(
+							types[f] as string
+						)
+					) {
 						oTotals[f] = 0;
 						oTypes[f] = 'numeric';
 					} else if(types[f] === 'decimal') {
@@ -462,7 +490,10 @@ export default class Results extends React.PureComponent {
 		// Export by generating and clicking a fake link
 		const link = document.createElement('a');
 		link.setAttribute('href', csv);
-		link.setAttribute('download', this.props.tree._name + '_' + date.toISOString() + '.csv');
+		link.setAttribute(
+			'download',
+			this.props.tree._name + '_' + date.toISOString() + '.csv'
+		);
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
@@ -480,7 +511,9 @@ export default class Results extends React.PureComponent {
 	 */
 	_optionCallback(field: string, options: string[][]) {
 		const oOptions = clone(this.state.options);
-		oOptions[field] = options.reduce((o, l) => Object.assign(o, {[l[0]]: l[1]}), {});
+		oOptions[field] = options.reduce(
+			(o, l) => Object.assign(o, {[l[0]]: l[1]}), {}
+		);
 		this.setState({ options: oOptions });
 	}
 
@@ -508,7 +541,9 @@ export default class Results extends React.PureComponent {
 
 		// Save the new state
 		this.setState({
-			data: this._sortData(clone(this.state.data), order, orderBy as string),
+			data: this._sortData(
+				clone(this.state.data), order, orderBy as string
+			),
 			order,
 			orderBy
 		});
@@ -537,7 +572,9 @@ export default class Results extends React.PureComponent {
 	 * @access private
 	 * @param event The event triggered by the option change
 	 */
-	_perPageChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+	_perPageChange(
+		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) {
 		localStorage.setItem('rowsPerPage', event.target.value);
 		this.setState({
 			rowsPerPage: parseInt(event.target.value, 10),
@@ -557,7 +594,11 @@ export default class Results extends React.PureComponent {
 	 * @param orderBy The field to sort by
 	 * @returns The sorted data
 	 */
-	_sortData(data: Record<string, any>[], order: 'asc' | 'desc', orderBy: string): Record<string, any>[] {
+	_sortData(
+		data: Record<string, any>[],
+		order: 'asc' | 'desc',
+		orderBy: string
+	): Record<string, any>[] {
 
 		// Sort it based on the order and orderBy
 		data.sort((a,b) => {
@@ -595,12 +636,20 @@ export default class Results extends React.PureComponent {
 							{this.titles.map(title => (
 								<TableCell
 									key={title.key}
-									sortDirection={this.state.orderBy === title.key ? this.state.order : false}
+									sortDirection={
+										this.state.orderBy === title.key ?
+											this.state.order :
+											false
+									}
 									className={'field_' + title.key}
 								>
 									<TableSortLabel
 										active={this.state.orderBy === title.key}
-										direction={this.state.orderBy === title.key ? this.state.order : 'asc'}
+										direction={
+											this.state.orderBy === title.key ?
+												this.state.order :
+												'asc'
+										}
 										data-key={title.key}
 										onClick={this._orderChange}
 									>
@@ -610,11 +659,13 @@ export default class Results extends React.PureComponent {
 							))}
 							{this.props.actions &&
 								<TableCell align="right" className="actions">
-									<Tooltip title="Export CSV">
-										<IconButton onClick={this._exportCsv}>
-											<i className="fa-solid fa-file-csv" />
-										</IconButton>
-									</Tooltip>
+									{!this.props.disableCSV &&
+										<Tooltip title="Export CSV">
+											<IconButton onClick={this._exportCsv}>
+												<i className="fa-solid fa-file-csv" />
+											</IconButton>
+										</Tooltip>
+									}
 								</TableCell>
 							}
 						</TableRow>
@@ -623,7 +674,8 @@ export default class Results extends React.PureComponent {
 						{(this.state.rowsPerPage > 0 ?
 							this.state.data.slice(
 								this.state.page * this.state.rowsPerPage,
-								this.state.page * this.state.rowsPerPage + this.state.rowsPerPage
+								this.state.page * this.state.rowsPerPage +
+									this.state.rowsPerPage
 							) : this.state.data).map(row =>
 							<Row
 								actions={this.props.actions}
@@ -640,7 +692,8 @@ export default class Results extends React.PureComponent {
 								menu={this.props.menu}
 								options={this.state.options}
 								onDelete={this.props.onDelete}
-								onKeyCopy={this.props.onKeyCopy || Results.defaultOnCopyKey}
+								onKeyCopy={this.props.onKeyCopy ||
+											Results.defaultOnCopyKey}
 								onNodeChange={this.props.onNodeChange}
 								onUpdate={this.props.onUpdate}
 							/>
@@ -663,7 +716,9 @@ export default class Results extends React.PureComponent {
 								onRowsPerPageChange={this._perPageChange}
 								page={this.state.page}
 								rowsPerPage={this.state.rowsPerPage}
-								rowsPerPageOptions={[10, 20, 50, { label: 'All', value: -1 }]}
+								rowsPerPageOptions={
+									[10, 20, 50, { label: 'All', value: -1 }]
+								}
 								ActionsComponent={PaginationActions}
 								SelectProps={{
 									inputProps: { 'aria-label': 'rows per page' },
