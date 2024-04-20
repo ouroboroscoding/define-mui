@@ -17,6 +17,13 @@
 	},
 	"include": ["./"],
 	"exclude": [
+		"documentation",
 		"node_modules"
-	]
+	],
+
+	"typedocOptions": {
+		"disableSources": true,
+		"entryPoints": [ "src/index.ts" ],
+		"out": "documentation/html"
+	}
 }

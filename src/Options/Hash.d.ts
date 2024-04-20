@@ -22,8 +22,8 @@ export type HashArg = HashData | HashFunc;
  * @extends Subscribe
  */
 export default class Hash extends Subscribe {
-    _hash: HashData;
-    _key: string;
+    protected _hash: HashData;
+    protected _key: string;
     /**
      * Hash
      *
@@ -35,7 +35,7 @@ export default class Hash extends Subscribe {
      * 				promise
      * @param initialKey Optional, the initial key to use,
      * 						defaults to the first key in the hash
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(hash: HashArg, initialKey?: string | null);
     /**
@@ -46,7 +46,7 @@ export default class Hash extends Subscribe {
      * @name hash
      * @access public
      * @param hash Optional, used to set value, else get
-     * @returns the current hash, or void on setting new hash
+     * @return the current hash, or void on setting new hash
      */
     hash(hash: HashData): void | HashData;
     /**
@@ -57,7 +57,7 @@ export default class Hash extends Subscribe {
      * @name key
      * @access public
      * @param key Optional, used to set value, else get
-     * @returns the current key, or void on setting new key
+     * @return the current key, or void on setting new key
      */
     key(key?: string): void | string;
 }

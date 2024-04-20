@@ -43,7 +43,7 @@ import {
 } from './DefineNode';
 import { DefineNodeBaseProps } from './DefineNode/Base';
 import type { gridSizesStruct } from './DefineParent';
-type DefineArrayProps = {
+export type DefineArrayProps = {
 	display?: Record<string, any>,
 	error?: any,
 	gridSizes?: gridSizesStruct,
@@ -121,7 +121,7 @@ export default class DefineArray extends DefineBase {
 		validation: PropTypes.bool,
 		variant: PropTypes.oneOf(['filled', 'outlined', 'standard'])
 	}
-	static defaultProps = {
+	protected static defaultProps = {
 		label: 'placeholder',
 		name: '',
 		value: [],
@@ -137,7 +137,7 @@ export default class DefineArray extends DefineBase {
 	 * @name DefineArray
 	 * @access public
 	 * @param props Properties passed to the component
-	 * @returns a new instance
+	 * @return a new instance
 	 */
 	constructor(props: DefineArrayProps) {
 
@@ -384,7 +384,7 @@ export default class DefineArray extends DefineBase {
 	 *
 	 * @name valid
 	 * @public
-	 * @returns true if the current values are valid
+	 * @return true if the current values are valid
 	 */
 	valid(): boolean {
 
@@ -442,7 +442,7 @@ export default class DefineArray extends DefineBase {
 	 *
 	 * @name value
 	 * @property
-	 * @returns the current value
+	 * @return the current value
 	 */
 	get value(): any[] {
 

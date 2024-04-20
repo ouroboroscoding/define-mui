@@ -41,7 +41,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
      * @name DefineNodeSelect
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         // Call parent
@@ -57,7 +57,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
             }
             // Else, if we have a list but the elements aren't lists
             else if (!(lDisplayOptions[0] instanceof Array)) {
-                lDisplayOptions = lDisplayOptions.map((s) => [s, s]);
+                lDisplayOptions = lDisplayOptions.map(s => [s, s]);
             }
         }
         // Else, get the options from the node
@@ -187,8 +187,8 @@ export default class DefineNodeSelect extends DefineNodeBase {
         const lOpts = [React.createElement("option", { key: 0, value: '' })];
         // Add the other options
         let i = 1;
-        for (const o of this.state.options) {
-            lOpts.push(React.createElement("option", { key: i, value: o[0] }, o[1]));
+        for (const l of this.state.options) {
+            lOpts.push(React.createElement("option", { key: i, value: l[0] }, l[1]));
             ++i;
         }
         return (React.createElement(React.Fragment, null,

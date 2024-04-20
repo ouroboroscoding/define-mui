@@ -85,7 +85,7 @@ export default class DefineArray extends DefineBase {
      * @name DefineArray
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         // Call parent
@@ -281,7 +281,7 @@ export default class DefineArray extends DefineBase {
      *
      * @name valid
      * @public
-     * @returns true if the current values are valid
+     * @return true if the current values are valid
      */
     valid() {
         // Valid?
@@ -327,7 +327,7 @@ export default class DefineArray extends DefineBase {
      *
      * @name value
      * @property
-     * @returns the current value
+     * @return the current value
      */
     get value() {
         // If we have a plugin component

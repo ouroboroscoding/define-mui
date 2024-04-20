@@ -16,7 +16,7 @@
  * @name errorTree
  * @access public
  * @param {string[][]} errors The list of errors
- * @returns {object}
+ * @return {object}
  */
 export function errorTree(errors: string[][]): Record<string, any> {
 

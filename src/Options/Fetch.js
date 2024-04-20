@@ -35,7 +35,7 @@ export default class Fetch extends Subscribe {
      * 					that return [key, value] for the element passed
      * 					to it
      * @param data Default data
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(fetch, fields = ['_id', 'name'], data = []) {
         // Call the base class constructor
@@ -54,7 +54,7 @@ export default class Fetch extends Subscribe {
      * @name subscribe
      * @access public
      * @param callback The function to call when data changes
-     * @param remove Set to false to remove the callback
+     * @return The current data plus an unsubscribe function
      */
     subscribe(callback) {
         // Call the base class subscribe

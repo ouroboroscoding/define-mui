@@ -17,9 +17,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 // Types
-import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './';
+import type { nodeDisplayStruct } from '../types';
+import type { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './';
 export type DefineNodeBaseProps = {
-	display: Record<string, any>,
+	display: nodeDisplayStruct,
 	error?: any,
 	label?: labelOptions,
 	name: string,
@@ -37,7 +38,7 @@ export type DefineNodeBaseState = {
 	error?: string | false,
 	value: any
 }
-type RegisterType = {
+export type RegisterType = {
 	class_: typeof DefineNodeBase,
 	default_: any
 };
@@ -91,7 +92,7 @@ export default class DefineNodeBase extends React.Component {
 	 * @name DefineNodeBase
 	 * @access public
 	 * @param props Properties passed to the component
-	 * @returns a new instance
+	 * @return a new instance
 	 */
 	constructor(props: DefineNodeBaseProps) {
 
@@ -145,7 +146,7 @@ export default class DefineNodeBase extends React.Component {
 	 *
 	 * @name error
 	 * @access public
-	 * @param msg The error message
+	 * @param error The error message
 	 */
 	error(error: any): void {
 		this.setState({ error });
@@ -188,7 +189,7 @@ export default class DefineNodeBase extends React.Component {
 	 *
 	 * @name value
 	 * @property
-	 * @returns the current value
+	 * @return the current value
 	 */
 	get value(): any {
 		return this.state.value === '' ? null : this.state.value;

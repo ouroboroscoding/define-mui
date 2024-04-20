@@ -11,12 +11,13 @@ import { Tree } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DefineParent from './DefineParent';
+import type { displayStruct } from './types';
 import type { labelOptions, variantOptions } from './DefineNode';
 import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './DefineParent';
 export type onCancelCallback = () => void;
 export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
-    display?: Record<string, any>;
+    display?: displayStruct;
     dynamicOptions?: dynamicOptionStruct[];
     fields?: string[];
     gridSizes?: gridSizesStruct;
@@ -99,7 +100,7 @@ export default class Form extends React.Component {
      * @name DefineSearch
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props: FormProps);
     /**
@@ -167,7 +168,7 @@ export default class Form extends React.Component {
      *
      * @name value
      * @property
-     * @returns the current value
+     * @return the current value
      */
     get value(): Record<string, any>;
     /**

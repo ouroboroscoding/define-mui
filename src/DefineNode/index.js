@@ -82,7 +82,7 @@ export default class DefineNode extends DefineBase {
      * @name DefineNode
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         // Call parent
@@ -130,7 +130,7 @@ export default class DefineNode extends DefineBase {
      *
      * @name defaultType
      * @param node The Node associated with the element
-     * @returns string
+     * @return string
      */
     defaultType(node) {
         // If it has options, it's a select, no question
@@ -193,7 +193,7 @@ export default class DefineNode extends DefineBase {
      *
      * @name generateState
      * @access public
-     * @returns the state to use
+     * @return the state to use
      */
     generateState() {
         // Get the react display properties
@@ -264,7 +264,7 @@ export default class DefineNode extends DefineBase {
      *
      * @name value
      * @property
-     * @returns the current value
+     * @return the current value
      */
     get value() {
         // If we don't have the element

@@ -11,7 +11,9 @@
 
 // Ouroboros modules
 import { Node } from '@ouroboros/define';
-import Subscribe, { SubscribeCallback, SubscribeReturn } from '@ouroboros/subscribe';
+import Subscribe, {
+	SubscribeCallback, SubscribeReturn
+} from '@ouroboros/subscribe';
 
 // NPM modules
 import React from 'react';
@@ -37,7 +39,7 @@ import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 // Types
 type DefineNodeMultiSelectCSVState = {
 	defaultValues: string[] | null,
-	options: string[][]
+	options: [string, string][]
 }
 
 /**
@@ -74,7 +76,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 	 * @name DefineNodeMultiSelectCSV
 	 * @access public
 	 * @param props Properties passed to the component
-	 * @returns a new instance
+	 * @return a new instance
 	 */
 	constructor(props: DefineNodeBaseProps) {
 
@@ -101,13 +103,13 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 
 			// If any exist, use them to set the dialog options
 			if(lNodeOptions) {
-				lDisplayOptions = lNodeOptions.map(s => [s, s]);
+				lDisplayOptions = (lNodeOptions.map(s => [s, s]) as [string, string][]);
 			}
 		}
 
 		// Set the state options
 		this.state.defaultValues = null;
-		this.state.options = lDisplayOptions;
+		this.state.options = lDisplayOptions as [string, string][];
 
 		// Refs
 		this.checks = [];
@@ -132,7 +134,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 		if(this.callback) {
 
 			// Subscribe to the changes in options
-			this.subscribe = this.props.display.__options__.subscribe(this.callback);
+			this.subscribe = (this.props.display.__options__ as Subscribe).subscribe(this.callback);
 
 			// Store the current options
 			this.setState({ options: this.subscribe.data });
@@ -180,7 +182,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 	open(): void {
 		this.setState({
 			defaultValues: this.state.value.split(
-				this.props.display.extra_space ? ', ' : ','
+				this.props.display.__extra_space__ ? ', ' : ','
 			)
 		});
 	}
@@ -220,7 +222,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
 
 		// Combine the values
 		let sValue = lValues.join(
-			this.props.display.extra_space ? ', ' : ','
+			this.props.display.__extra_space__ ? ', ' : ','
 		);
 
 		// If there's a callback

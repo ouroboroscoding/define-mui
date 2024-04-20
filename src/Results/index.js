@@ -119,7 +119,7 @@ export default class Results extends React.PureComponent {
      *
      * @name Results
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         // Call parent
@@ -280,7 +280,7 @@ export default class Results extends React.PureComponent {
      *
      * @param types The types of each field
      * @param data The array of data
-     * @returns an object of totals per field
+     * @return an object of totals per field
      */
     _calculateTotals(types, data) {
         // Init the totals, types, and count
@@ -449,7 +449,7 @@ export default class Results extends React.PureComponent {
      * @param data The data to sort
      * @param order The order to sort by
      * @param orderBy The field to sort by
-     * @returns The sorted data
+     * @return The sorted data
      */
     _sortData(data, order, orderBy) {
         // Sort it based on the order and orderBy

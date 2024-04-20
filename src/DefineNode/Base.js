@@ -54,7 +54,7 @@ export default class DefineNodeBase extends React.Component {
      * @name DefineNodeBase
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         // Call the React parent component
@@ -99,7 +99,7 @@ export default class DefineNodeBase extends React.Component {
      *
      * @name error
      * @access public
-     * @param msg The error message
+     * @param error The error message
      */
     error(error) {
         this.setState({ error });
@@ -139,7 +139,7 @@ export default class DefineNodeBase extends React.Component {
      *
      * @name value
      * @property
-     * @returns the current value
+     * @return the current value
      */
     get value() {
         return this.state.value === '' ? null : this.state.value;

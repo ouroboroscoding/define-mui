@@ -39,6 +39,7 @@ import TotalsRow from './TotalsRow';
 
 // Types
 import type { onSubmitCallback } from '../Form';
+import type { displayStruct } from '../types';
 import type {
 	dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback }
 from '../DefineParent';
@@ -67,7 +68,7 @@ export type ResultsProps = {
 	custom: Record<string, customCallback>,
 	data: Record<string, any>[],
 	disableCSV?: boolean,
-	display?: Record<string, Record<string, any>>,
+	display?: displayStruct,
 	dynamicOptions?: dynamicOptionStruct[],
 	errors: Record<string, any>,
 	fields: string[],
@@ -193,7 +194,7 @@ export default class Results extends React.PureComponent {
 	 *
 	 * @name Results
 	 * @param props Properties passed to the component
-	 * @returns a new instance
+	 * @return a new instance
 	 */
 	constructor(props: ResultsProps) {
 
@@ -382,7 +383,7 @@ export default class Results extends React.PureComponent {
 	 *
 	 * @param types The types of each field
 	 * @param data The array of data
-	 * @returns an object of totals per field
+	 * @return an object of totals per field
 	 */
 	_calculateTotals(
 		types: Record<string, string | null>,
@@ -592,7 +593,7 @@ export default class Results extends React.PureComponent {
 	 * @param data The data to sort
 	 * @param order The order to sort by
 	 * @param orderBy The field to sort by
-	 * @returns The sorted data
+	 * @return The sorted data
 	 */
 	_sortData(
 		data: Record<string, any>[],

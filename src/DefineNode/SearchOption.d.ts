@@ -39,7 +39,7 @@ export default class DefineNodeSearchOption extends React.Component {
      * @name DefineNodeSearchOption
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props: DefineNodeSearchOptionProps);
     /**
@@ -68,7 +68,7 @@ export default class DefineNodeSearchOption extends React.Component {
      *
      * @name value
      * @property
-     * @returns the current value
+     * @return the current value
      */
     get value(): string | null;
     /**

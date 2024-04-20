@@ -105,7 +105,7 @@ export default class DefineHash extends DefineBase {
 	 * @name DefineHash
 	 * @access public
 	 * @param props Properties passed to the component
-	 * @returns a new instance
+	 * @return a new instance
 	 */
 	constructor(props: DefineHashProps) {
 
@@ -225,7 +225,7 @@ export default class DefineHash extends DefineBase {
 	 *
 	 * @name valid
 	 * @public
-	 * @returns true if the current values are valid
+	 * @return true if the current values are valid
 	 */
 	valid() {
 
@@ -244,7 +244,7 @@ export default class DefineHash extends DefineBase {
 	 *
 	 * @name value
 	 * @property
-	 * @returns the current value
+	 * @return the current value
 	 */
 	get value() {
 

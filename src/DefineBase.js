@@ -31,7 +31,7 @@ export default class DefineBase extends React.Component {
      * @access public
      * @static
      * @param name The name of the child class type to create
-     * @returns
+     * @return
      */
     static create(name, props) {
         // If the name is invalid

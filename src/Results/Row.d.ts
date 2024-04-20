@@ -9,6 +9,7 @@
  */
 import PropTypes from 'prop-types';
 import React from 'react';
+import { displayStruct } from '../types';
 import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
 import type { onSubmitCallback } from '../Form';
 export type actionCallback = (data: Record<string, any>) => void;
@@ -42,7 +43,7 @@ export type ResultsRowProps = {
     actions: actionStruct[] | false;
     custom: Record<string, customCallback>;
     data: Record<string, any>;
-    display?: Record<string, any>;
+    display?: displayStruct;
     dynamicOptions?: dynamicOptionStruct[];
     errors?: Record<string, any>;
     fields: string[];

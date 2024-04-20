@@ -44,7 +44,7 @@ export default class DefineNodeNumber extends DefineNodeBase {
 	 * @name DefineNodeNumber
 	 * @access public
 	 * @param props Properties passed to the component
-	 * @returns a new instance
+	 * @return a new instance
 	 */
 	constructor(props: DefineNodeBaseProps) {
 		super(props);

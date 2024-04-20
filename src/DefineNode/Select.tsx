@@ -66,7 +66,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 	 * @name DefineNodeSelect
 	 * @access public
 	 * @param props Properties passed to the component
-	 * @returns a new instance
+	 * @return a new instance
 	 */
 	constructor(props: DefineNodeBaseProps) {
 
@@ -87,7 +87,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 
 			// Else, if we have a list but the elements aren't lists
 			else if(!(lDisplayOptions[0] instanceof Array)) {
-				lDisplayOptions = lDisplayOptions.map((s: string) => [s, s]);
+				lDisplayOptions = lDisplayOptions.map(s => [s, s]) as [string, string][];
 			}
 		}
 		// Else, get the options from the node
@@ -98,12 +98,12 @@ export default class DefineNodeSelect extends DefineNodeBase {
 
 			// If any exist, use them to set the dialog options
 			if(lNodeOptions) {
-				lDisplayOptions = lNodeOptions.map(s => [s, s]);
+				lDisplayOptions = lNodeOptions.map(s => [s, s]) as [string, string][];
 			}
 		}
 
 		// Set the state options
-		this.state.options = lDisplayOptions;
+		this.state.options = lDisplayOptions as [string, string][];
 
 		// Bind methods
 		this.change = this.change.bind(this);
@@ -123,7 +123,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		if(this.callback) {
 
 			// Subscribe to the changes in options
-			this.subscribe = this.props.display.__options__.subscribe(this.callback);
+			this.subscribe = (this.props.display.__options__ as Subscribe).subscribe(this.callback);
 
 			// Store the current options
 			this.setState({ options: this.subscribe.data });
@@ -244,8 +244,8 @@ export default class DefineNodeSelect extends DefineNodeBase {
 
 		// Add the other options
 		let i = 1;
-		for(const o of this.state.options) {
-			lOpts.push(<option key={i} value={o[0]}>{o[1]}</option>);
+		for(const l of this.state.options) {
+			lOpts.push(<option key={i} value={l[0]}>{l[1]}</option>);
 			++i;
 		}
 

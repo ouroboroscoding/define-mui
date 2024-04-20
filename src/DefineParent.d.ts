@@ -12,7 +12,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
-import type { HashArg } from 'Options/Hash';
+import type { displayStruct } from './types';
+import type { HashArg } from './Options/Hash';
 import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 export type dynamicOptionStruct = {
     node: string;
@@ -33,7 +34,7 @@ export type ParentChangeEvent = {
     oldValue: any;
 };
 export type DefineParentProps = {
-    display?: Record<string, any>;
+    display?: displayStruct;
     dynamicOptions?: dynamicOptionStruct[];
     error?: Record<string, any>;
     fields?: string[];
@@ -53,7 +54,7 @@ export type DefineParentProps = {
     variant: variantOptions;
 };
 type DefineParentState = {
-    display: Record<string, any>;
+    display: displayStruct;
     elements?: JSX.Element[];
     order?: string[];
     plugin: typeof DefineNodeBase | null;
@@ -125,7 +126,7 @@ export default class DefineParent extends DefineBase {
      * @name DefineParent
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props: DefineParentProps);
     /**
@@ -155,7 +156,7 @@ export default class DefineParent extends DefineBase {
      *
      * @name generateState
      * @access public
-     * @returns the new state to set
+     * @return the new state to set
      */
     generateState(): DefineParentState;
     /**
@@ -195,7 +196,7 @@ export default class DefineParent extends DefineBase {
      *
      * @name valid
      * @public
-     * @returns true if the current values are valid
+     * @return true if the current values are valid
      */
     valid(): boolean;
     /**
@@ -205,7 +206,7 @@ export default class DefineParent extends DefineBase {
      *
      * @name value
      * @property
-     * @returns the current value
+     * @return the current value
      */
     get value(): Record<string, any>;
     /**

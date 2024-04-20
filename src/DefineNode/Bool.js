@@ -32,7 +32,7 @@ export default class DefineNodeBool extends DefineNodeBase {
      *
      * @name DefineNodeBool
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         super(props);

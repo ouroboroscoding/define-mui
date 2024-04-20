@@ -32,7 +32,7 @@ export default class DefineNodePassword extends DefineNodeBase {
      * @name DefineNodePassword
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         super(props);

@@ -20,9 +20,9 @@ export type FieldsType = (data: Record<string, any>) => string[];
  * @extends
  */
 export default class Fetch extends Subscribe {
-    _fetch: FetchType;
-    _fetched: boolean;
-    _fields: string[] | FieldsType;
+    protected _fetch: FetchType;
+    protected _fetched: boolean;
+    protected _fields: string[] | FieldsType;
     /**
      * Fetch
      *
@@ -35,7 +35,7 @@ export default class Fetch extends Subscribe {
      * 					that return [key, value] for the element passed
      * 					to it
      * @param data Default data
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(fetch: FetchType, fields?: string[] | FieldsType, data?: string[][]);
     /**
@@ -46,7 +46,7 @@ export default class Fetch extends Subscribe {
      * @name subscribe
      * @access public
      * @param callback The function to call when data changes
-     * @param remove Set to false to remove the callback
+     * @return The current data plus an unsubscribe function
      */
     subscribe(callback: SubscribeCallback): SubscribeReturn;
 }

@@ -47,6 +47,7 @@ export {
 }
 
 // Types
+import type { nodeDisplayStruct } from '../types';
 //	Options
 export type labelOptions = 'above' | 'none' | 'placeholder';
 export type typeOptions = 'create' | 'search' | 'update';
@@ -56,7 +57,7 @@ export type onChangeCallback = (value: any, oldValue: any) => void;
 export type onEnterPressedCallback = () => void;
 //	Props
 export type DefineNodeProps = {
-	display?: Record<string, any>,
+	display?: nodeDisplayStruct,
 	error: string | false,
 	label?: labelOptions,
 	name: string,
@@ -72,7 +73,7 @@ export type DefineNodeProps = {
 };
 //	State
 type DefineNodeState = {
-	display: Record<string, any>,
+	display: nodeDisplayStruct,
 	type: string,
 	value?: any
 };
@@ -132,7 +133,7 @@ export default class DefineNode extends DefineBase {
 	 * @name DefineNode
 	 * @access public
 	 * @param props Properties passed to the component
-	 * @returns a new instance
+	 * @return a new instance
 	 */
 	constructor(props: DefineNodeProps) {
 
@@ -191,7 +192,7 @@ export default class DefineNode extends DefineBase {
 	 *
 	 * @name defaultType
 	 * @param node The Node associated with the element
-	 * @returns string
+	 * @return string
 	 */
 	defaultType(node: Node) {
 
@@ -264,7 +265,7 @@ export default class DefineNode extends DefineBase {
 	 *
 	 * @name generateState
 	 * @access public
-	 * @returns the state to use
+	 * @return the state to use
 	 */
 	generateState(): DefineNodeState {
 
@@ -366,7 +367,7 @@ export default class DefineNode extends DefineBase {
 	 *
 	 * @name value
 	 * @property
-	 * @returns the current value
+	 * @return the current value
 	 */
 	get value(): any | null {
 

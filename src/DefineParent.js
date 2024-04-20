@@ -94,7 +94,7 @@ export default class DefineParent extends DefineBase {
      * @name DefineParent
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         // Call parent
@@ -182,7 +182,7 @@ export default class DefineParent extends DefineBase {
      *
      * @name generateState
      * @access public
-     * @returns the new state to set
+     * @return the new state to set
      */
     generateState() {
         // Get the React special section if there is one
@@ -431,7 +431,7 @@ export default class DefineParent extends DefineBase {
      *
      * @name valid
      * @public
-     * @returns true if the current values are valid
+     * @return true if the current values are valid
      */
     valid() {
         // Valid?
@@ -474,7 +474,7 @@ export default class DefineParent extends DefineBase {
      *
      * @name value
      * @property
-     * @returns the current value
+     * @return the current value
      */
     get value() {
         // If we have a plugin component

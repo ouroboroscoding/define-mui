@@ -14,7 +14,7 @@ import DefineNodeBase from './Base';
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 type DefineNodeMultiSelectCSVState = {
     defaultValues: string[] | null;
-    options: string[][];
+    options: [string, string][];
 };
 /**
  * Node Multi Select CSV
@@ -39,7 +39,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
      * @name DefineNodeMultiSelectCSV
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props: DefineNodeBaseProps);
     /**

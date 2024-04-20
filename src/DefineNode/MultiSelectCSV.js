@@ -48,7 +48,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
      * @name DefineNodeMultiSelectCSV
      * @access public
      * @param props Properties passed to the component
-     * @returns a new instance
+     * @return a new instance
      */
     constructor(props) {
         // Call parent
@@ -135,7 +135,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
      */
     open() {
         this.setState({
-            defaultValues: this.state.value.split(this.props.display.extra_space ? ', ' : ',')
+            defaultValues: this.state.value.split(this.props.display.__extra_space__ ? ', ' : ',')
         });
     }
     /**
@@ -168,7 +168,7 @@ export default class DefineNodeMultiSelectCSV extends DefineNodeBase {
             }
         }
         // Combine the values
-        let sValue = lValues.join(this.props.display.extra_space ? ', ' : ',');
+        let sValue = lValues.join(this.props.display.__extra_space__ ? ', ' : ',');
         // If there's a callback
         if (this.props.onChange) {
             const mResult = this.props.onChange(sValue, this.state.value);
