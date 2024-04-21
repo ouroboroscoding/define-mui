@@ -17,12 +17,104 @@ It is strongly recommended that before using this library you fully understand h
 
 Define-MUI extends definition files by adding the special field \_\_ui\_\_ to both parents and nodes.
 
-### Parent UI
+### Tree / Parent UI
+
+| Node | Type | Description |
+| ---- | ---- | ----------- |
+| [\_\_create\_\_](#ui-create) | string[] | The list, and order, of nodes to display in a `create` Form. |
+| [\_\_order\_\_](#ui-order) | string[] | The list, and order, of nodes to display as a default for all class types. |
+| [\_\_primary\_\_](#ui-primary) | string | The name of the node that represents the primary key in the record. |
+| [\_\_result\_\_](#ui-result) | string[] | The list, and order, of nodes to display in each Result row. |
+| [\_\_update\_\_](#ui-update) | string[] | The list, and order, of nodes to display in an `update` Form. |
+
+#### ui create
+
+Allows a custom list of nodes, and the order of those nodes, in a `create` Form instead of showing every node in the same order as in the definition.
+
+```json
+{
+	"__name__": "user",
+	"__ui__": {
+		"__create__": [
+			"email",
+			"passwd",
+			"first_name",
+			"last_name"
+		]
+	}
+}
+```
+
+#### ui order
+
+Allows a custom list of nodes, and the order of those nodes,
+Allows a custom list of nodes, and the order of those nodes, to display in a `create` Form if \_\_create\_\_ is not set, in an `update` Form if \_\_update\_\_ is not set, and in a Result row if \_\_result\_\_ is not set.
+
+```json
+{
+	"__name__": "user",
+	"__ui__": {
+		"__order__": [
+			"email",
+			"first_name",
+			"last_name"
+		]
+	}
+}
+```
+
+#### ui primary
+
+Allows setting the name of the node that acts as the primary key of the record, by default `_id` is used.
+
+```json
+{
+	"__name__": "user",
+	"__ui__": {
+		"__primary__": "id"
+	}
+}
+```
+
+#### ui result
+
+Allows a custom list of nodes, and the order of those nodes, in a Result row instead of showing every node in the same order as in the definition.
+
+```json
+{
+	"__name__": "user",
+	"__ui__": {
+		"__primary__": "id",
+		"__result__": [
+			"id",
+			"created",
+			"email"
+		]
+	}
+}
+```
+
+#### ui update
+
+Allows a custom list of nodes, and the order of those nodes, in a `update` Form instead of showing every node in the same order as in the definition.
+
+```json
+{
+	"__name__": "user",
+	"__ui__": {
+		"__update__": [
+			"email",
+			"first_name",
+			"last_name"
+		]
+	}
+}
+```
 
 ### Node UI
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
+| Node | Type | Description |
+| ---- | ---- | ----------- |
 | [\_\_adornment\_\_](#ui-adornment) | string | Character or string to put before field data, only used in `price` node |
 | [\_\_default\_\_](#ui-default) | any | The default value to set for the node in the case of a `create` form |
 | [\_\_errors\_\_](#ui-errors) | object | Error message codes or short strings mapped to more descriptive error messages we want to display |
