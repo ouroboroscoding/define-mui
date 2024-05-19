@@ -38,7 +38,6 @@ export type ResultsProps = {
     disableCSV?: boolean;
     display?: displayStruct;
     dynamicOptions?: dynamicOptionStruct[];
-    errors: Record<string, any>;
     fields: string[];
     gridSizes: gridSizesStruct;
     gridSpacing: number;
@@ -83,7 +82,6 @@ export default class Results extends React.PureComponent {
             trigger: PropTypes.Validator<string>;
             options: PropTypes.Validator<object>;
         }>> | null | undefined)[]>;
-        errors: PropTypes.Requireable<object>;
         fields: PropTypes.Requireable<any[]>;
         gridSizes: PropTypes.Requireable<{
             [x: string]: Required<PropTypes.InferProps<{
@@ -111,7 +109,6 @@ export default class Results extends React.PureComponent {
         actions: never[];
         custom: {};
         disableCSV: boolean;
-        errors: {};
         fields: never[];
         gridSizes: {
             __default__: {

@@ -295,6 +295,7 @@ export default class Form extends React.Component {
 					ref={(el: DefineParent) => this.parent = el}
 					name={this.props.tree._name}
 					node={this.props.tree}
+					nodeVariant={this.props.variant}
 					onEnterPressed={this._submit}
 					onNodeChange={this.props.onNodeChange}
 					type={this.props.type}

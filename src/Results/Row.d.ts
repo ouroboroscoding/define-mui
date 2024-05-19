@@ -45,7 +45,6 @@ export type ResultsRowProps = {
     data: Record<string, any>;
     display?: displayStruct;
     dynamicOptions?: dynamicOptionStruct[];
-    errors?: Record<string, any>;
     fields: string[];
     gridSizes?: gridSizesStruct;
     gridSpacing?: number;
@@ -79,7 +78,6 @@ declare namespace ResultsRow {
             trigger: PropTypes.Validator<string>;
             options: PropTypes.Validator<object>;
         }>> | null | undefined)[]>;
-        errors: PropTypes.Validator<object>;
         fields: PropTypes.Validator<any[]>;
         gridSizes: PropTypes.Requireable<{
             [x: string]: Required<PropTypes.InferProps<{

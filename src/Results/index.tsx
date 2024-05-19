@@ -70,7 +70,6 @@ export type ResultsProps = {
 	disableCSV?: boolean,
 	display?: displayStruct,
 	dynamicOptions?: dynamicOptionStruct[],
-	errors: Record<string, any>,
 	fields: string[],
 	gridSizes: gridSizesStruct,
 	gridSpacing: number,
@@ -120,7 +119,6 @@ export default class Results extends React.PureComponent {
 				[ PropTypes.object, PropTypes.func ]
 			).isRequired
 		})),
-		errors: PropTypes.object,
 		fields: PropTypes.array,
 		gridSizes: PropTypes.objectOf(
 			PropTypes.exact({
@@ -146,7 +144,6 @@ export default class Results extends React.PureComponent {
 		actions: [],
 		custom: {},
 		disableCSV: false,
-		errors: {},
 		fields: [],
 		gridSizes: {__default__: {xs: 12, sm: 6, lg: 3}},
 		gridSpacing: 2,
@@ -684,7 +681,6 @@ export default class Results extends React.PureComponent {
 								data={row}
 								display={this.props.display}
 								dynamicOptions={this.props.dynamicOptions}
-								errors={this.props.errors}
 								fields={this.fields}
 								gridSizes={this.props.gridSizes}
 								gridSpacing={this.props.gridSpacing}

@@ -296,7 +296,6 @@ ResultsRow.propTypes = {
         trigger: PropTypes.string.isRequired,
         options: PropTypes.oneOfType([PropTypes.object, PropTypes.func]).isRequired
     })),
-    errors: PropTypes.object.isRequired,
     fields: PropTypes.array.isRequired,
     gridSizes: PropTypes.objectOf(PropTypes.exact({
         xs: PropTypes.number,

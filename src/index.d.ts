@@ -18,4 +18,5 @@ export type { DefineNodeProps, labelOptions, onChangeCallback, onEnterPressedCal
 export type { DefineNodeBaseProps, RegisterType } from './DefineNode/Base';
 export { default as DefineParent } from './DefineParent';
 export type { DefineParentProps, dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback, ParentChangeEvent } from './DefineParent';
+export type { displayStruct, nodeDisplayStruct } from './types';
 export type { SubscribeCallback } from '@ouroboros/subscribe';

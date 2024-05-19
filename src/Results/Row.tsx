@@ -68,7 +68,6 @@ export type ResultsRowProps = {
 	data: Record<string, any>,
 	display?: displayStruct,
 	dynamicOptions?: dynamicOptionStruct[],
-	errors?: Record<string, any>,
 	fields: string[],
 	gridSizes?: gridSizesStruct,
 	gridSpacing?: number,
@@ -462,7 +461,6 @@ ResultsRow.propTypes = {
 			[ PropTypes.object, PropTypes.func ]
 		).isRequired
 	})),
-	errors: PropTypes.object.isRequired,
 	fields: PropTypes.array.isRequired,
 	gridSizes: PropTypes.objectOf(
 		PropTypes.exact({
