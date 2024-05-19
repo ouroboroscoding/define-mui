@@ -99,6 +99,21 @@ export default class DefineNodeBool extends DefineNodeBase {
 			</Box>
 		);
 	}
+
+	/**
+	 * Value (get)
+	 *
+	 * Returns the current value of the component
+	 *
+	 * @name value
+	 * @property
+	 * @returns the current value
+	 */
+	get value(): any {
+		return this.state.value === '' ?
+			(this.props.node.optional() ? null : false) :
+			this.state.value;
+	}
 }
 
 // Register with Node
