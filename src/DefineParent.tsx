@@ -30,7 +30,7 @@ import { errorTree } from './Shared';
 
 // Types
 import type { Node } from '@ouroboros/define'
-import type { HashArg } from 'Options/Hash';
+import type { HashArg } from './Options/Hash';
 import type { DefineNodeBaseProps } from './DefineNode/Base';
 import {
 	DefineNodeProps,
