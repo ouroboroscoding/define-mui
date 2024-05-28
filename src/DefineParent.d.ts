@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
-import type { HashArg } from 'Options/Hash';
+import type { HashArg } from './Options/Hash';
 import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
 export type dynamicOptionStruct = {
     node: string;
