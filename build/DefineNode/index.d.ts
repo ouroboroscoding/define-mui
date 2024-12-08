@@ -120,7 +120,7 @@ export default class DefineNode extends DefineBase {
      * @param node The Node associated with the element
      * @returns string
      */
-    defaultType(node: Node): "select" | "time" | "text" | "number" | "bool" | "date" | "datetime" | "price" | "timestamp";
+    defaultType(node: Node): "select" | "time" | "text" | "number" | "date" | "bool" | "datetime" | "price" | "timestamp";
     /**
      * Error
      *
