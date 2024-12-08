@@ -6,7 +6,7 @@
 	"types": "build/index.d.ts",
 	"scripts": {
 		"build": "tslint -p tsconfig.json && tsc",
-		"clean": "rm build/*",
+		"clean": "rm Rf build/*",
 		"for_local": "npm install; tslint -p tsconfig.json && tsc; rm -Rf node_modules/@emotion/react node_modules/@emotion/styled node_modules/@mui/material node_modules/@ouroboros/define node_modules/react node_modules/react-dom",
 		"test": "echo \"Error: no test specified.\" && exit 1"
 	},
