@@ -14,6 +14,7 @@ import { Parent } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
 // Material UI
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 // Components
@@ -66,6 +67,7 @@ export default class DefineParent extends DefineBase {
         onEnterPressed: PropTypes.func,
         placeholder: PropTypes.string,
         returnAll: PropTypes.bool,
+        root: PropTypes.bool,
         type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
         value: PropTypes.object,
         validation: PropTypes.bool,
@@ -77,6 +79,7 @@ export default class DefineParent extends DefineBase {
         gridSpacing: 2,
         label: 'placeholder',
         nodeVariant: 'outlined',
+        root: false,
         returnAll: false,
         value: {},
         validation: true,
@@ -401,9 +404,12 @@ export default class DefineParent extends DefineBase {
             return (React.createElement(ElName, { ...oProps }));
         }
         // Regular Parent
-        return (React.createElement(React.Fragment, null,
+        return this.props.root ? (React.createElement(React.Fragment, null,
             this.state.title &&
                 React.createElement(Typography, { variant: "h6" }, this.state.title),
+            React.createElement(Grid, { container: true, spacing: this.props.gridSpacing, className: "nodeParent _" + this.props.name }, this.state.elements))) : (React.createElement(Box, { className: "nodeParentChild" },
+            this.state.title &&
+                React.createElement(Box, { className: "legend" }, this.state.title),
             React.createElement(Grid, { container: true, spacing: this.props.gridSpacing, className: "nodeParent _" + this.props.name }, this.state.elements)));
     }
     /**
