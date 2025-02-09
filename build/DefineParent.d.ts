@@ -47,6 +47,7 @@ export type DefineParentProps = {
     onNodeChange?: Record<string, onNodeChangeCallback>;
     placeholder?: string;
     returnAll?: boolean;
+    root?: boolean;
     type: typeOptions;
     value: Record<string, any>;
     validation?: boolean;
@@ -93,6 +94,7 @@ export default class DefineParent extends DefineBase {
         onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
         placeholder: PropTypes.Requireable<string>;
         returnAll: PropTypes.Requireable<boolean>;
+        root: PropTypes.Requireable<boolean>;
         type: PropTypes.Validator<string>;
         value: PropTypes.Requireable<object>;
         validation: PropTypes.Requireable<boolean>;
@@ -108,6 +110,7 @@ export default class DefineParent extends DefineBase {
         gridSpacing: number;
         label: string;
         nodeVariant: string;
+        root: boolean;
         returnAll: boolean;
         value: {};
         validation: boolean;
