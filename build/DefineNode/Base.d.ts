@@ -27,7 +27,7 @@ export type DefineNodeBaseProps = {
     variant: variantOptions;
 };
 export type DefineNodeBaseState = {
-    error?: string | false;
+    error?: string | Record<string, any> | false;
     value: any;
 };
 type RegisterType = {

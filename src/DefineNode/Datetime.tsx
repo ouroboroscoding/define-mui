@@ -119,7 +119,7 @@ export default class DefineNodeDatetime extends DefineNodeBase {
 				<Box className="nodeDatetimeFields">
 					<TextField
 						error={this.state.error !== false}
-						helperText={sError}
+						helperText={sError as string}
 						label={this.props.label === 'placeholder' ? this.props.display.__title__ : ''}
 						onChange={ev => this.change('date', ev.target.value)}
 						onKeyPress={this.keyPressed}

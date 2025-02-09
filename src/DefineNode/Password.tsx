@@ -115,7 +115,7 @@ export default class DefineNodePassword extends DefineNodeBase {
 		const props: TextFieldProps = {
 			className: `field_${this.props.name} nodePassword`,
 			error: this.state.error !== false,
-			helperText: sError,
+			helperText: sError as string,
 			onKeyPress: this.keyPressed,
 			onChange: this.change,
 			type: 'password',
