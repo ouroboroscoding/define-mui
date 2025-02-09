@@ -268,7 +268,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 						{lOpts}
 					</Select>
 					{this.state.error &&
-						<FormHelperText>{sError}</FormHelperText>
+						<FormHelperText>{sError as string}</FormHelperText>
 					}
 				</FormControl>
 			</React.Fragment>

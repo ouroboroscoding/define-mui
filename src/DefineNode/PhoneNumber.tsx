@@ -124,7 +124,7 @@ export default class DefineNodePhoneNumber extends DefineNodeBase {
 						value={this.state.value === null ? '' : this.state.value}
 					/>
 					{this.state.error &&
-						<FormHelperText>{sError}</FormHelperText>
+						<FormHelperText>{sError as string}</FormHelperText>
 					}
 				</FormControl>
 			</React.Fragment>

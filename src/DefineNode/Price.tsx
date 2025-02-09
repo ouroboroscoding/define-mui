@@ -127,7 +127,7 @@ export default class DefineNodePrice extends DefineNodeBase {
 		const props: TextFieldProps = {
 			className: `field_${this.props.name} nodePrice`,
 			error: this.state.error !== false,
-			helperText: sError,
+			helperText: sError as string,
 			onKeyPress: this.keyPressed,
 			onChange: this.change,
 			type: 'number',
