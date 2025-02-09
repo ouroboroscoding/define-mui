@@ -136,7 +136,7 @@ export default class DefineNodeTimestamp extends DefineNodeBase {
 					<TextField
 						className="date"
 						error={this.state.error !== false}
-						helperText={sError}
+						helperText={sError as string}
 						label={this.props.label === 'placeholder' ? this.props.display.__title__ : ''}
 						onChange={ev => this.change('date', ev.target.value)}
 						onKeyPress={this.keyPressed}

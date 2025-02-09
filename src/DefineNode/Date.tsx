@@ -103,7 +103,7 @@ export default class DefineNodeDate extends DefineNodeBase {
 			InputLabelProps: { shrink: true },
 			className: `field_${this.props.name} nodeDate`,
 			error: this.state.error !== false,
-			helperText: sError,
+			helperText: sError as string,
 			onKeyPress: this.keyPressed,
 			onChange: this.change,
 			type: 'date',
