@@ -17,6 +17,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 // Material UI
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
@@ -71,6 +72,7 @@ export type DefineParentProps = {
 	onNodeChange?: Record<string, onNodeChangeCallback>
 	placeholder?: string,
 	returnAll?: boolean,
+	root?: boolean,
 	type: typeOptions,
 	value: Record<string, any>,
 	validation?: boolean,
@@ -137,6 +139,7 @@ export default class DefineParent extends DefineBase {
 		onEnterPressed: PropTypes.func,
 		placeholder: PropTypes.string,
 		returnAll: PropTypes.bool,
+		root: PropTypes.bool,
 		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
 		value: PropTypes.object,
 		validation: PropTypes.bool,
@@ -148,6 +151,7 @@ export default class DefineParent extends DefineBase {
 		gridSpacing: 2,
 		label: 'placeholder',
 		nodeVariant: 'outlined',
+		root: false,
 		returnAll: false,
 		value: {},
 		validation: true,
@@ -375,7 +379,7 @@ export default class DefineParent extends DefineBase {
 				// Grid sizes
 				const gridSizes = (this.props.gridSizes as gridSizesStruct)[sField] ||
 								(this.props.gridSizes as gridSizesStruct).__default__ ||
-								{xs: 12}
+								{ xs: 12 }
 
 				// Display override
 				const mDisplay = (this.props.display &&
@@ -544,15 +548,22 @@ export default class DefineParent extends DefineBase {
 		}
 
 		// Regular Parent
-		return (
-			<React.Fragment>
+		return this.props.root ? (<React.Fragment>
+			{this.state.title &&
+				<Typography variant="h6">{this.state.title}</Typography>
+			}
+			<Grid container spacing={this.props.gridSpacing} className={"nodeParent _" + this.props.name}>
+				{this.state.elements}
+			</Grid>
+		</React.Fragment>) : (
+			<Box className="nodeParentChild">
 				{this.state.title &&
-					<Typography variant="h6">{this.state.title}</Typography>
+					<Box className="legend">{this.state.title}</Box>
 				}
 				<Grid container spacing={this.props.gridSpacing} className={"nodeParent _" + this.props.name}>
 					{this.state.elements}
 				</Grid>
-			</React.Fragment>
+			</Box>
 		);
 	}
 
