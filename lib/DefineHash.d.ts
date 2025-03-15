@@ -12,19 +12,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
-import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
-export type DefineHashProps = {
-    display?: Record<string, any>;
-    error?: any;
-    label?: labelOptions;
-    name: string;
+import { DefineBaseProps } from './DefineBase';
+export type DefineHashProps = DefineBaseProps & {
     node: Hash;
-    onEnterPressed?: onEnterPressedCallback;
-    placeholder?: string;
-    type: typeOptions;
     value?: Record<any, any>;
-    validation?: boolean;
-    variant: variantOptions;
 };
 type DefineHashState = {
     plugin: typeof DefineNodeBase;
@@ -46,6 +37,7 @@ export default class DefineHash extends DefineBase {
         label: PropTypes.Requireable<string>;
         name: PropTypes.Requireable<string>;
         node: PropTypes.Validator<Hash>;
+        onChange: PropTypes.Requireable<(...args: any[]) => any>;
         onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
         placeholder: PropTypes.Requireable<string>;
         type: PropTypes.Validator<string>;
@@ -111,7 +103,7 @@ export default class DefineHash extends DefineBase {
      * @public
      * @returns true if the current values are valid
      */
-    valid(): boolean;
+    valid(): any;
     /**
      * Value (get)
      *

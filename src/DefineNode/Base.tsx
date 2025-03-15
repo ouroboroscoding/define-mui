@@ -10,14 +10,17 @@
 
 // Ouroboros
 import { Base } from '@ouroboros/define';
-import { compare, empty } from '@ouroboros/tools';
+import { empty } from '@ouroboros/tools';
 
 // NPM modules
 import PropTypes from 'prop-types';
 import React from 'react';
 
 // Types
-import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './';
+import {
+	labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions,
+	variantOptions
+} from './';
 export type DefineNodeBaseProps = {
 	display: Record<string, any>,
 	error?: any,

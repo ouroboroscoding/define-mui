@@ -7,7 +7,41 @@
  * @copyright Ouroboros Coding Inc.
  * @created 2023-02-14
  */
+import { Base } from '@ouroboros/define';
 import React from 'react';
+import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
+export type DefineBaseProps = {
+    display?: Record<string, any>;
+    error?: any;
+    gridSizes?: gridSizesPropStruct;
+    gridSpacing?: number;
+    label?: labelOptions;
+    name: string;
+    node: Base;
+    onChange?: onChangeCallback;
+    onEnterPressed?: onEnterPressedCallback;
+    placeholder?: string;
+    ref?: any;
+    returnAll?: boolean;
+    type: typeOptions;
+    value?: any;
+    validation?: boolean;
+    variant: variantOptions;
+};
+export type gridSizesStruct = {
+    xs?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+};
+export type gridSizesByNodeStruct = {
+    [key: string]: gridSizesStruct;
+};
+export type gridSizesByParentStruct = {
+    [key: string]: gridSizesByNodeStruct;
+};
+export type gridSizesPropStruct = gridSizesByNodeStruct | gridSizesByParentStruct;
 /**
  * Define Base
  *

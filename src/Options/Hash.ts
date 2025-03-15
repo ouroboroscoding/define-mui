@@ -12,7 +12,7 @@
 import Subscribe from '@ouroboros/subscribe';
 
 // Types
-export type HashData = Record<string, string[][]>;
+export type HashData = Record<string, string[][] | string[]>;
 export type HashFunc = () => Promise<HashData>;
 export type HashArg = HashData | HashFunc
 
@@ -50,19 +50,26 @@ export default class Hash extends Subscribe {
 		// Call base class constructor
 		super([]);
 
-		// Store or fetch the hash data
+		// Store the key
+		this._key = initialKey || '';
+
+		// If we got a function, call it and process the promise data
 		if(typeof hash === 'function') {
 			hash().then(data => {
 				this.hash(data)
 			}, error => {
 				throw new Error(error)
 			});
-		} else {
-			this._hash = hash;
 		}
 
-		// Store the key
-		this._key = initialKey || '';
+		// Else, we got the data as is, store it and check if the key already
+		//	fits
+		else {
+			this._hash = hash;
+			if(this._key in this._hash) {
+				this.set(this._hash[this._key]);
+			}
+		}
 	}
 
 	/**

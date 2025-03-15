@@ -39,8 +39,9 @@ import TotalsRow from './TotalsRow';
 
 // Types
 import type { onSubmitCallback } from '../Form';
+import type { gridSizesPropStruct } from '../DefineBase';
 import type {
-	dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback }
+	dynamicOptionStruct, onNodeChangeCallback }
 from '../DefineParent';
 import type {
 	actionStruct, customCallback, onDeleteCallback, onKeyCopyCallback,
@@ -71,7 +72,7 @@ export type ResultsProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	errors: Record<string, any>,
 	fields: string[],
-	gridSizes: gridSizesStruct,
+	gridSizes: gridSizesPropStruct,
 	gridSpacing: number,
 	menu: menuStruct[],
 	onDelete: onDeleteCallback | false,

@@ -13,7 +13,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import DefineNodeBase from './Base';
 import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 type DefineNodeSelectState = {
-    options: string[][];
+    options: string[][] | string[];
 };
 /**
  * Node Select
@@ -67,7 +67,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
      * @access public
      * @param data The new options data
      */
-    dynamicData(data: string[][]): void;
+    dynamicData(data: string[] | string[][]): void;
     /**
      * Change
      *

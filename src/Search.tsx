@@ -26,12 +26,13 @@ import DefineParent from './DefineParent';
 import { errorTree } from './Shared';
 
 // Types
+import { gridSizesByNodeStruct } from './DefineBase';
 import { labelOptions } from './DefineNode';
-import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
+import { dynamicOptionStruct } from './DefineParent';
 export type onSearchCallback = (value: Record<string, any>) => Promise<boolean>;
 export type DefineSearchProps = {
 	dynamicOptions?: dynamicOptionStruct[],
-	gridSizes?: gridSizesStruct,
+	gridSizes?: gridSizesByNodeStruct,
 	hash: string,
 	label?: labelOptions,
 	name?: string,

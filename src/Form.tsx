@@ -25,18 +25,20 @@ import Typography from '@mui/material/Typography';
 import DefineParent from './DefineParent';
 
 // Types
-import type { labelOptions, variantOptions } from './DefineNode';
-import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from './DefineParent';
+import type { gridSizesPropStruct } from './DefineBase';
+import type { labelOptions, onChangeCallback, variantOptions } from './DefineNode';
+import type { dynamicOptionStruct, onNodeChangeCallback } from './DefineParent';
 export type onCancelCallback = () => void;
 export type onSubmitCallback = (value: Record<string, any>, key: any) => boolean | string[][] | Promise<boolean>;
 export type FormProps = {
 	display?: Record<string, any>,
 	dynamicOptions?: dynamicOptionStruct[],
 	fields?: string[],
-	gridSizes?: gridSizesStruct,
+	gridSizes?: gridSizesPropStruct,
 	gridSpacing?: number,
 	label?: labelOptions,
 	onCancel?: onCancelCallback,
+	onChange?: onChangeCallback,
 	onNodeChange?: Record<string, onNodeChangeCallback>,
 	onSubmit: onSubmitCallback,
 	title: string | boolean,
@@ -295,6 +297,7 @@ export default class Form extends React.Component {
 					root={true}
 					name={this.props.tree._name}
 					node={this.props.tree}
+					onChange={this.props.onChange}
 					onEnterPressed={this._submit}
 					onNodeChange={this.props.onNodeChange}
 					type={this.props.type}

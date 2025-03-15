@@ -9,10 +9,44 @@
  */
 
 // Ouroboros modules
+import { Base } from '@ouroboros/define';
 import { isObject } from '@ouroboros/tools';
 
 // NPM modules
 import React from 'react';
+
+// Types
+import {
+	labelOptions,
+	onChangeCallback,
+	onEnterPressedCallback,
+	typeOptions,
+	variantOptions } from './DefineNode';
+
+export type DefineBaseProps = {
+	display?: Record<string, any>,
+	error?: any,
+	gridSizes?: gridSizesPropStruct,
+	gridSpacing?: number,
+	label?: labelOptions,
+	name: string,
+	node: Base,
+	onChange?: onChangeCallback,
+	onEnterPressed?: onEnterPressedCallback,
+	placeholder?: string,
+	ref?: any,
+	returnAll?: boolean,
+	type: typeOptions,
+	value?: any,
+	validation?: boolean,
+	variant: variantOptions
+};
+export type gridSizesStruct = {
+	xs?: number, sm?: number, md?: number, lg?: number, xl?: number
+}
+export type gridSizesByNodeStruct = { [key: string]: gridSizesStruct }
+export type gridSizesByParentStruct = { [key: string]: gridSizesByNodeStruct }
+export type gridSizesPropStruct = gridSizesByNodeStruct | gridSizesByParentStruct
 
 // Private variables
 const _components: Record<string, typeof DefineBase> = {};

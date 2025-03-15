@@ -9,7 +9,7 @@
  */
 
 // Ouroboros
-import { compare, empty, merge } from '@ouroboros/tools';
+import { compare, empty, merge, opop } from '@ouroboros/tools';
 import { Parent } from '@ouroboros/define';
 
 // NPM modules
@@ -30,53 +30,32 @@ import { Hash as OptionsHash } from './Options';
 import { errorTree } from './Shared';
 
 // Types
-import type { Node } from '@ouroboros/define'
+import type { Node } from '@ouroboros/define';
+import type {
+	DefineBaseProps, gridSizesByNodeStruct, gridSizesStruct
+} from './DefineBase';
 import type { HashArg } from './Options/Hash';
 import type { DefineNodeBaseProps } from './DefineNode/Base';
-import {
-	DefineNodeProps,
-	labelOptions,
-	onEnterPressedCallback,
-	typeOptions,
-	variantOptions } from './DefineNode';
+import { DefineNodeProps, onChangeCallback } from './DefineNode';
 export type dynamicOptionStruct = {
 	node: string,
 	trigger: string,
 	options: HashArg
 }
-export type gridSizesStruct = Record<string, {
-	xs?: number,
-	sm?: number,
-	md?: number,
-	lg?: number,
-	xl?: number
-} | Record<string, any>>;
-export type onNodeChangeCallback = (event: ParentChangeEvent) => void | Record<string, any>;
-export type ParentChangeEvent = {
+export type onNodeChangeCallback = (event: ParentNodeChangeEvent) => void | Record<string, any>;
+export type ParentNodeChangeEvent = {
 	data: Record<string, any>,
 	node: string,
-	oldValue: any
+	oldValue: any,
+	value: any
 };
-export type DefineParentProps = {
-	display?: Record<string, any>,
+export type DefineParentProps = DefineBaseProps & {
 	dynamicOptions?: dynamicOptionStruct[],
-	error?: Record<string, any>,
 	fields?: string[],
-	gridSizes?: gridSizesStruct,
-	gridSpacing?: number,
-	label?: labelOptions,
-	name: string,
 	node: Parent,
-	nodeVariant: variantOptions
-	onEnterPressed?: onEnterPressedCallback,
-	onNodeChange?: Record<string, onNodeChangeCallback>
-	placeholder?: string,
-	returnAll?: boolean,
+	onNodeChange?: Record<string, onChangeCallback>
 	root?: boolean,
-	type: typeOptions,
-	value: Record<string, any>,
-	validation?: boolean,
-	variant: variantOptions
+	value: Record<string, any>
 };
 type DefineParentState = {
 	display: Record<string, any>,
@@ -134,23 +113,21 @@ export default class DefineParent extends DefineBase {
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
 		name: PropTypes.string.isRequired,
 		node: PropTypes.instanceOf(Parent).isRequired,
-		nodeVariant: PropTypes.oneOf(['filled', 'outlined', 'standard']),
 		onNodeChange: PropTypes.objectOf(PropTypes.func),
 		onEnterPressed: PropTypes.func,
 		placeholder: PropTypes.string,
 		returnAll: PropTypes.bool,
 		root: PropTypes.bool,
-		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
+		type: PropTypes.oneOf([ 'create', 'search', 'update' ]).isRequired,
 		value: PropTypes.object,
 		validation: PropTypes.bool,
-		variant: PropTypes.oneOf(['filled', 'outlined', 'standard'])
+		variant: PropTypes.oneOf([ 'filled', 'outlined', 'standard' ])
 	}
 	static defaultProps = {
-		dynamicOptions: [],
-		gridSizes: {__default__: {xs: 12}},
+		dynamicOptions: [ ],
+		gridSizes: { __default__: { xs: 12 } },
 		gridSpacing: 2,
 		label: 'placeholder',
-		nodeVariant: 'outlined',
 		root: false,
 		returnAll: false,
 		value: {},
@@ -376,74 +353,213 @@ export default class DefineParent extends DefineBase {
 					this.props.value[sField] :
 					null;
 
-				// Grid sizes
-				const gridSizes = (this.props.gridSizes as gridSizesStruct)[sField] ||
-								(this.props.gridSizes as gridSizesStruct).__default__ ||
-								{ xs: 12 }
-
 				// Display override
 				const mDisplay = (this.props.display &&
 									this.props.display[sField]) ||
 									undefined;
 
-				// Check what kind of node it is
-				switch(sClass) {
-					case 'ArrayNode':
-					case 'HashNode':
-					case 'Parent':
-						lElements.push(
-							<Grid key={sField} item {...gridSizes}>
-								{DefineBase.create(sClass, {
-									display: mDisplay,
-									gridSizes,
-									label: this.props.label,
-									nodeVariant: this.props.nodeVariant,
-									ref: (el: DefineBase) => this.fields[sField] = el,
-									name: sField,
-									node: oChild,
-									onEnterPressed: this.props.onEnterPressed,
-									returnAll: this.props.returnAll,
-									type: this.props.type,
-									value: mValue,
-									validation: this.props.validation
-								})}
-							</Grid>
-						);
-						break;
-					case 'Node':
-						const oProps: DefineNodeProps = {
-							display: mDisplay,
-							error: false,
-							label: this.props.label,
-							ref: (el: DefineBase) => this.fields[sField] = el,
-							name: sField,
-							node: oChild as Node,
-							onEnterPressed: this.props.onEnterPressed,
-							type: this.props.type,
-							value: mValue,
-							validation: this.props.validation,
-							variant: this.props.nodeVariant
+				// If we have an array, hash, or parent
+				if([ 'ArrayNode', 'HashNode', 'Parent' ].includes(sClass)) {
+
+					// Calculate the different grid sizes
+					let gridSizes: gridSizesStruct;
+
+					// Init the base props
+					const oProps: DefineBaseProps = {
+						display: mDisplay,
+						label: this.props.label,
+						ref: (el: DefineBase) => this.fields[sField] = el,
+						name: sField,
+						node: oChild,
+						onEnterPressed: this.props.onEnterPressed,
+						returnAll: this.props.returnAll,
+						type: this.props.type,
+						value: mValue,
+						validation: this.props.validation,
+						variant: this.props.variant
+					}
+
+					// If we have the actual field name
+					if(sField in this.props.gridSizes!) {
+
+						// If we have a "self", pop it off, or use the default
+						//	full width
+						if('__self__' in this.props.gridSizes![sField]) {
+							gridSizes = opop(this.props.gridSizes!, sField);
+						} else {
+							gridSizes = { xs: 12 }
 						}
 
-						// If we have a trigger
-						if(oDynamicOptions && sField in oDynamicOptions) {
-							oProps.onChange = oDynamicOptions[sField];
-						}
+						// Set the child grid sizes from the remainder
+						oProps.gridSizes = this.props.gridSizes![sField] as gridSizesByNodeStruct;
+					}
 
-						// If we have a callback
-						if(this.props.onNodeChange && sField in this.props.onNodeChange) {
-							oProps.onChange = (value: any, oldValue: any) => { return this._nodeChanged(sField, value, oldValue) }
-						}
+					// Else, if we have a default on the grid sizes, set it as
+					//	both the child and self
+					else if('__default__' in this.props.gridSizes!) {
+						gridSizes = this.props.gridSizes!.__default__;
+						oProps.gridSizes = { __default__: this.props.gridSizes!.__default__ }
+					}
 
-						// Create the new element and push it to the list
-						lElements.push(
-							<Grid key={sField} item {...gridSizes}>
-								{DefineBase.create(sClass, oProps)}
-							</Grid>
-						);
-						break;
-					default:
-						throw new Error('Invalid Node type in parent of child: ' + sField);
+					// Else, set max width for everything
+					else {
+						gridSizes = { xs: 12 };
+					}
+
+					// Init the list of possible callbacks
+					const oOnChange: Record<string, any> = { };
+
+					// If we have a "node" level callback, add it to the list
+					if(this.props.onNodeChange && sField in this.props.onNodeChange) {
+						oOnChange.node = this.props.onNodeChange[sField];
+					}
+
+					// If we have a parent level callback, add it as well
+					if(this.props.onChange) {
+						oOnChange.parent = this.props.onChange;
+					}
+
+					// If we have any onChange events
+					if(!empty(oOnChange)) {
+						oProps.onChange = (value: any, oldValue: any) => {
+
+							// Generate the full parent value with the node
+							//	that just changed
+							const mNewValue = { ...this.value, [sField]: value }
+
+							// If we are tracking the entire parent
+							if(oOnChange.parent) {
+								oOnChange.parent(
+									mNewValue,
+									this.props.value
+								);
+							}
+
+							// If we are tracking a specific node changing
+							if(oOnChange.node) {
+								const m = oOnChange.node({
+									data: mNewValue,
+									node: sField,
+									oldValue,
+									value
+								});
+								if(m) {
+									return this._nodeTriggeredChanges(sField, m);
+								}
+							}
+						}
+					}
+
+					// Add the complex node to a grid item that's pushed to the
+					//	list of elements to render
+					lElements.push(
+						<Grid key={sField} item {...gridSizes}>
+							{DefineBase.create(sClass, oProps)}
+						</Grid>
+					);
+				}
+
+				// Else, if we're a node
+				else if(sClass === 'Node') {
+
+					// Calculate the grid sizes
+					let gridSizes: gridSizesStruct;
+
+					// If we have the actual field name
+					if(sField in this.props.gridSizes!) {
+						gridSizes = this.props.gridSizes![sField];
+					}
+
+					// Else, if we have a default on the grid sizes
+					else if('__default__' in this.props.gridSizes!) {
+						gridSizes = this.props.gridSizes!.__default__;
+					}
+
+					// Else, set max width for everything
+					else {
+						gridSizes = { xs: 12 };
+					}
+
+					// Init the base props for the node
+					const oProps: DefineNodeProps = {
+						display: mDisplay,
+						error: false,
+						label: this.props.label,
+						ref: (el: DefineBase) => this.fields[sField] = el,
+						name: sField,
+						node: oChild as Node,
+						onEnterPressed: this.props.onEnterPressed,
+						type: this.props.type,
+						value: mValue,
+						validation: this.props.validation,
+						variant: this.props.variant
+					}
+
+					// Init the list of possible callbacks
+					const oOnChange: Record<string, any> = { };
+
+					// If we have a trigger, add it to the list of callbacks
+					if(oDynamicOptions && sField in oDynamicOptions) {
+						oOnChange.dynamic = oDynamicOptions[sField];
+					}
+
+					// If we have a node level callback, add it to the list
+					if(this.props.onNodeChange && sField in this.props.onNodeChange) {
+						oOnChange.node = this.props.onNodeChange[sField];
+					}
+
+					// If we have a parent level callback, add it as well
+					if(this.props.onChange) {
+						oOnChange.parent = this.props.onChange;
+					}
+
+					// If we have any onChange events
+					if(!empty(oOnChange)) {
+						oProps.onChange = (value: any, oldValue: any) => {
+
+							// If we have some sort of dynamic based on the
+							//	dynamicOptions prop
+							if(oOnChange.dynamic) {
+								oOnChange.dynamic(value);
+							}
+
+							// If we are tracking either an individual node, or
+							//	the parent as a whole
+							if(oOnChange.node || oOnChange.parent) {
+
+								// Generate the full parent value with the node
+								//	that just changed
+								const mNewValue = { ...this.value, [sField]: value }
+								if(oOnChange.parent) {
+									oOnChange.parent(mNewValue, this.props.value);
+								}
+								if(oOnChange.node) {
+									const m = oOnChange.node({
+										data: mNewValue,
+										node: sField,
+										oldValue,
+										value
+									});
+									if(m) {
+										return this._nodeTriggeredChanges(sField, m);
+									}
+								}
+							}
+						}
+					}
+
+					// Create the new node element in a grid item and push it to
+					//	the list of elements to render
+					lElements.push(
+						<Grid key={sField} item {...gridSizes}>
+							{DefineBase.create(sClass, oProps)}
+						</Grid>
+					);
+				}
+
+				// Unknown or unsupported node type
+				else {
+					throw new Error('Invalid Node type in parent of child: ' + sField);
 				}
 			}
 
@@ -457,55 +573,36 @@ export default class DefineParent extends DefineBase {
 	}
 
 	/**
-	 * Node Changed
+	 * Node Triggered Changes
 	 *
 	 * Called when a node that is setup to track changes changes
 	 *
-	 * @name nodeChanged
+	 * @name nodeTriggeredChanges
 	 * @access private
 	 * @param name The name of the node that changed
-	 * @param value The new value of the node
-	 * @param oldValue The old value of the node
+	 * @param value The new values from the callback
 	 */
-	_nodeChanged(name: string, value: any, oldValue: any) {
+	_nodeTriggeredChanges(name: string, value: any) {
 
-		// If we have a callback for the name
-		if(this.props.onNodeChange && name in this.props.onNodeChange) {
+		// If we got anything back
+		if(value) {
 
-			// Init the current values
-			const oValues: Record<string, any> = {};
-			for(const k of Object.keys(this.fields)) {
-				oValues[k] = this.fields[k].value;
-			}
-			oValues[name] = value;
+			// Init possible return
+			let mReturn;
 
-			// Create a new Parent change event and send it to the callback
-			const o: Record<string, any> | void = this.props.onNodeChange[name]({
-				data: oValues,
-				node: name,
-				oldValue
-			});
-
-			// If we got anything back
-			if(o) {
-
-				// Init possible return
-				let mReturn;
-
-				// Go through each field and update the value
-				for(const k in o) {
-					if(k in this.fields) {
-						if(k === name) {
-							mReturn = o[k];
-						} else {
-							this.fields[k].value = o[k];
-						}
+			// Go through each field and update the value
+			for(const k in value) {
+				if(k in this.fields) {
+					if(k === name) {
+						mReturn = value[k];
+					} else {
+						this.fields[k].value = value[k];
 					}
 				}
-
-				// Return
-				return mReturn;
 			}
+
+			// Return
+			return mReturn;
 		}
 	}
 
@@ -533,6 +630,7 @@ export default class DefineParent extends DefineBase {
 				ref: (el: DefineBase) => this.node = el,
 				name: this.props.name,
 				node: this.props.node,
+				onChange: this.props.onChange,
 				onEnterPressed: this.props.onEnterPressed,
 				placeholder: (this.props as DefineParentProps).placeholder,
 				type: this.props.type,

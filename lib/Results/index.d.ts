@@ -12,7 +12,8 @@ import Subscribe, { SubscribeCallback } from '@ouroboros/subscribe';
 import PropTypes from 'prop-types';
 import React from 'react';
 import type { onSubmitCallback } from '../Form';
-import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
+import type { gridSizesPropStruct } from '../DefineBase';
+import type { dynamicOptionStruct, onNodeChangeCallback } from '../DefineParent';
 import type { actionStruct, customCallback, onDeleteCallback, onKeyCopyCallback, menuStruct } from './Row';
 export type { actionStruct, onDeleteCallback, onKeyCopyCallback, menuStruct };
 export type dynCallbacksStruct = {
@@ -39,7 +40,7 @@ export type ResultsProps = {
     dynamicOptions?: dynamicOptionStruct[];
     errors: Record<string, any>;
     fields: string[];
-    gridSizes: gridSizesStruct;
+    gridSizes: gridSizesPropStruct;
     gridSpacing: number;
     menu: menuStruct[];
     onDelete: onDeleteCallback | false;
