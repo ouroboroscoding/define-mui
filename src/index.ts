@@ -15,4 +15,4 @@ export { errorTree } from './Shared';
 export type {
 	DefineNodeBaseProps, DefineNodeBaseState
 } from './DefineNode/Base';
-export type { ParentChangeEvent } from './DefineParent';
+export type { ParentNodeChangeEvent } from './DefineParent';

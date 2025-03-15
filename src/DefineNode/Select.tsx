@@ -32,7 +32,7 @@ import { DefineNodeBaseProps, DefineNodeBaseState } from './Base';
 
 // Types
 type DefineNodeSelectState = {
-	options: string[][]
+	options: string[][] | string[]
 }
 
 /**
@@ -86,7 +86,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 			}
 
 			// Else, if we have a list but the elements aren't lists
-			else if(!(lDisplayOptions[0] instanceof Array)) {
+			else if(typeof lDisplayOptions[0] === 'string') {
 				lDisplayOptions = lDisplayOptions.map((s: string) => [s, s]);
 			}
 		}
@@ -125,8 +125,18 @@ export default class DefineNodeSelect extends DefineNodeBase {
 			// Subscribe to the changes in options
 			this.subscribe = this.props.display.__options__.subscribe(this.callback);
 
+			// Make sure we have an array of arrays of strings
+			let lData: string[][];
+
+			// If we got an array of strings
+			if(typeof this.subscribe.data[0] === 'string') {
+				lData = this.subscribe.data.map((s: string) => [s, s]) as string[][];
+			} else {
+				lData = this.subscribe.data as string[][];
+			}
+
 			// Store the current options
-			this.setState({ options: this.subscribe.data });
+			this.setState({ options: lData });
 		}
 	}
 
@@ -157,16 +167,26 @@ export default class DefineNodeSelect extends DefineNodeBase {
 	 * @access public
 	 * @param data The new options data
 	 */
-	dynamicData(data: string[][]) {
+	dynamicData(data: string[] | string[][]) {
+
+		// Make sure we have an array of arrays of strings
+		let lData: string[][];
+
+		// If we got an array of strings
+		if(typeof data[0] === 'string') {
+			lData = data.map(s => [s, s]) as string[][];
+		} else {
+			lData = data as string[][];
+		}
 
 		// Init the new state
-		const oState: Record<string, any> = { options: data };
+		const oState: Record<string, any> = { options: lData };
 
 		// If we have an existing value
 		if(this.state.value !== '' && this.state.value !== null) {
 
 			// If the current value doesn't match the list
-			if(afindi(data, 0, this.state.value) === -1) {
+			if(afindi(lData, 0, this.state.value) === -1) {
 				oState.value = '';
 			}
 		}
@@ -175,7 +195,7 @@ export default class DefineNodeSelect extends DefineNodeBase {
 		else if(this.props.value !== '' && this.props.value !== null) {
 
 			// If the current value doesn't match the list
-			if(afindi(data, 0, this.props.value) > -1) {
+			if(afindi(lData, 0, this.props.value) > -1) {
 				oState.value = this.props.value;
 			}
 		}

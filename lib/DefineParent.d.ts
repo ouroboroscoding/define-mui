@@ -12,46 +12,28 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
+import type { DefineBaseProps } from './DefineBase';
 import type { HashArg } from './Options/Hash';
-import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
+import { onChangeCallback } from './DefineNode';
 export type dynamicOptionStruct = {
     node: string;
     trigger: string;
     options: HashArg;
 };
-export type gridSizesStruct = Record<string, {
-    xs?: number;
-    sm?: number;
-    md?: number;
-    lg?: number;
-    xl?: number;
-} | Record<string, any>>;
-export type onNodeChangeCallback = (event: ParentChangeEvent) => void | Record<string, any>;
-export type ParentChangeEvent = {
+export type onNodeChangeCallback = (event: ParentNodeChangeEvent) => void | Record<string, any>;
+export type ParentNodeChangeEvent = {
     data: Record<string, any>;
     node: string;
     oldValue: any;
+    value: any;
 };
-export type DefineParentProps = {
-    display?: Record<string, any>;
+export type DefineParentProps = DefineBaseProps & {
     dynamicOptions?: dynamicOptionStruct[];
-    error?: Record<string, any>;
     fields?: string[];
-    gridSizes?: gridSizesStruct;
-    gridSpacing?: number;
-    label?: labelOptions;
-    name: string;
     node: Parent;
-    nodeVariant: variantOptions;
-    onEnterPressed?: onEnterPressedCallback;
-    onNodeChange?: Record<string, onNodeChangeCallback>;
-    placeholder?: string;
-    returnAll?: boolean;
+    onNodeChange?: Record<string, onChangeCallback>;
     root?: boolean;
-    type: typeOptions;
     value: Record<string, any>;
-    validation?: boolean;
-    variant: variantOptions;
 };
 type DefineParentState = {
     display: Record<string, any>;
@@ -87,7 +69,6 @@ export default class DefineParent extends DefineBase {
         label: PropTypes.Requireable<string>;
         name: PropTypes.Validator<string>;
         node: PropTypes.Validator<Parent>;
-        nodeVariant: PropTypes.Requireable<string>;
         onNodeChange: PropTypes.Requireable<{
             [x: string]: ((...args: any[]) => any) | null | undefined;
         }>;
@@ -109,7 +90,6 @@ export default class DefineParent extends DefineBase {
         };
         gridSpacing: number;
         label: string;
-        nodeVariant: string;
         root: boolean;
         returnAll: boolean;
         value: {};
@@ -162,17 +142,16 @@ export default class DefineParent extends DefineBase {
      */
     generateState(): DefineParentState;
     /**
-     * Node Changed
+     * Node Triggered Changes
      *
      * Called when a node that is setup to track changes changes
      *
-     * @name nodeChanged
+     * @name nodeTriggeredChanges
      * @access private
      * @param name The name of the node that changed
-     * @param value The new value of the node
-     * @param oldValue The old value of the node
+     * @param value The new values from the callback
      */
-    _nodeChanged(name: string, value: any, oldValue: any): any;
+    _nodeTriggeredChanges(name: string, value: any): any;
     /**
      * Render
      *

@@ -8,7 +8,7 @@
  * @created 2023-02-15
  */
 import Subscribe from '@ouroboros/subscribe';
-export type HashData = Record<string, string[][]>;
+export type HashData = Record<string, string[][] | string[]>;
 export type HashFunc = () => Promise<HashData>;
 export type HashArg = HashData | HashFunc;
 /**

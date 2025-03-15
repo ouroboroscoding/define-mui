@@ -35,28 +35,12 @@ import { errorTree } from './Shared';
 
 // Types
 import {
-	labelOptions,
-	onChangeCallback,
-	onEnterPressedCallback,
-	typeOptions,
-	variantOptions
-} from './DefineNode';
+	DefineBaseProps
+} from './DefineBase';
 import { DefineNodeBaseProps } from './DefineNode/Base';
-import type { gridSizesStruct } from './DefineParent';
-type DefineArrayProps = {
-	display?: Record<string, any>,
-	error?: any,
-	gridSizes?: gridSizesStruct,
-	label?: labelOptions,
-	name: string,
+type DefineArrayProps = DefineBaseProps & {
 	node: ArrayNode,
-	onChange?: onChangeCallback,
-	onEnterPressed?: onEnterPressedCallback,
-	placeholder?: string,
-	type: typeOptions,
-	value?: any[],
-	validation?: boolean,
-	variant: variantOptions
+	value?: any[]
 };
 type DefineArrayStateElement = {
 	value: any,
@@ -114,6 +98,7 @@ export default class DefineArray extends DefineBase {
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
 		name: PropTypes.string.isRequired,
 		node: PropTypes.instanceOf(ArrayNode).isRequired,
+		onChange: PropTypes.func,
 		onEnterPressed: PropTypes.func,
 		placeholder: PropTypes.string,
 		type: PropTypes.oneOf(['create', 'search', 'update']).isRequired,
@@ -298,6 +283,7 @@ export default class DefineArray extends DefineBase {
 				ref: (el: DefineBase) => this.nodes = el,
 				name: this.props.name,
 				node: this.props.node,
+				onChange: this.props.onChange,
 				onEnterPressed: this.props.onEnterPressed,
 				placeholder: (this.props as DefineArrayProps).placeholder,
 				type: this.props.type,
@@ -312,6 +298,26 @@ export default class DefineArray extends DefineBase {
 			);
 		}
 
+		// Init the base props for all instances
+		const oBaseProps: Record<string, any> = {
+			display: this.state.nodeClass === 'Node' ? this.state.display : this.props.display,
+			gridSizes: this.props.gridSizes,
+			name: (this.props as DefineArrayProps).name,
+			node: this.child,
+			onEnterPressed: (this.props as DefineArrayProps).onEnterPressed,
+			returnAll: true,
+			type: (this.props as DefineArrayProps).type,
+			validation: (this.props as DefineArrayProps).validation,
+			variant: this.props.variant
+		}
+
+		// If we have an on change callback
+		if(this.props.onChange) {
+			oBaseProps.onChange = (value: any, oldValue: any) => {
+				this.props.onChange!(this.value, this.props.value);
+			}
+		}
+
 		// Render
 		return (
 			<Box className="nodeArray">
@@ -322,16 +328,9 @@ export default class DefineArray extends DefineBase {
 					<Box key={o.key} className="element">
 						<Box className="data">
 							{DefineBase.create(this.state.nodeClass, {
-								display: this.state.nodeClass === 'Node' ? this.state.display : this.props.display,
-								gridSizes: this.props.gridSizes,
+								...oBaseProps,
 								ref: (el: DefineBase) => { if(el) (this.nodes as Record<string, DefineBase>)[o.key] = el; },
-								name: (this.props as DefineArrayProps).name,
-								node: this.child,
-								onEnterPressed: (this.props as DefineArrayProps).onEnterPressed,
-								returnAll: true,
-								type: (this.props as DefineArrayProps).type,
-								value: o.value,
-								validation: (this.props as DefineArrayProps).validation
+								value: o.value
 							})}
 						</Box>
 						<Box className="actions">
