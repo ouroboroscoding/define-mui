@@ -38,7 +38,8 @@ import Typography from '@mui/material/Typography';
 import Form from '../Form';
 
 // Types
-import type { dynamicOptionStruct, gridSizesStruct, onNodeChangeCallback } from '../DefineParent';
+import type { gridSizesPropStruct } from '../DefineBase';
+import type { dynamicOptionStruct, onNodeChangeCallback } from '../DefineParent';
 import type { onSubmitCallback } from '../Form';
 export type actionCallback = (data: Record<string, any>) => void;
 export type actionDynamicCallback = (data: Record<string, any>) => Record<string, any>;
@@ -69,7 +70,7 @@ export type ResultsRowProps = {
 	dynamicOptions?: dynamicOptionStruct[],
 	errors?: Record<string, any>,
 	fields: string[],
-	gridSizes?: gridSizesStruct,
+	gridSizes?: gridSizesPropStruct,
 	gridSpacing?: number,
 	info: Record<string, any>,
 	menu: menuStruct[],

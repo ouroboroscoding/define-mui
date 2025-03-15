@@ -28,20 +28,11 @@ import { DefineNodeBase } from './DefineNode';
 import { errorTree } from './Shared';
 
 // Types
-import { labelOptions, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
+import { DefineBaseProps } from './DefineBase';
 import { DefineNodeBaseProps } from './DefineNode/Base';
-export type DefineHashProps = {
-	display?: Record<string, any>,
-	error?: any,
-	label?: labelOptions,
-	name: string,
+export type DefineHashProps = DefineBaseProps & {
 	node: Hash,
-	onEnterPressed?: onEnterPressedCallback,
-	placeholder?: string,
-	type: typeOptions,
-	value?: Record<any, any>,
-	validation?: boolean,
-	variant: variantOptions
+	value?: Record<any, any>
 }
 type DefineHashState = {
 	plugin: typeof DefineNodeBase,
@@ -73,6 +64,7 @@ export default class DefineHash extends DefineBase {
 		label: PropTypes.oneOf(['above', 'none', 'placeholder']),
 		name: PropTypes.string,
 		node: PropTypes.instanceOf(Hash).isRequired,
+		onChange: PropTypes.func,
 		onEnterPressed: PropTypes.func,
 		placeholder: PropTypes.string,
 		type: PropTypes.oneOf(['create', 'update']).isRequired,
@@ -194,6 +186,13 @@ export default class DefineHash extends DefineBase {
 			validation: this.props.validation,
 			variant: this.props.variant
 		};
+
+		// If we have an on change prop
+		if(this.props.onChange) {
+			oProps.onChange = (value: any, oldValue: any) => {
+				this.props.onChange!(this.plugin.value, this.props.value);
+			}
+		}
 
 		// Render custom type
 		return (

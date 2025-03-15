@@ -11,12 +11,13 @@ import { Tree } from '@ouroboros/define';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DefineParent from './DefineParent';
+import { gridSizesByNodeStruct } from './DefineBase';
 import { labelOptions } from './DefineNode';
-import { dynamicOptionStruct, gridSizesStruct } from './DefineParent';
+import { dynamicOptionStruct } from './DefineParent';
 export type onSearchCallback = (value: Record<string, any>) => Promise<boolean>;
 export type DefineSearchProps = {
     dynamicOptions?: dynamicOptionStruct[];
-    gridSizes?: gridSizesStruct;
+    gridSizes?: gridSizesByNodeStruct;
     hash: string;
     label?: labelOptions;
     name?: string;

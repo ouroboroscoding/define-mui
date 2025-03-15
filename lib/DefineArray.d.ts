@@ -12,22 +12,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import DefineBase from './DefineBase';
 import { DefineNodeBase } from './DefineNode';
-import { labelOptions, onChangeCallback, onEnterPressedCallback, typeOptions, variantOptions } from './DefineNode';
-import type { gridSizesStruct } from './DefineParent';
-type DefineArrayProps = {
-    display?: Record<string, any>;
-    error?: any;
-    gridSizes?: gridSizesStruct;
-    label?: labelOptions;
-    name: string;
+import { DefineBaseProps } from './DefineBase';
+type DefineArrayProps = DefineBaseProps & {
     node: ArrayNode;
-    onChange?: onChangeCallback;
-    onEnterPressed?: onEnterPressedCallback;
-    placeholder?: string;
-    type: typeOptions;
     value?: any[];
-    validation?: boolean;
-    variant: variantOptions;
 };
 type DefineArrayStateElement = {
     value: any;
@@ -63,6 +51,7 @@ export default class DefineArray extends DefineBase {
         label: PropTypes.Requireable<string>;
         name: PropTypes.Validator<string>;
         node: PropTypes.Validator<ArrayNode>;
+        onChange: PropTypes.Requireable<(...args: any[]) => any>;
         onEnterPressed: PropTypes.Requireable<(...args: any[]) => any>;
         placeholder: PropTypes.Requireable<string>;
         type: PropTypes.Validator<string>;
